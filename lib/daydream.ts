@@ -1,5 +1,5 @@
 import { fetchAlpacaBars } from './alpaca';
-import { calculateIndicators } from './indicators';
+import { calculateIndicators, calculateConfluenceScore } from './indicators';
 import { getNewsData } from './news-service';
 import { calculateSentimentScore } from './news';
 import { publicClient } from './public-api';
@@ -24,16 +24,16 @@ const INDICES = ['SPY', 'QQQ', 'IWM'];
 export async function getDayDreamPicks(): Promise<DayDreamPick[]> {
     const results: DayDreamPick[] = [];
 
-    for (const symbol of INDICES) {
+    // Parallelize processing to prevent timeouts
+    await Promise.all(INDICES.map(async (symbol) => {
         try {
             console.log(`[DayDream] 🔍 Processing ${symbol}...`);
 
             // 1. Fetch Technicals
             const bars = await fetchAlpacaBars(symbol, '1Day', 200);
-            console.log(`[DayDream] 📊 ${symbol} fetched ${bars?.length || 0} bars`);
             if (!bars || bars.length < 50) {
-                console.warn(`[DayDream] ⚠️ Not enough bars for ${symbol}`);
-                continue;
+                console.warn(`[DayDream] ⚠️ Not enough data for ${symbol}`);
+                return;
             }
 
             const cleanData = bars.map(b => ({
@@ -43,17 +43,9 @@ export async function getDayDreamPicks(): Promise<DayDreamPick[]> {
             const currentPrice = cleanData[cleanData.length - 1].close;
             const indicators = calculateIndicators(cleanData);
             const latest = indicators[indicators.length - 1];
-            console.log(`[DayDream] 📈 ${symbol} latest price: ${currentPrice}, RSI: ${latest?.rsi14}`);
 
-            // Technical Score
-            let techScore = 50;
-            const rsi = latest.rsi14 || 50;
-            const isAboveEma50 = latest.close > (latest.ema50 || 0);
-            const isAboveEma200 = latest.close > (latest.ema200 || 0);
-
-            if (isAboveEma50) techScore += 15;
-            if (isAboveEma200) techScore += 10;
-            if (rsi > 40 && rsi < 60) techScore += 10;
+            const confluence = calculateConfluenceScore(latest);
+            const techScore = confluence.strength;
 
             // 2. Fetch News/Social
             const [news, social] = await Promise.all([
@@ -65,9 +57,9 @@ export async function getDayDreamPicks(): Promise<DayDreamPick[]> {
 
             // 3. Direction
             const totalScore = (techScore * 0.4) + (newsSentiment.score * 0.3) + (socialSentiment.score * 0.3);
-            const direction = totalScore > 50 ? 'CALL' : 'PUT';
+            const direction = totalScore >= 50 ? 'CALL' : 'PUT';
 
-            // 4. Expiry Selection — Schwab chain includes expirations, use that first
+            // 4. Expiry Selection
             let expirations: string[] = [];
             let chain: any = null;
 
@@ -78,19 +70,16 @@ export async function getDayDreamPicks(): Promise<DayDreamPick[]> {
             if (expirations.length === 0) {
                 expirations = await publicClient.getOptionExpirations(symbol) || [];
             }
-            if (expirations.length === 0) {
-                console.warn(`[DayDream] ❌ No expirations found for ${symbol}`);
-                continue;
-            }
+            if (expirations.length === 0) return;
 
             const target = Date.now() + (30 * 24 * 60 * 60 * 1000);
             const expiry = [...expirations].sort((a, b) =>
                 Math.abs(new Date(a).getTime() - target) - Math.abs(new Date(b).getTime() - target)
             )[0];
 
-            console.log(`[DayDream] 📅 ${symbol} Target Expiry: ${expiry}`);
+            console.log(`[DayDream] 📅 ${symbol} Expiry: ${expiry} | Bias: ${direction}`);
 
-            // 5. Fetch Full Chain for THIS Expiry — reuse Schwab chain if already fetched, else fallback
+            // 5. Fetch Full Chain
             if (!chain) {
                 chain = await publicClient.getOptionChain(symbol, expiry);
             }
@@ -98,25 +87,19 @@ export async function getDayDreamPicks(): Promise<DayDreamPick[]> {
             const strikes = chain?.options?.[expiry];
 
             if (strikes) {
-                // Focus on strikes near current price
+                // Focus on strikes near ATM
                 const strikeKeys = Object.keys(strikes)
                     .map(s => parseFloat(s))
                     .sort((a, b) => Math.abs(a - currentPrice) - Math.abs(b - currentPrice))
-                    .slice(0, 15); // Top 15 strikes near ATM
+                    .slice(0, 10); // Reduced to 10 for speed safety
 
-                console.log(`[DayDream] ⛓️ ${symbol} processing ${strikeKeys.length} nearby strikes`);
-
-                const optionSymbolsToFetch: string[] = [];
                 const tempCandidates: any[] = [];
-
                 for (const strikePrice of strikeKeys) {
                     const data = strikes[strikePrice];
                     const opt = direction === 'CALL' ? data.call : data.put;
-
                     if (!opt) continue;
-                    if (opt.volume < 1 && opt.openInterest < 10) continue;
+                    if (opt.volume < 1 && opt.openInterest < 5) continue;
 
-                    optionSymbolsToFetch.push(opt.symbol);
                     tempCandidates.push({
                         type: direction,
                         strike: strikePrice,
@@ -126,74 +109,57 @@ export async function getDayDreamPicks(): Promise<DayDreamPick[]> {
                         openInterest: opt.openInterest,
                         symbol: opt.symbol,
                         entryPrice: currentPrice,
-                        strategy: "Golden Strike"
+                        strategy: "Golden Strike",
+                        greeks: opt.greeks
                     });
                 }
 
-                // Batch Fetch Greeks
-                if (optionSymbolsToFetch.length > 0) {
-                    console.log(`[DayDream] 🇬🇷 Fetching greeks for ${optionSymbolsToFetch.length} symbols...`);
-                    for (const cand of tempCandidates) {
-                        try {
-                            const greeks = await publicClient.getGreeks(cand.symbol);
-                            if (greeks) {
-                                const delta = Math.abs(greeks.delta);
-                                // The "Sweet Spot": Delta between 0.25 and 0.55 for weekly/monthly setups
-                                if (delta >= 0.20 && delta <= 0.70) {
-                                    // MULTI-FACTOR SCORING (0-100)
-                                    // 1. Delta Score (Perfect = 0.45)
-                                    const deltaScore = (1 - Math.abs(delta - 0.45)) * 40;
-
-                                    // 2. Liquidity Score (Vol/OI momentum)
-                                    const volWeight = Math.min(cand.volume / 100, 1) * 30;
-                                    const oiWeight = Math.min(cand.openInterest / 500, 1) * 10;
-
-                                    // 3. IV Efficiency (Score higher if IV is not absurdly high compared to proxy)
-                                    const ivProxy = calculateVolatilityProxy(currentPrice, undefined, symbol);
-                                    const ivEfficiency = Math.max(0, 20 - (Math.abs(greeks.impliedVolatility - ivProxy) * 20));
-
-                                    const finalScore = deltaScore + volWeight + oiWeight + ivEfficiency;
-
-                                    candidates.push({
-                                        ...cand,
-                                        confidence: Math.round(finalScore), // Local score for this strike
-                                        reason: `Delta ${delta.toFixed(2)} | Vol/OI Flux: ${(cand.openInterest > 0 ? cand.volume / cand.openInterest : 0).toFixed(1)}x`,
-                                        probabilityITM: delta,
-                                        iv: greeks.impliedVolatility
-                                    } as any);
-                                }
-                            }
-                            // Small delay to prevent 403
-                            await new Promise(r => setTimeout(r, 150));
-                        } catch (e) {
-                            console.error(`[DayDream] Greek error for ${cand.symbol}:`, e);
+                for (const cand of tempCandidates) {
+                    try {
+                        let greeks = cand.greeks;
+                        if (!greeks && cand.symbol) {
+                            greeks = await publicClient.getGreeks(cand.symbol);
+                            await new Promise(r => setTimeout(r, 400));
                         }
+
+                        if (greeks) {
+                            const delta = Math.abs(greeks.delta);
+                            if (delta >= 0.20 && delta <= 0.70) {
+                                const deltaScore = (1 - Math.abs(delta - 0.45)) * 40;
+                                const volWeight = Math.min(cand.volume / 100, 1) * 30;
+                                const oiWeight = Math.min(cand.openInterest / 500, 1) * 10;
+                                const ivProxy = calculateVolatilityProxy(currentPrice, undefined, symbol);
+                                const ivEfficiency = Math.max(0, 20 - (Math.abs((greeks.impliedVolatility || 0) - ivProxy) * 20));
+
+                                candidates.push({
+                                    ...cand,
+                                    confidence: Math.round(deltaScore + volWeight + oiWeight + ivEfficiency),
+                                    reason: `Delta ${delta.toFixed(2)} | Vol/OI Flux: ${(cand.openInterest > 0 ? cand.volume / cand.openInterest : 0).toFixed(1)}x`,
+                                    probabilityITM: delta,
+                                    iv: greeks.impliedVolatility
+                                } as any);
+                            }
+                        }
+                    } catch (e) {
+                        console.error(`[DayDream] Greek error for ${cand.symbol}:`, e);
                     }
                 }
-
-                console.log(`[DayDream] 🎯 ${symbol} found ${candidates.length} candidate options`);
-
-                // Always return top 3 based on our multi-factor score
-                const topOptions = candidates
-                    .sort((a, b) => (b.confidence || 0) - (a.confidence || 0))
-                    .slice(0, 3);
 
                 results.push({
                     symbol,
                     direction,
                     confidence: Math.round(totalScore),
-                    reason: `${direction} Bias: Tech (${techScore}) + News/Social (${Math.round((newsSentiment.score + socialSentiment.score) / 2)})`,
-                    options: topOptions,
+                    reason: `${direction} Bias: Tech (${techScore}) + Sentiment (${Math.round((newsSentiment.score + socialSentiment.score) / 2)})`,
+                    options: candidates.sort((a, b) => (b.confidence || 0) - (a.confidence || 0)).slice(0, 3),
                     technicalScore: techScore,
                     sentimentScore: newsSentiment.score,
                     socialScore: socialSentiment.score
                 });
             }
-
         } catch (e) {
-            console.error(`[DayDream] Error for ${symbol}:`, e);
+            console.error(`[DayDream] Fatal error for ${symbol}:`, e);
         }
-    }
+    }));
 
     return results;
 }

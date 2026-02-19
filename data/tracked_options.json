@@ -269,5 +269,202 @@
       }
     ],
     "status": "ACTIVE"
+  },
+  {
+    "id": "QQQ   260327P00600000",
+    "ticker": "QQQ   ",
+    "companyName": "Invesco QQQ Trust",
+    "strike": 600,
+    "expiry": "2026-03-27",
+    "type": "PUT",
+    "entryPremium": 14.21,
+    "entryStockPrice": 604.9,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Price < EMA50",
+      "EMA Stack Bearish (Short < Mid < Long)",
+      "MACD Bearish Cross",
+      "Bollinger Downtrend"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 14.21,
+        "stockPrice": 604.9
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "IWM   260320C00265000",
+    "ticker": "IWM   ",
+    "companyName": "IWM",
+    "strike": 265,
+    "expiry": "2026-03-20",
+    "type": "CALL",
+    "entryPremium": 6.665,
+    "entryStockPrice": 264.13,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Delta 0.48 | Vol/OI Flux: 0.0x"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 6.665,
+        "stockPrice": 264.13
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "SRE   260417C00100000",
+    "ticker": "SRE",
+    "companyName": "Sempra",
+    "strike": 100,
+    "expiry": "2026-04-17",
+    "type": "CALL",
+    "entryPremium": 1.15,
+    "entryStockPrice": 92.455,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Institutional flow at $100. (Live IV: 26.1%)"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 1.15,
+        "stockPrice": 92.455
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "KLAR  260320P00012500",
+    "ticker": "KLAR",
+    "companyName": "Klarna Group plc",
+    "strike": 12.5,
+    "expiry": "2026-03-20",
+    "type": "PUT",
+    "entryPremium": 0.575,
+    "entryStockPrice": 14.265,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Price < EMA50",
+      "EMA Stack Bearish (Short < Mid < Long)",
+      "MACD Bearish Cross"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 0.575,
+        "stockPrice": 14.265
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "NVDA  260327C00190000",
+    "ticker": "NVDA",
+    "companyName": "NVIDIA Corporation",
+    "strike": 190,
+    "expiry": "2026-03-27",
+    "type": "CALL",
+    "entryPremium": 10,
+    "entryStockPrice": 186.57,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Price > EMA50",
+      "Price > EMA200",
+      "EMA Stack Bullish (Short > Mid > Long)",
+      "MACD Bullish Cross",
+      "Bollinger Uptrend"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 10,
+        "stockPrice": 186.57
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "HOOD  260327P00070000",
+    "ticker": "HOOD",
+    "companyName": "Robinhood Markets, Inc.",
+    "strike": 70,
+    "expiry": "2026-03-27",
+    "type": "PUT",
+    "entryPremium": 4.025,
+    "entryStockPrice": 74.61,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Price < EMA50",
+      "Price < EMA200",
+      "EMA Stack Bearish (Short < Mid < Long)",
+      "Developing Bearish Momentum",
+      "MACD Bearish Cross",
+      "Bollinger Downtrend"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 4.025,
+        "stockPrice": 74.61
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "PLTR  260327P00130000",
+    "ticker": "PLTR",
+    "companyName": "Palantir Technologies Inc.",
+    "strike": 130,
+    "expiry": "2026-03-27",
+    "type": "PUT",
+    "entryPremium": 6.625,
+    "entryStockPrice": 134.9,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Price < EMA50",
+      "Price < EMA200",
+      "EMA Stack Bearish (Short < Mid < Long)",
+      "Developing Bearish Momentum",
+      "MACD Bearish Cross",
+      "Bollinger Downtrend"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 6.625,
+        "stockPrice": 134.9
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "SPY   260327P00680000",
+    "ticker": "SPY",
+    "companyName": "State Street SPDR S&P 500 ETF Trust",
+    "strike": 680,
+    "expiry": "2026-03-27",
+    "type": "PUT",
+    "entryPremium": 12.775,
+    "entryStockPrice": 683.92,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Price < EMA50",
+      "MACD Bearish Cross",
+      "Bollinger Downtrend"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 12.775,
+        "stockPrice": 683.92
+      }
+    ],
+    "status": "ACTIVE"
   }
 ]

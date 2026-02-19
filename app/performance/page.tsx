@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, TrendingDown, Clock, Activity, ChevronLeft, Target, Shield, Zap, Info } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
@@ -136,16 +137,25 @@ export default function PerformancePage() {
                                     <div key={option.id} className="bg-gray-800/40 border border-gray-700/50 rounded-3xl p-6 backdrop-blur-sm hover:border-blue-500/30 transition-all group">
                                         <div className="flex justify-between items-start mb-6">
                                             <div>
-                                                <div className="flex items-center gap-2 mb-1">
+                                                <div className="flex items-center gap-2 mb-0.5">
+                                                    <Link
+                                                        href={`/?symbol=${(option.ticker || '').trim()}`}
+                                                        className="text-2xl font-black text-white tracking-tighter uppercase hover:text-blue-400 transition-colors cursor-pointer"
+                                                    >
+                                                        {(option.ticker || '').trim()}
+                                                    </Link>
                                                     <span className={`text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-widest ${option.type === 'CALL' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}`}>
                                                         {option.type}
                                                     </span>
-                                                    <span className="text-xl font-black text-white tracking-tight">${option.strike} Strike</span>
                                                 </div>
-                                                <h3 className="text-sm font-bold text-gray-300 flex items-center gap-2 uppercase tracking-wide">
-                                                    {option.companyName || option.ticker}
-                                                    <span className="text-[10px] text-gray-500 font-mono">({option.ticker})</span>
-                                                </h3>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wide truncate max-w-[120px]">
+                                                        {option.companyName}
+                                                    </span>
+                                                    <span className="text-xs font-black text-blue-400 tracking-tight">
+                                                        ${option.strike} Strike
+                                                    </span>
+                                                </div>
                                             </div>
                                             <div className="text-right">
                                                 <div className={`text-2xl font-black tracking-tighter ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>

@@ -60,7 +60,7 @@ export function trackOption(option: OptionRecommendation, companyName: string, u
 
     const newTracked: TrackedOption = {
         id: option.symbol,
-        ticker: option.symbol.split(/[0-9]/)[0], // Simple ticker extraction from OSI
+        ticker: (option.symbol.split(/[0-9]/)[0] || companyName).trim(), // Clean ticker extraction
         companyName,
         strike: option.strike,
         expiry: option.expiry,

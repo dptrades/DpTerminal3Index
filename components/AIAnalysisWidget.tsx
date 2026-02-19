@@ -92,6 +92,19 @@ function generateSignal(symbol: string, analysis: MultiTimeframeAnalysis, option
     const daily = analysis.timeframes.find(t => t.timeframe === '1d');
     const hourly = analysis.timeframes.find(t => t.timeframe === '1h');
 
+    // 0. CRITICAL TECHNICAL WARNINGS (Crosses)
+    if (daily && daily.ema50 && daily.ema200) {
+        const gap = (daily.ema50 - daily.ema200) / daily.ema200;
+        if (gap > 0 && gap < 0.02) {
+            score -= 1.0; // Higher penalty for proximity
+            reasons.push({ text: "⚠️ Nearing Death Cross (Critical Trend Risk)", sentiment: 'negative' });
+        } else if (daily.ema50 < daily.ema200) {
+            score -= 1.5;
+            reasons.push({ text: "💀 Death Cross Active (Major Bearish Trend)", sentiment: 'negative' });
+        }
+    }
+
+    // 1. TECHNICALS (FVG + Trends)
     if (daily) {
         if (daily.trend === 'BULLISH') {
             score += 1.5;
@@ -110,7 +123,7 @@ function generateSignal(symbol: string, analysis: MultiTimeframeAnalysis, option
             reasons.push({ text: "Active Bearish Fair Value Gap (Price Imbalance)", sentiment: 'negative' });
         }
 
-        // EMA 200 (Long Term)
+        // EMA 200 (Long Term) & Death Cross check
         if (daily.ema200 && daily.close > daily.ema200) {
             score += 0.7;
             reasons.push({ text: "Stable above 200-Day Moving Average", sentiment: 'positive' });

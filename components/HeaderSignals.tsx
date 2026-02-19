@@ -42,6 +42,8 @@ export default function HeaderSignals({ latestData, showRSI = true }: HeaderSign
 
     // Golden/Death Cross status for extra signal
     const isGoldenCross = ema50 && ema200 && ema50 > ema200;
+    const isDeathCross = ema50 && ema200 && ema50 < ema200;
+    const isNearingDeathCross = ema50 && ema200 && ema50 > ema200 && ((ema50 - ema200) / ema200) < 0.02;
 
     // MACD Signal
     let macdStatus = "ALT";
@@ -131,6 +133,18 @@ export default function HeaderSignals({ latestData, showRSI = true }: HeaderSign
                         <span className="text-[8px] text-gray-200 font-bold uppercase tracking-widest leading-none">LT Trend</span>
                         <span className={`text-[10px] font-bold ${ltColor} leading-none`}>{ltTrend}</span>
                     </div>
+                    {isNearingDeathCross && (
+                        <div className="flex flex-col gap-1 items-center bg-yellow-500/10 border border-yellow-500/30 px-2 py-0.5 rounded animate-pulse">
+                            <span className="text-[7px] text-yellow-400 font-black uppercase tracking-tighter leading-none">Nearing</span>
+                            <span className="text-[9px] text-yellow-400 font-black tracking-tighter leading-none">Death Cross</span>
+                        </div>
+                    )}
+                    {isDeathCross && (
+                        <div className="flex flex-col gap-1 items-center bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded animate-pulse">
+                            <span className="text-[7px] text-red-400 font-black uppercase tracking-tighter leading-none">Active</span>
+                            <span className="text-[9px] text-red-400 font-black tracking-tighter leading-none">Death Cross</span>
+                        </div>
+                    )}
                 </div>
             </div>
 

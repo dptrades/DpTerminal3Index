@@ -31,8 +31,31 @@ export default function OptionsSignal({ data, loading, onRefresh, companyName, u
     }, [data?.contractPrice]);
 
     useEffect(() => {
-        setIsTracked(false); // Reset when data changes
-    }, [data?.symbol]);
+        const checkTrackedStatus = async () => {
+            if (!data?.symbol) return;
+
+            // Extract ticker - prioritize ticker from symbol for matching
+            const symbolTicker = data.symbol.split(/[0-9]/)[0]?.trim();
+            const ticker = symbolTicker || companyName;
+            if (!ticker) return;
+
+            try {
+                const res = await fetch(`/api/options/track?ticker=${ticker}`);
+                if (res.ok) {
+                    const { tracked } = await res.json();
+                    const isAlreadyTracked = tracked.some((o: any) =>
+                        (o.id || '').replace(/\s+/g, '') === (data.symbol || '').replace(/\s+/g, '')
+                    );
+                    setIsTracked(isAlreadyTracked);
+                }
+            } catch (e) {
+                console.error('Failed to check tracked status:', e);
+                setIsTracked(false);
+            }
+        };
+
+        checkTrackedStatus();
+    }, [data?.symbol, companyName]);
 
     const handleTrack = async () => {
         if (!data || !data.symbol) return;

@@ -20,6 +20,28 @@ export default function TopOptionsList({ options, symbol, loading, companyName, 
     const [trackLoading, setTrackLoading] = useState<Record<string, boolean>>({});
 
     useEffect(() => {
+        const checkTrackedStatus = async () => {
+            if (!symbol) return;
+            try {
+                const res = await fetch(`/api/options/track?ticker=${symbol}`);
+                if (res.ok) {
+                    const { tracked } = await res.json();
+                    const statusMap: Record<string, boolean> = {};
+                    tracked.forEach((o: any) => {
+                        const normalizedId = (o.id || '').replace(/\s+/g, '');
+                        statusMap[normalizedId] = true;
+                    });
+                    setTrackedSymbols(statusMap);
+                }
+            } catch (e) {
+                console.error('Failed to check tracked status:', e);
+            }
+        };
+
+        checkTrackedStatus();
+    }, [symbol, options]);
+
+    useEffect(() => {
         const newFlashes: Record<string, 'up' | 'down' | null> = { ...priceFlashes };
         const newPrevPrices: Record<string, number> = { ...prevPrices };
         let hasChanges = false;
@@ -67,7 +89,7 @@ export default function TopOptionsList({ options, symbol, loading, companyName, 
                 })
             });
             if (res.ok) {
-                setTrackedSymbols(prev => ({ ...prev, [key]: true }));
+                setTrackedSymbols(prev => ({ ...prev, [key.replace(/\s+/g, '')]: true }));
             }
         } catch (e) {
             console.error('Failed to track option:', e);
@@ -167,8 +189,8 @@ export default function TopOptionsList({ options, symbol, loading, companyName, 
                                 )}
                                 <button
                                     onClick={(e) => { e.stopPropagation(); handleTrack(opt); }}
-                                    disabled={trackedSymbols[opt.symbol || ''] || trackLoading[opt.symbol || '']}
-                                    className={`mt-1 p-1 rounded-md border transition-all flex items-center gap-1 ${trackedSymbols[opt.symbol || '']
+                                    disabled={trackedSymbols[(opt.symbol || '').replace(/\s+/g, '')] || trackLoading[opt.symbol || '']}
+                                    className={`mt-1 p-1 rounded-md border transition-all flex items-center gap-1 ${trackedSymbols[(opt.symbol || '').replace(/\s+/g, '')]
                                         ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
                                         : 'bg-gray-800/50 border-gray-700 hover:border-blue-500/50 text-gray-400 hover:text-white'
                                         }`}
