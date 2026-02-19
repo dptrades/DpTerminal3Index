@@ -152,5 +152,100 @@
       }
     ],
     "status": "ACTIVE"
+  },
+  {
+    "id": "RELY  260320C00017500",
+    "ticker": "RELY  ",
+    "companyName": "Remitly Global, Inc.",
+    "strike": 17.5,
+    "expiry": "2026-03-20",
+    "type": "CALL",
+    "entryPremium": 0.825,
+    "entryStockPrice": 16.905,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Price > EMA50",
+      "Price > EMA200",
+      "MACD Bullish Cross"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 0.825,
+        "stockPrice": 16.905
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "CAT   260320C00850000",
+    "ticker": "CAT   ",
+    "companyName": "Caterpillar Inc.",
+    "strike": 850,
+    "expiry": "2026-03-20",
+    "type": "CALL",
+    "entryPremium": 5.5,
+    "entryStockPrice": 750.445,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Institutional flow at $850. (Live IV: 3861.0%)"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 5.5,
+        "stockPrice": 750.445
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "AMZN  260327P00200000",
+    "ticker": "AMZN  ",
+    "companyName": "Amazon.com, Inc.",
+    "strike": 200,
+    "expiry": "2026-03-27",
+    "type": "PUT",
+    "entryPremium": 6.2,
+    "entryStockPrice": 204.36,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Price < EMA50",
+      "Price < EMA200",
+      "EMA Stack Bearish (Short < Mid < Long)",
+      "Developing Bearish Momentum",
+      "MACD Bearish Cross",
+      "Bollinger Downtrend"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 6.2,
+        "stockPrice": 204.36
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "MRK   260320C00130000",
+    "ticker": "MRK   ",
+    "companyName": "Merck & Co., Inc.",
+    "strike": 130,
+    "expiry": "2026-03-20",
+    "type": "CALL",
+    "entryPremium": 0.76,
+    "entryStockPrice": 120.9,
+    "entryDate": "2026-02-19",
+    "reasoning": [
+      "Institutional flow at $130. (Live IV: 2659.3%)"
+    ],
+    "history": [
+      {
+        "date": "2026-02-19",
+        "optionPremium": 0.76,
+        "stockPrice": 120.9
+      }
+    ],
+    "status": "ACTIVE"
   }
 ]

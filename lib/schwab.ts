@@ -255,7 +255,7 @@ export class SchwabClient {
                 theta: opt.theta || 0,
                 vega: opt.vega || 0,
                 rho: opt.rho || 0,
-                impliedVolatility: opt.volatility || opt.impliedVolatility || 0
+                impliedVolatility: (opt.volatility || opt.impliedVolatility || 0) / 100
             }
         };
     }
@@ -284,7 +284,7 @@ export class SchwabClient {
                     theta: q?.theta || 0,
                     vega: q?.vega || 0,
                     rho: q?.rho || 0,
-                    impliedVolatility: q?.volatility || 0,
+                    impliedVolatility: (q?.volatility || 0) / 100,
                     lastPrice: quote.lastPrice || q?.lastPrice || 0
                 };
             }
