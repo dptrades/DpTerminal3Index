@@ -173,3 +173,93 @@ export async function sendAlerts(payload: NotificationPayload): Promise<{ email:
         sms: smsResult
     };
 }
+
+export interface MorningBriefPayload {
+    topPicks: Array<{ symbol: string; signal: string; score: number; change: number }>;
+    alphaHunter: Array<{ symbol: string; signal: string; score: number; change: number }>;
+    socialPulse: Array<{ symbol: string; signal: string; heat: number; change: number }>;
+}
+
+export async function sendMorningBriefAlert(payload: MorningBriefPayload): Promise<boolean> {
+    const recipients = env.emailRecipients;
+    if (recipients.length === 0) {
+        console.log('[Notify] Morning Brief skipped - no recipients configured');
+        return false;
+    }
+
+    try {
+        const renderRow = (s: any, scoreKey: string, scoreLabel: string) => `
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; font-weight: bold; color: #0f172a;">${s.symbol}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; color: #475569; font-size: 14px;">${s.signal}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: right; color: ${s[scoreKey] >= 70 ? '#16a34a' : '#f59e0b'}; font-weight: bold;">${s[scoreKey]} ${scoreLabel}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: right; color: ${s.change >= 0 ? '#16a34a' : '#ef4444'};">${s.change > 0 ? '+' : ''}${s.change.toFixed(2)}%</td>
+            </tr>
+        `;
+
+        const html = `
+            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 650px; margin: 0 auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                <div style="background: linear-gradient(135deg, #1e3a8a, #4338ca); padding: 30px 20px; text-align: center;">
+                    <h1 style="color: white; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">🌅 DP TradeDesk Morning Briefing</h1>
+                    <p style="color: #cbd5e1; margin: 10px 0 0 0; font-size: 15px;">Your daily market advantage.</p>
+                </div>
+                
+                <div style="padding: 30px 20px; background: #f8fafc;">
+                    <!-- TOP PICKS -->
+                    <h2 style="color: #0f172a; font-size: 18px; border-bottom: 2px solid #3b82f6; padding-bottom: 8px; margin-top: 0;">🏆 Top Picks (Mega-Caps)</h2>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        ${payload.topPicks.map(s => renderRow(s, 'score', 'pts')).join('')}
+                    </table>
+
+                    <!-- ALPHA HUNTER -->
+                    <h2 style="color: #0f172a; font-size: 18px; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px;">🐺 Alpha Hunter (Growth & Momentum)</h2>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        ${payload.alphaHunter.map(s => renderRow(s, 'score', 'pts')).join('')}
+                    </table>
+
+                    <!-- SOCIAL PULSE -->
+                    <h2 style="color: #0f172a; font-size: 18px; border-bottom: 2px solid #ef4444; padding-bottom: 8px;">🔥 Social Pulse (Retail Momentum)</h2>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        ${payload.socialPulse.map(s => renderRow(s, 'heat', '🔥')).join('')}
+                    </table>
+
+                    <div style="text-align: center; margin-top: 40px;">
+                        <a href="${env.baseUrl}" style="display: inline-block; padding: 14px 28px; background: #0ea5e9; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; transition: background 0.2s;">
+                            Open Dashboard
+                        </a>
+                    </div>
+                </div>
+                
+                <div style="padding: 20px; background: #0f172a; text-align: center;">
+                    <p style="color: #64748b; margin: 0; font-size: 12px;">© ${new Date().getFullYear()} DP TradeDesk. Automated Trading Intelligence.</p>
+                </div>
+            </div>
+        `;
+
+        const response = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                from: 'DP TradeDesk <alerts@resend.dev>',
+                to: recipients,
+                subject: `🌅 Morning Briefing - ${new Date().toLocaleDateString()}`,
+                html: html
+            })
+        });
+
+        if (response.ok) {
+            console.log(`[Notify] Morning Brief sent to ${recipients.join(', ')}`);
+            return true;
+        } else {
+            const error = await response.text();
+            console.error('[Notify] Morning Brief failed:', error);
+            return false;
+        }
+    } catch (e) {
+        console.error('[Notify] Morning Brief error:', e);
+        return false;
+    }
+}
