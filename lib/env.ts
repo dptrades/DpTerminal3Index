@@ -77,7 +77,7 @@ export const env = {
     get baseUrl() {
         return this.VERCEL_URL
             ? `https://${this.VERCEL_URL}`
-            : 'https://dptradedesk.vercel.app';
+            : 'https://dptrade.vercel.app';
     },
 
     // Public.com API
