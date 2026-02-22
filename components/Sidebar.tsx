@@ -140,6 +140,8 @@ export default function Sidebar({
         }
     }, [latest, stats, symbol, data]);
 
+    const enableBetaFeatures = process.env.NEXT_PUBLIC_ENABLE_BETA_FEATURES === 'true';
+
     return (
         <aside className={`${isOpen ? 'w-full lg:w-80' : 'w-0 lg:w-0'} bg-gray-800 border-r border-gray-700 flex flex-col h-full overflow-y-auto custom-scrollbar shadow-2xl transition-all duration-300`}>
             <div className="p-4 flex justify-between items-center bg-gray-900/60 border-b border-gray-700/50 backdrop-blur-md sticky top-0 z-20">
@@ -199,24 +201,28 @@ export default function Sidebar({
                 >
                     <span className="truncate">🔥 Social Pulse</span>
                 </Link>
-                <Link
-                    href="/daydream"
-                    className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold transition-all w-full group ${activePage === 'daydream'
-                        ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
-                        : 'text-gray-400 hover:text-yellow-400 hover:bg-yellow-500/10 border border-transparent'
-                        }`}
-                >
-                    <span className="truncate">✨ DayDream</span>
-                </Link>
-                <Link
-                    href="/performance"
-                    className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold transition-all w-full group ${activePage === 'performance'
-                        ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                        : 'text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 border border-transparent'
-                        }`}
-                >
-                    <span className="truncate">📈 Performance</span>
-                </Link>
+                {enableBetaFeatures && (
+                    <>
+                        <Link
+                            href="/daydream"
+                            className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold transition-all w-full group ${activePage === 'daydream'
+                                ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                                : 'text-gray-400 hover:text-yellow-400 hover:bg-yellow-500/10 border border-transparent'
+                                }`}
+                        >
+                            <span className="truncate">✨ DayDream</span>
+                        </Link>
+                        <Link
+                            href="/performance"
+                            className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold transition-all w-full group ${activePage === 'performance'
+                                ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                                : 'text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 border border-transparent'
+                                }`}
+                        >
+                            <span className="truncate">📈 Performance</span>
+                        </Link>
+                    </>
+                )}
             </nav>
 
             <div className="flex-1 overflow-y-auto">

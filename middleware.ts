@@ -20,6 +20,12 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next()
     }
 
+    // Beta features ringfencing
+    const enableBetaFeatures = process.env.NEXT_PUBLIC_ENABLE_BETA_FEATURES === 'true';
+    if (!enableBetaFeatures && (request.nextUrl.pathname.startsWith('/performance') || request.nextUrl.pathname.startsWith('/daydream'))) {
+        return NextResponse.redirect(new URL('/', request.url));
+    }
+
     if (!session) {
         // If it's an API route, return 401
         if (request.nextUrl.pathname.startsWith('/api')) {
