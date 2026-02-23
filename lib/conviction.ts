@@ -98,12 +98,12 @@ const ALPHA_HUNTER_WATCHLIST = Array.from(new Set([
 const CACHE_TTL = 15 * 60 * 1000; // 15 minutes (Standard Auto-Refresh)
 
 declare global {
-    var _megaCapCacheV2: { data: ConvictionStock[], timestamp: number } | null;
+    var _megaCapCacheV3: { data: ConvictionStock[], timestamp: number } | null;
     var _alphaHunterCacheV2: { data: ConvictionStock[], timestamp: number } | null;
 }
 
-// Initialize global cache if not exists (V2 to force refresh with names)
-if (!global._megaCapCacheV2) global._megaCapCacheV2 = null;
+// Initialize global cache if not exists (V3 to force refresh with names)
+if (!global._megaCapCacheV3) global._megaCapCacheV3 = null;
 if (!global._alphaHunterCacheV2) global._alphaHunterCacheV2 = null;
 
 let isScanning = false;
@@ -113,19 +113,19 @@ export async function scanConviction(forceRefresh = false): Promise<ConvictionSt
 
     // Logic: If market is OFF, only scan if cache is empty (one-time baseline fetch).
     // Otherwise, always serve cache during OFF hours to prevent redundant load.
-    if (marketSession === 'OFF' && global._megaCapCacheV2 && !forceRefresh) {
+    if (marketSession === 'OFF' && global._megaCapCacheV3 && !forceRefresh) {
         console.log("🌙 Market is CLOSED. Serving preserved Top Picks cache.");
-        return global._megaCapCacheV2.data;
+        return global._megaCapCacheV3.data;
     }
 
     // Return cached data if valid and not force-refresh
-    if (!forceRefresh && global._megaCapCacheV2 && (Date.now() - global._megaCapCacheV2.timestamp < CACHE_TTL)) {
+    if (!forceRefresh && global._megaCapCacheV3 && (Date.now() - global._megaCapCacheV3.timestamp < CACHE_TTL)) {
         console.log("⚡ Returning cached mega-cap conviction data");
-        return global._megaCapCacheV2.data;
+        return global._megaCapCacheV3.data;
     }
 
     // Clear old cache to force immediate update for user
-    if (forceRefresh) global._megaCapCacheV2 = null;
+    if (forceRefresh) global._megaCapCacheV3 = null;
 
     isScanning = true;
     const results: ConvictionStock[] = [];
@@ -141,8 +141,8 @@ export async function scanConviction(forceRefresh = false): Promise<ConvictionSt
     console.log("🚀 Starting Mega-Cap Conviction Scan (Top Picks)...");
     console.log("🔑 Public.com API Status:", publicClient.isConfigured() ? "Configured (Live) ✅" : "Missing (Estimated) ⚠️");
 
-    // Build symbol list - strictly use MEGA CAPS
-    let symbolsToScan: string[] = [...MEGA_CAP_WATCHLIST];
+    // Build symbol list - strictly use all tracked sector companies
+    let symbolsToScan: string[] = [...SCANNER_WATCHLIST];
     let discoveryMap = new Map<string, DiscoveredStock>();
 
     // TOP PICKS: Strictly S&P 500 & Nasdaq top companies
@@ -410,13 +410,13 @@ export async function scanConviction(forceRefresh = false): Promise<ConvictionSt
     const sorted = results.sort((a, b) => b.score - a.score);
 
     // Update Cache
-    global._megaCapCacheV2 = {
+    global._megaCapCacheV3 = {
         data: sorted,
         timestamp: Date.now()
     };
     isScanning = false;
-    console.log(`🏁 [Scanner] Scan complete. Found ${results.length} stocks. Returning top ${sorted.slice(0, 50).length}.`);
-    return sorted.slice(0, 50);
+    console.log(`🏁 [Scanner] Scan complete. Found ${results.length} stocks. Returning all ${sorted.length} tracked companies.`);
+    return sorted;
 }
 
 // Alpha Hunter - Broader Market Scan with Smart Discovery

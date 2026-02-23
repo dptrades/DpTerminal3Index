@@ -35,6 +35,11 @@
         "date": "2026-02-22",
         "optionPremium": 10.79,
         "stockPrice": 608.76
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 13.71,
+        "stockPrice": 601.7
       }
     ],
     "status": "ACTIVE"
@@ -77,6 +82,11 @@
         "date": "2026-02-22",
         "optionPremium": 35.05,
         "stockPrice": 759.41
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 31.6,
+        "stockPrice": 756.8178
       }
     ],
     "status": "ACTIVE"
@@ -154,46 +164,6 @@
     "status": "PROFIT"
   },
   {
-    "id": "MCW   260320C00007500",
-    "ticker": "MCW   ",
-    "companyName": "Mister Car Wash, Inc.",
-    "strike": 7.5,
-    "expiry": "2026-03-20",
-    "type": "CALL",
-    "entryPremium": 0.05,
-    "entryStockPrice": 6.985,
-    "entryDate": "2026-02-18",
-    "reasoning": [
-      "Price > EMA50",
-      "Price > EMA200",
-      "EMA Stack Bullish (Short > Mid > Long)",
-      "MACD Bullish Cross"
-    ],
-    "history": [
-      {
-        "date": "2026-02-18",
-        "optionPremium": 0.05,
-        "stockPrice": 6.985
-      },
-      {
-        "date": "2026-02-19",
-        "optionPremium": 0.05,
-        "stockPrice": 6.97
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 0.05,
-        "stockPrice": 7.03
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 0.05,
-        "stockPrice": 7.01
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
     "id": "LIN   260320C00490000",
     "ticker": "LIN   ",
     "companyName": "Linde plc",
@@ -227,72 +197,6 @@
       }
     ],
     "status": "PROFIT"
-  },
-  {
-    "id": "RELY  260320C00017500",
-    "ticker": "RELY  ",
-    "companyName": "Remitly Global, Inc.",
-    "strike": 17.5,
-    "expiry": "2026-03-20",
-    "type": "CALL",
-    "entryPremium": 0.825,
-    "entryStockPrice": 16.905,
-    "entryDate": "2026-02-19",
-    "reasoning": [
-      "Price > EMA50",
-      "Price > EMA200",
-      "MACD Bullish Cross"
-    ],
-    "history": [
-      {
-        "date": "2026-02-19",
-        "optionPremium": 0.85,
-        "stockPrice": 17.019
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 0.72,
-        "stockPrice": 17.15
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 0.72,
-        "stockPrice": 17.21
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "CAT   260320C00850000",
-    "ticker": "CAT   ",
-    "companyName": "Caterpillar Inc.",
-    "strike": 850,
-    "expiry": "2026-03-20",
-    "type": "CALL",
-    "entryPremium": 5.5,
-    "entryStockPrice": 750.445,
-    "entryDate": "2026-02-19",
-    "reasoning": [
-      "Institutional flow at $850. (Live IV: 3861.0%)"
-    ],
-    "history": [
-      {
-        "date": "2026-02-19",
-        "optionPremium": 5.89,
-        "stockPrice": 760.6
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 5.5,
-        "stockPrice": 759.74
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 5.5,
-        "stockPrice": 759.41
-      }
-    ],
-    "status": "ACTIVE"
   },
   {
     "id": "AMZN  260327P00200000",
@@ -354,9 +258,14 @@
         "date": "2026-02-22",
         "optionPremium": 0.81,
         "stockPrice": 122.1
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 1.06,
+        "stockPrice": 123.75
       }
     ],
-    "status": "ACTIVE"
+    "status": "PROFIT"
   },
   {
     "id": "KO    260417C00080000",
@@ -386,44 +295,14 @@
         "date": "2026-02-22",
         "optionPremium": 1.94,
         "stockPrice": 79.85
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "QQQ   260327P00600000",
-    "ticker": "QQQ   ",
-    "companyName": "Invesco QQQ Trust",
-    "strike": 600,
-    "expiry": "2026-03-27",
-    "type": "PUT",
-    "entryPremium": 14.21,
-    "entryStockPrice": 604.9,
-    "entryDate": "2026-02-19",
-    "reasoning": [
-      "Price < EMA50",
-      "EMA Stack Bearish (Short < Mid < Long)",
-      "MACD Bearish Cross",
-      "Bollinger Downtrend"
-    ],
-    "history": [
-      {
-        "date": "2026-02-19",
-        "optionPremium": 14.75,
-        "stockPrice": 603.3528
       },
       {
-        "date": "2026-02-20",
-        "optionPremium": 12.5,
-        "stockPrice": 608.71
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 12.5,
-        "stockPrice": 608.76
+        "date": "2026-02-23",
+        "optionPremium": 2.46,
+        "stockPrice": 80.64
       }
     ],
-    "status": "ACTIVE"
+    "status": "PROFIT"
   },
   {
     "id": "IWM   260320C00265000",
@@ -453,9 +332,14 @@
         "date": "2026-02-22",
         "optionPremium": 6.85,
         "stockPrice": 264.5
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 4.89,
+        "stockPrice": 260.669
       }
     ],
-    "status": "ACTIVE"
+    "status": "LOSS"
   },
   {
     "id": "SRE   260417C00100000",
@@ -485,6 +369,11 @@
         "date": "2026-02-22",
         "optionPremium": 1.25,
         "stockPrice": 94.97
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 1.2,
+        "stockPrice": 93.6
       }
     ],
     "status": "ACTIVE"
@@ -550,9 +439,14 @@
         "date": "2026-02-22",
         "optionPremium": 11.18,
         "stockPrice": 189.9999
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 12.6,
+        "stockPrice": 191.641
       }
     ],
-    "status": "ACTIVE"
+    "status": "PROFIT"
   },
   {
     "id": "HOOD  260327P00070000",
@@ -587,6 +481,11 @@
         "date": "2026-02-22",
         "optionPremium": 3.35,
         "stockPrice": 75.9458
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 4.98,
+        "stockPrice": 71.65
       }
     ],
     "status": "ACTIVE"
@@ -624,6 +523,11 @@
         "date": "2026-02-22",
         "optionPremium": 6.2,
         "stockPrice": 134.52
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 8.25,
+        "stockPrice": 130.52
       }
     ],
     "status": "ACTIVE"
@@ -658,6 +562,11 @@
         "date": "2026-02-22",
         "optionPremium": 10.02,
         "stockPrice": 689.59
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 13.81,
+        "stockPrice": 682.71
       }
     ],
     "status": "ACTIVE"
@@ -690,69 +599,14 @@
         "date": "2026-02-22",
         "optionPremium": 2.05,
         "stockPrice": 375.3
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 1.5,
+        "stockPrice": 373.02
       }
     ],
     "status": "ACTIVE"
-  },
-  {
-    "id": "FIG   260327P00025000",
-    "ticker": "FIG",
-    "companyName": "Figma, Inc.",
-    "strike": 25,
-    "expiry": "2026-03-27",
-    "type": "PUT",
-    "entryPremium": 1.89,
-    "entryStockPrice": 26.3,
-    "entryDate": "2026-02-19",
-    "reasoning": [
-      "Price < EMA50",
-      "EMA Stack Bearish (Short < Mid < Long)"
-    ],
-    "history": [
-      {
-        "date": "2026-02-19",
-        "optionPremium": 1.89,
-        "stockPrice": 25.76
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 1.65,
-        "stockPrice": 26.2402
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 1.65,
-        "stockPrice": 26.0597
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "XOM   260227C00155000",
-    "ticker": "XOM",
-    "companyName": "Exxon Mobil Corporation",
-    "strike": 155,
-    "expiry": "2026-02-27",
-    "type": "CALL",
-    "entryPremium": 1.42,
-    "entryStockPrice": 151.6,
-    "entryDate": "2026-02-19",
-    "reasoning": [
-      "Institutional flow at $155. (Live IV: 30.2%)"
-    ],
-    "history": [
-      {
-        "date": "2026-02-19",
-        "optionPremium": 1.15,
-        "stockPrice": 150.92
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 0.43,
-        "stockPrice": 147.6
-      }
-    ],
-    "status": "LOSS"
   },
   {
     "id": "MSFT  260327P00390000",
@@ -787,9 +641,14 @@
         "date": "2026-02-22",
         "optionPremium": 9.94,
         "stockPrice": 397.05
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 15.95,
+        "stockPrice": 384.93
       }
     ],
-    "status": "ACTIVE"
+    "status": "PROFIT"
   },
   {
     "id": "PM    260320C00190000",
@@ -814,9 +673,14 @@
         "date": "2026-02-22",
         "optionPremium": 2.13,
         "stockPrice": 184.21
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 3.4,
+        "stockPrice": 187.22
       }
     ],
-    "status": "ACTIVE"
+    "status": "PROFIT"
   },
   {
     "id": "GOOGL 260327P00310000",
@@ -843,37 +707,11 @@
         "date": "2026-02-22",
         "optionPremium": 9.46,
         "stockPrice": 315.41
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "FSM   260320C00012500",
-    "ticker": "FSM",
-    "companyName": "Fortuna Mining Corp.",
-    "strike": 12.5,
-    "expiry": "2026-03-20",
-    "type": "CALL",
-    "entryPremium": 0.7,
-    "entryStockPrice": 12.065,
-    "entryDate": "2026-02-20",
-    "reasoning": [
-      "Price > EMA50",
-      "Price > EMA200",
-      "EMA Stack Bullish (Short > Mid > Long)",
-      "Strong Bullish Momentum",
-      "MACD Bullish Cross"
-    ],
-    "history": [
-      {
-        "date": "2026-02-20",
-        "optionPremium": 0.7,
-        "stockPrice": 12.065
       },
       {
-        "date": "2026-02-22",
-        "optionPremium": 0.75,
-        "stockPrice": 12.2607
+        "date": "2026-02-23",
+        "optionPremium": 11.35,
+        "stockPrice": 312.12
       }
     ],
     "status": "ACTIVE"
@@ -904,9 +742,14 @@
         "date": "2026-02-22",
         "optionPremium": 10.7,
         "stockPrice": 171
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 16.05,
+        "stockPrice": 160.5618
       }
     ],
-    "status": "ACTIVE"
+    "status": "PROFIT"
   },
   {
     "id": "BA    260327C00240000",
@@ -934,6 +777,11 @@
         "date": "2026-02-22",
         "optionPremium": 7,
         "stockPrice": 231.95
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 5.03,
+        "stockPrice": 230.25
       }
     ],
     "status": "ACTIVE"
@@ -964,9 +812,14 @@
         "date": "2026-02-22",
         "optionPremium": 8.7,
         "stockPrice": 185.66
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 13.16,
+        "stockPrice": 178.3383
       }
     ],
-    "status": "ACTIVE"
+    "status": "PROFIT"
   },
   {
     "id": "XOM   260327C00150000",
@@ -994,6 +847,113 @@
         "date": "2026-02-22",
         "optionPremium": 4.75,
         "stockPrice": 147.6017
+      },
+      {
+        "date": "2026-02-23",
+        "optionPremium": 5.87,
+        "stockPrice": 150.92
+      }
+    ],
+    "status": "PROFIT"
+  },
+  {
+    "id": "SHLS  260320C00011000",
+    "ticker": "SHLS",
+    "companyName": "Shoals Technologies Group, Inc.",
+    "strike": 11,
+    "expiry": "2026-03-20",
+    "type": "CALL",
+    "entryPremium": 0.9,
+    "entryStockPrice": 10.62,
+    "entryDate": "2026-02-23",
+    "reasoning": [
+      "Price > EMA50",
+      "Price > EMA200",
+      "EMA Stack Bullish (Short > Mid > Long)",
+      "MACD Bullish Cross"
+    ],
+    "history": [
+      {
+        "date": "2026-02-23",
+        "optionPremium": 0.9,
+        "stockPrice": 10.62
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "CAH   260320C00230000",
+    "ticker": "CAH",
+    "companyName": "Cardinal Health, Inc.",
+    "strike": 230,
+    "expiry": "2026-03-20",
+    "type": "CALL",
+    "entryPremium": 4.95,
+    "entryStockPrice": 225.97,
+    "entryDate": "2026-02-23",
+    "reasoning": [
+      "Institutional flow at $230. (Live IV: 28.0%)"
+    ],
+    "history": [
+      {
+        "date": "2026-02-23",
+        "optionPremium": 4.95,
+        "stockPrice": 225.97
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "ATMU  260320C00065000",
+    "ticker": "ATMU",
+    "companyName": "Atmus Filtration Technologies Inc.",
+    "strike": 65,
+    "expiry": "2026-03-20",
+    "type": "CALL",
+    "entryPremium": 1.5999999999999999,
+    "entryStockPrice": 63.485,
+    "entryDate": "2026-02-23",
+    "reasoning": [
+      "Price > EMA50",
+      "Price > EMA200",
+      "EMA Stack Bullish (Short > Mid > Long)",
+      "Strong Bullish Momentum",
+      "MACD Bullish Cross",
+      "Bollinger Uptrend"
+    ],
+    "history": [
+      {
+        "date": "2026-02-23",
+        "optionPremium": 1.5999999999999999,
+        "stockPrice": 63.485
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "DLR   260402C00180000",
+    "ticker": "DLR",
+    "companyName": "Digital Realty Trust, Inc.",
+    "strike": 180,
+    "expiry": "2026-04-02",
+    "type": "CALL",
+    "entryPremium": 5.050000000000001,
+    "entryStockPrice": 176.11,
+    "entryDate": "2026-02-23",
+    "reasoning": [
+      "Price > EMA50",
+      "Price > EMA200",
+      "EMA Stack Bullish (Short > Mid > Long)",
+      "Strong Bullish Momentum",
+      "MACD Bullish Cross",
+      "Bollinger Uptrend",
+      "Pattern: Bullish Engulfing (Bullish)"
+    ],
+    "history": [
+      {
+        "date": "2026-02-23",
+        "optionPremium": 5.050000000000001,
+        "stockPrice": 176.11
       }
     ],
     "status": "ACTIVE"

@@ -9,6 +9,8 @@ interface SectorGroup {
     name: string;
     avgChange: number;
     stocks: ConvictionStock[];
+    topPerformer?: ConvictionStock;
+    worstPerformer?: ConvictionStock;
 }
 
 interface Props {
@@ -50,7 +52,23 @@ export default function SectorDetailModal({ sector, onClose, onSelectStock }: Pr
                                 {sector.avgChange > 0 ? '+' : ''}{sector.avgChange.toFixed(2)}%
                             </div>
                         </div>
-                        <p className="text-gray-200 text-sm mt-1">Sector Overview • {sector.stocks.length} Assets Tracked</p>
+                        <div className="flex items-center gap-4 mt-2">
+                            <p className="text-gray-300 text-sm font-medium border-r border-gray-700 pr-4">{sector.stocks.length} Assets Tracked</p>
+                            {sector.topPerformer && (
+                                <div className="flex items-center gap-1.5 text-sm">
+                                    <span className="text-gray-400 text-xs uppercase tracking-wider">Top:</span>
+                                    <span className="font-bold text-white">{sector.topPerformer.symbol}</span>
+                                    <span className="text-green-400 font-mono">+{sector.topPerformer.change24h.toFixed(2)}%</span>
+                                </div>
+                            )}
+                            {sector.worstPerformer && (
+                                <div className="flex items-center gap-1.5 text-sm">
+                                    <span className="text-gray-400 text-xs uppercase tracking-wider">Worst:</span>
+                                    <span className="font-bold text-white">{sector.worstPerformer.symbol}</span>
+                                    <span className="text-red-400 font-mono">{sector.worstPerformer.change24h.toFixed(2)}%</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <button
                         onClick={onClose}
@@ -116,6 +134,32 @@ export default function SectorDetailModal({ sector, onClose, onSelectStock }: Pr
                                     No significant losers found in this sector today.
                                 </div>
                             )}
+                        </div>
+                    </div>
+
+                    {/* All Tickers Section */}
+                    <div className="pt-6 border-t border-gray-800">
+                        <div className="flex items-center gap-2 mb-6">
+                            <h3 className="text-xl font-bold text-white">All Tracked Assets</h3>
+                            <span className="text-xs text-gray-400">({sector.stocks.length})</span>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                            {sector.stocks.sort((a, b) => a.symbol.localeCompare(b.symbol)).map(stock => (
+                                <button
+                                    key={`all-${stock.symbol}`}
+                                    onClick={() => {
+                                        onSelectStock(stock.symbol);
+                                        onClose();
+                                    }}
+                                    className="flex items-center justify-between p-3 rounded-xl bg-gray-900/50 border border-gray-700/50 hover:border-gray-500 hover:bg-gray-800 transition-all text-left"
+                                >
+                                    <span className="font-bold text-gray-200">{stock.symbol}</span>
+                                    <span className={`text-xs font-mono font-medium ${stock.change24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                        {stock.change24h > 0 ? '+' : ''}{stock.change24h.toFixed(2)}%
+                                    </span>
+                                </button>
+                            ))}
                         </div>
                     </div>
                 </div>

@@ -8,6 +8,8 @@ interface SectorGroup {
     name: string;
     avgChange: number;
     stocks: ConvictionStock[];
+    topPerformer?: ConvictionStock;
+    worstPerformer?: ConvictionStock;
 }
 
 interface Props {
@@ -39,10 +41,21 @@ export default function SectorPerformanceWidget({ onSectorClick }: Props) {
                 const sectorList = Object.keys(groups).map(name => {
                     const stocks = groups[name];
                     const avgChange = stocks.reduce((acc, s) => acc + s.change24h, 0) / stocks.length;
+
+                    let topPerformer = stocks[0];
+                    let worstPerformer = stocks[0];
+
+                    stocks.forEach(s => {
+                        if (s.change24h > topPerformer.change24h) topPerformer = s;
+                        if (s.change24h < worstPerformer.change24h) worstPerformer = s;
+                    });
+
                     return {
                         name,
                         avgChange,
-                        stocks
+                        stocks,
+                        topPerformer,
+                        worstPerformer
                     };
                 });
 
@@ -87,14 +100,29 @@ export default function SectorPerformanceWidget({ onSectorClick }: Props) {
                     <button
                         key={sector.name}
                         onClick={() => onSectorClick(sector)}
-                        className="flex flex-col items-center justify-center p-3 rounded-lg bg-gray-900/50 border border-gray-700/50 hover:border-gray-500 hover:bg-gray-800 transition-all text-center group"
+                        className="flex flex-col p-3 rounded-lg bg-gray-900/50 border border-gray-700/50 hover:border-gray-500 hover:bg-gray-800 transition-all text-left group gap-1 outline-none w-full"
                     >
-                        <span className="text-[10px] text-gray-200 font-bold uppercase tracking-tight mb-1 group-hover:text-gray-200">
-                            {sector.name}
-                        </span>
-                        <div className={`text-sm font-mono font-bold ${sector.avgChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                            {sector.avgChange > 0 ? '+' : ''}{sector.avgChange.toFixed(2)}%
+                        <div className="flex w-full justify-between items-center mb-1">
+                            <span className="text-[10px] text-gray-200 font-bold uppercase tracking-tight group-hover:text-white truncate pr-2">
+                                {sector.name}
+                            </span>
+                            <div className={`text-xs font-mono font-bold ${sector.avgChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                                {sector.avgChange > 0 ? '+' : ''}{sector.avgChange.toFixed(2)}%
+                            </div>
                         </div>
+
+                        {sector.topPerformer && (
+                            <div className="flex w-full justify-between items-center text-[10px] bg-green-900/20 px-1.5 py-0.5 rounded border border-green-900/30">
+                                <span className="text-gray-300">Top <span className="text-white font-bold ml-1">{sector.topPerformer.symbol}</span></span>
+                                <span className="text-green-400 font-mono">+{sector.topPerformer.change24h.toFixed(2)}%</span>
+                            </div>
+                        )}
+                        {sector.worstPerformer && (
+                            <div className="flex w-full justify-between items-center text-[10px] bg-red-900/20 px-1.5 py-0.5 rounded border border-red-900/30">
+                                <span className="text-gray-300">Worst <span className="text-white font-bold ml-1">{sector.worstPerformer.symbol}</span></span>
+                                <span className="text-red-400 font-mono">{sector.worstPerformer.change24h.toFixed(2)}%</span>
+                            </div>
+                        )}
                     </button>
                 ))}
             </div>
