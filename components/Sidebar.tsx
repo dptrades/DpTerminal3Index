@@ -10,6 +10,7 @@ import { IndicatorData } from '../types/financial';
 import { PriceStats } from '../lib/stats';
 import OptionsSignal from './OptionsSignal';
 import { generateOptionSignal, OptionRecommendation } from '../lib/options';
+import PreMarketMovers from './PreMarketMovers';
 
 
 interface SidebarProps {
@@ -112,12 +113,13 @@ export default function Sidebar({
 }: SidebarProps) {
     const pathname = usePathname();
     const activePage = pathname === '/' ? 'dashboard'
-        : pathname.startsWith('/picks') ? 'picks'
-            : pathname.startsWith('/conviction') ? 'conviction'
-                : pathname.startsWith('/social-pulse') ? 'social'
-                    : pathname.startsWith('/daydream') ? 'daydream'
-                        : pathname.startsWith('/performance') ? 'performance'
-                            : 'dashboard';
+        : pathname.startsWith('/pre-market') ? 'pre-market'
+            : pathname.startsWith('/picks') ? 'picks'
+                : pathname.startsWith('/conviction') ? 'conviction'
+                    : pathname.startsWith('/social-pulse') ? 'social'
+                        : pathname.startsWith('/daydream') ? 'daydream'
+                            : pathname.startsWith('/performance') ? 'performance'
+                                : 'dashboard';
 
     // Calculate Options Signal
     const latest = data[data.length - 1];
@@ -175,6 +177,15 @@ export default function Sidebar({
                     <span className="truncate">📡 Live Dashboard</span>
                 </Link>
                 <Link
+                    href="/pre-market"
+                    className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold transition-all w-full group ${activePage === 'pre-market'
+                        ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                        : 'text-gray-400 hover:text-yellow-400 hover:bg-yellow-500/10 border border-transparent'
+                        }`}
+                >
+                    <span className="truncate">⚡ Pre-Market</span>
+                </Link>
+                <Link
                     href="/picks"
                     className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-bold transition-all w-full group ${activePage === 'picks'
                         ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
@@ -225,7 +236,7 @@ export default function Sidebar({
                 )}
             </nav>
 
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto mt-4">
                 {/* Market Internals (Market Pulse) - Below Navigation */}
                 <SidebarInternals onSectorClick={onSectorClick} isOpen={isOpen} />
             </div>

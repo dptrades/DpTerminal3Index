@@ -1,489 +1,89 @@
 [
   {
-    "id": "QQQ   260320P00600000",
-    "ticker": "QQQ   ",
-    "companyName": "Invesco QQQ Trust",
-    "strike": 600,
-    "expiry": "2026-03-20",
-    "type": "PUT",
-    "entryPremium": 12.559999999999999,
-    "entryStockPrice": 605.67,
-    "entryDate": "2026-02-18",
-    "reasoning": [
-      "Price < EMA50",
-      "EMA Stack Bearish (Short < Mid < Long)",
-      "MACD Bearish Cross",
-      "Bollinger Downtrend"
-    ],
-    "history": [
-      {
-        "date": "2026-02-18",
-        "optionPremium": 12.559999999999999,
-        "stockPrice": 605.67
-      },
-      {
-        "date": "2026-02-19",
-        "optionPremium": 13.25,
-        "stockPrice": 603.3528
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 10.9,
-        "stockPrice": 608.71
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 10.79,
-        "stockPrice": 608.76
-      },
-      {
-        "date": "2026-02-23",
-        "optionPremium": 13.71,
-        "stockPrice": 601.7
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 10.5,
-        "stockPrice": 607.83
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "CAT   260327C00770000",
-    "ticker": "CAT   ",
-    "companyName": "Caterpillar Inc.",
-    "strike": 770,
-    "expiry": "2026-03-27",
+    "id": "BLK260402C01110000",
+    "ticker": "BLK",
+    "companyName": "BlackRock, Inc.",
+    "strike": 1110,
+    "expiry": "2026-04-02",
     "type": "CALL",
-    "entryPremium": 31,
-    "entryStockPrice": 752.21,
-    "entryDate": "2026-02-18",
+    "entryPremium": 30.75,
+    "entryStockPrice": 1095.22,
+    "entryDate": "2026-02-26",
     "reasoning": [
       "Price > EMA50",
       "Price > EMA200",
-      "EMA Stack Bullish (Short > Mid > Long)",
-      "Strong Bullish Momentum",
       "MACD Bullish Cross",
       "Bollinger Uptrend"
     ],
     "history": [
       {
-        "date": "2026-02-18",
-        "optionPremium": 31,
-        "stockPrice": 752.21
-      },
-      {
-        "date": "2026-02-19",
-        "optionPremium": 35.05,
-        "stockPrice": 760.6
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 35.05,
-        "stockPrice": 759.74
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 35.05,
-        "stockPrice": 759.41
-      },
-      {
-        "date": "2026-02-23",
-        "optionPremium": 31.6,
-        "stockPrice": 756.8178
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 33.75,
-        "stockPrice": 768.23
+        "date": "2026-02-26",
+        "optionPremium": 30.75,
+        "stockPrice": 1095.22
       }
     ],
     "status": "ACTIVE"
   },
   {
-    "id": "SRE   260417C00100000",
-    "ticker": "SRE",
-    "companyName": "Sempra",
-    "strike": 100,
-    "expiry": "2026-04-17",
-    "type": "CALL",
-    "entryPremium": 1.15,
-    "entryStockPrice": 92.455,
-    "entryDate": "2026-02-19",
-    "reasoning": [
-      "Institutional flow at $100. (Live IV: 26.1%)"
-    ],
-    "history": [
-      {
-        "date": "2026-02-19",
-        "optionPremium": 1.2,
-        "stockPrice": 92.97
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 1.25,
-        "stockPrice": 93.55
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 1.25,
-        "stockPrice": 94.97
-      },
-      {
-        "date": "2026-02-23",
-        "optionPremium": 1.2,
-        "stockPrice": 93.6
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 1.31,
-        "stockPrice": 93.97
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "HOOD  260327P00070000",
-    "ticker": "HOOD",
-    "companyName": "Robinhood Markets, Inc.",
-    "strike": 70,
-    "expiry": "2026-03-27",
+    "id": "IONQ260402P00040000",
+    "ticker": "IONQ",
+    "companyName": "IonQ, Inc.",
+    "strike": 40,
+    "expiry": "2026-04-02",
     "type": "PUT",
-    "entryPremium": 4.025,
-    "entryStockPrice": 74.61,
-    "entryDate": "2026-02-19",
+    "entryPremium": 4.125,
+    "entryStockPrice": 40.99,
+    "entryDate": "2026-02-26",
     "reasoning": [
       "Price < EMA50",
       "Price < EMA200",
       "EMA Stack Bearish (Short < Mid < Long)",
-      "Developing Bearish Momentum",
-      "MACD Bearish Cross",
-      "Bollinger Downtrend"
+      "Price at Upper BB (Resistance)"
     ],
     "history": [
       {
-        "date": "2026-02-19",
-        "optionPremium": 3.96,
-        "stockPrice": 75.57
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 3.35,
-        "stockPrice": 76
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 3.35,
-        "stockPrice": 75.9458
-      },
-      {
-        "date": "2026-02-23",
-        "optionPremium": 4.98,
-        "stockPrice": 71.65
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 4.18,
-        "stockPrice": 73.38
+        "date": "2026-02-26",
+        "optionPremium": 4.125,
+        "stockPrice": 40.99
       }
     ],
     "status": "ACTIVE"
   },
   {
-    "id": "SPY   260327P00680000",
-    "ticker": "SPY",
-    "companyName": "State Street SPDR S&P 500 ETF Trust",
-    "strike": 680,
-    "expiry": "2026-03-27",
-    "type": "PUT",
-    "entryPremium": 12.775,
-    "entryStockPrice": 683.92,
-    "entryDate": "2026-02-19",
-    "reasoning": [
-      "Price < EMA50",
-      "MACD Bearish Cross",
-      "Bollinger Downtrend"
-    ],
-    "history": [
-      {
-        "date": "2026-02-19",
-        "optionPremium": 12.4,
-        "stockPrice": 684.631
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 10.14,
-        "stockPrice": 689.37
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 10.02,
-        "stockPrice": 689.59
-      },
-      {
-        "date": "2026-02-23",
-        "optionPremium": 13.81,
-        "stockPrice": 682.71
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 10.22,
-        "stockPrice": 687.3548
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "AMAT  260227C00400000",
-    "ticker": "AMAT",
-    "companyName": "Applied Materials, Inc.",
-    "strike": 400,
-    "expiry": "2026-02-27",
-    "type": "CALL",
-    "entryPremium": 1.79,
-    "entryStockPrice": 367.68,
-    "entryDate": "2026-02-19",
-    "reasoning": [
-      "Institutional flow at $400. (Live IV: 49.9%)"
-    ],
-    "history": [
-      {
-        "date": "2026-02-19",
-        "optionPremium": 1.58,
-        "stockPrice": 370.85
-      },
-      {
-        "date": "2026-02-20",
-        "optionPremium": 2.05,
-        "stockPrice": 375.3501
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 2.05,
-        "stockPrice": 375.3
-      },
-      {
-        "date": "2026-02-23",
-        "optionPremium": 1.5,
-        "stockPrice": 373.02
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 1.52,
-        "stockPrice": 377.93
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "GOOGL 260327P00310000",
-    "ticker": "GOOGL",
-    "companyName": "Alphabet Inc.",
-    "strike": 310,
-    "expiry": "2026-03-27",
-    "type": "PUT",
-    "entryPremium": 9.725000000000001,
-    "entryStockPrice": 314.765,
-    "entryDate": "2026-02-20",
-    "reasoning": [
-      "Price < EMA50",
-      "MACD Bearish Cross",
-      "Bollinger Downtrend"
-    ],
-    "history": [
-      {
-        "date": "2026-02-20",
-        "optionPremium": 9.725000000000001,
-        "stockPrice": 314.765
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 9.46,
-        "stockPrice": 315.41
-      },
-      {
-        "date": "2026-02-23",
-        "optionPremium": 11.35,
-        "stockPrice": 312.12
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 10.8,
-        "stockPrice": 310.9
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "BA    260327C00240000",
-    "ticker": "BA",
-    "companyName": "The Boeing Company",
-    "strike": 240,
-    "expiry": "2026-03-27",
-    "type": "CALL",
-    "entryPremium": 6.300000000000001,
-    "entryStockPrice": 232,
-    "entryDate": "2026-02-20",
-    "reasoning": [
-      "Price > EMA50",
-      "Price > EMA200",
-      "Price at Lower BB (Support)",
-      "Pattern: Doji (Indecision)"
-    ],
-    "history": [
-      {
-        "date": "2026-02-20",
-        "optionPremium": 6.300000000000001,
-        "stockPrice": 232
-      },
-      {
-        "date": "2026-02-22",
-        "optionPremium": 7,
-        "stockPrice": 231.95
-      },
-      {
-        "date": "2026-02-23",
-        "optionPremium": 5.03,
-        "stockPrice": 230.25
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 6.55,
-        "stockPrice": 233.39
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "CAH   260320C00230000",
-    "ticker": "CAH",
-    "companyName": "Cardinal Health, Inc.",
-    "strike": 230,
-    "expiry": "2026-03-20",
-    "type": "CALL",
-    "entryPremium": 4.95,
-    "entryStockPrice": 225.97,
-    "entryDate": "2026-02-23",
-    "reasoning": [
-      "Institutional flow at $230. (Live IV: 28.0%)"
-    ],
-    "history": [
-      {
-        "date": "2026-02-23",
-        "optionPremium": 4.95,
-        "stockPrice": 225.97
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 4.5,
-        "stockPrice": 225.97
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "ATMU  260320C00065000",
-    "ticker": "ATMU",
-    "companyName": "Atmus Filtration Technologies Inc.",
-    "strike": 65,
-    "expiry": "2026-03-20",
-    "type": "CALL",
-    "entryPremium": 1.5999999999999999,
-    "entryStockPrice": 63.485,
-    "entryDate": "2026-02-23",
-    "reasoning": [
-      "Price > EMA50",
-      "Price > EMA200",
-      "EMA Stack Bullish (Short > Mid > Long)",
-      "Strong Bullish Momentum",
-      "MACD Bullish Cross",
-      "Bollinger Uptrend"
-    ],
-    "history": [
-      {
-        "date": "2026-02-23",
-        "optionPremium": 1.5999999999999999,
-        "stockPrice": 63.485
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 1.58,
-        "stockPrice": 65.11
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "DLR   260402C00180000",
-    "ticker": "DLR",
-    "companyName": "Digital Realty Trust, Inc.",
-    "strike": 180,
-    "expiry": "2026-04-02",
-    "type": "CALL",
-    "entryPremium": 5.050000000000001,
-    "entryStockPrice": 176.11,
-    "entryDate": "2026-02-23",
-    "reasoning": [
-      "Price > EMA50",
-      "Price > EMA200",
-      "EMA Stack Bullish (Short > Mid > Long)",
-      "Strong Bullish Momentum",
-      "MACD Bullish Cross",
-      "Bollinger Uptrend",
-      "Pattern: Bullish Engulfing (Bullish)"
-    ],
-    "history": [
-      {
-        "date": "2026-02-23",
-        "optionPremium": 5.050000000000001,
-        "stockPrice": 176.11
-      },
-      {
-        "date": "2026-02-24",
-        "optionPremium": 5.9,
-        "stockPrice": 178.24
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "WELL  260320C00210000",
-    "ticker": "WELL",
-    "companyName": "Welltower Inc.",
-    "strike": 210,
-    "expiry": "2026-03-20",
-    "type": "CALL",
-    "entryPremium": 5.1,
-    "entryStockPrice": 209.52,
-    "entryDate": "2026-02-24",
-    "reasoning": [
-      "Price > EMA50",
-      "Price > EMA200",
-      "EMA Stack Bullish (Short > Mid > Long)",
-      "Strong Bullish Momentum",
-      "MACD Bullish Cross",
-      "Bollinger Uptrend"
-    ],
-    "history": [
-      {
-        "date": "2026-02-24",
-        "optionPremium": 5.1,
-        "stockPrice": 209.52
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "IPGP  260320C00140000",
+    "id": "IPGP260320C00135000",
     "ticker": "IPGP",
     "companyName": "IPG Photonics Corporation",
-    "strike": 140,
+    "strike": 135,
     "expiry": "2026-03-20",
     "type": "CALL",
-    "entryPremium": 5.75,
-    "entryStockPrice": 134.62,
-    "entryDate": "2026-02-24",
+    "entryPremium": 4.65,
+    "entryStockPrice": 127.91,
+    "entryDate": "2026-02-26",
+    "reasoning": [
+      "Price > EMA50",
+      "Price > EMA200",
+      "EMA Stack Bullish (Short > Mid > Long)",
+      "Bollinger Uptrend"
+    ],
+    "history": [
+      {
+        "date": "2026-02-26",
+        "optionPremium": 4.65,
+        "stockPrice": 127.91
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "AMAT260402C00380000",
+    "ticker": "AMAT",
+    "companyName": "Applied Materials, Inc.",
+    "strike": 380,
+    "expiry": "2026-04-02",
+    "type": "CALL",
+    "entryPremium": 20.275,
+    "entryStockPrice": 371.3,
+    "entryDate": "2026-02-26",
     "reasoning": [
       "Price > EMA50",
       "Price > EMA200",
@@ -494,85 +94,34 @@
     ],
     "history": [
       {
-        "date": "2026-02-24",
-        "optionPremium": 5.75,
-        "stockPrice": 134.62
+        "date": "2026-02-26",
+        "optionPremium": 20.275,
+        "stockPrice": 371.3
       }
     ],
     "status": "ACTIVE"
   },
   {
-    "id": "MSFT  260402P00380000",
-    "ticker": "MSFT",
-    "companyName": "Microsoft Corporation",
-    "strike": 380,
-    "expiry": "2026-04-02",
-    "type": "PUT",
-    "entryPremium": 10,
-    "entryStockPrice": 388.165,
-    "entryDate": "2026-02-24",
+    "id": "PRVA260320C00025000",
+    "ticker": "PRVA",
+    "companyName": "Privia Health Group, Inc.",
+    "strike": 25,
+    "expiry": "2026-03-20",
+    "type": "CALL",
+    "entryPremium": 0.925,
+    "entryStockPrice": 24.73,
+    "entryDate": "2026-02-26",
     "reasoning": [
-      "Price < EMA50",
-      "Price < EMA200",
-      "EMA Stack Bearish (Short < Mid < Long)",
-      "Developing Bearish Momentum",
-      "MACD Bearish Cross",
-      "Bollinger Downtrend"
+      "Price > EMA50",
+      "Price > EMA200",
+      "Strong Bullish Momentum",
+      "MACD Bullish Cross"
     ],
     "history": [
       {
-        "date": "2026-02-24",
-        "optionPremium": 10,
-        "stockPrice": 388.165
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "ZETA  260402P00016000",
-    "ticker": "ZETA",
-    "companyName": "Zeta Global Holdings Corp.",
-    "strike": 16,
-    "expiry": "2026-04-02",
-    "type": "PUT",
-    "entryPremium": 1.495,
-    "entryStockPrice": 16.68,
-    "entryDate": "2026-02-24",
-    "reasoning": [
-      "Price < EMA50",
-      "Price < EMA200",
-      "EMA Stack Bearish (Short < Mid < Long)",
-      "Bollinger Downtrend"
-    ],
-    "history": [
-      {
-        "date": "2026-02-24",
-        "optionPremium": 1.495,
-        "stockPrice": 16.68
-      }
-    ],
-    "status": "ACTIVE"
-  },
-  {
-    "id": "PYPL  260402P00046000",
-    "ticker": "PYPL",
-    "companyName": "PayPal Holdings, Inc.",
-    "strike": 46,
-    "expiry": "2026-04-02",
-    "type": "PUT",
-    "entryPremium": 2.525,
-    "entryStockPrice": 47.06,
-    "entryDate": "2026-02-24",
-    "reasoning": [
-      "Price < EMA50",
-      "Price < EMA200",
-      "EMA Stack Bearish (Short < Mid < Long)"
-    ],
-    "history": [
-      {
-        "date": "2026-02-24",
-        "optionPremium": 2.525,
-        "stockPrice": 47.06
+        "date": "2026-02-26",
+        "optionPremium": 0.925,
+        "stockPrice": 24.73
       }
     ],
     "status": "ACTIVE"

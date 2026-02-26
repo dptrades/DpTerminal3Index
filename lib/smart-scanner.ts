@@ -38,8 +38,10 @@ export async function scanUnusualVolume(): Promise<DiscoveredStock[]> {
         for (const quote of quotes) {
             // Filter: Only US stocks with significant volume
             if (!quote.symbol || quote.symbol.includes('.') || quote.symbol.includes('-')) continue;
-            if (quote.averageDailyVolume10Day && quote.regularMarketVolume) {
-                const volumeRatio = quote.regularMarketVolume / quote.averageDailyVolume10Day;
+
+            const currentVolume = quote.preMarketVolume || quote.regularMarketVolume;
+            if (quote.averageDailyVolume10Day && currentVolume) {
+                const volumeRatio = currentVolume / quote.averageDailyVolume10Day;
                 if (volumeRatio >= 1.5) {
                     results.push({
                         symbol: quote.symbol,
@@ -83,13 +85,13 @@ export async function scanTopGainers(): Promise<DiscoveredStock[]> {
 
         for (const quote of quotes) {
             if (!quote.symbol || quote.symbol.includes('.') || quote.symbol.includes('-')) continue;
-            const changePercent = quote.regularMarketChangePercent || 0;
+            const changePercent = quote.preMarketChangePercent || quote.regularMarketChangePercent || 0;
             if (changePercent >= 5) {
                 results.push({
                     symbol: quote.symbol,
                     name: quote.shortName || quote.longName,
                     source: 'technical',
-                    signal: `+${changePercent.toFixed(1)}% today`,
+                    signal: `+${changePercent.toFixed(1)}% pre-mkt/today`,
                     strength: Math.min(100, Math.round(changePercent * 5)),
                     timestamp: new Date()
                 });

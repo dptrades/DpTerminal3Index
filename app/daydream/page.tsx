@@ -9,6 +9,7 @@ import { DayDreamPick } from '@/lib/daydream';
 import { getMarketStatus, MarketStatus } from '@/lib/market';
 import { REFRESH_INTERVALS, isMarketActive } from '../../lib/refresh-utils';
 import { OptionRecommendation } from '@/lib/options';
+import PreMarketMovers from '@/components/PreMarketMovers';
 
 export default function DayDreamPage() {
     const [picks, setPicks] = useState<DayDreamPick[]>([]);
@@ -160,6 +161,10 @@ export default function DayDreamPage() {
                                 </button>
                             </div>
                         </div>
+                    </div>
+
+                    <div className="mb-4">
+                        <PreMarketMovers />
                     </div>
 
                     {marketStatus && !marketStatus.isOpen && (

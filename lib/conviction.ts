@@ -98,13 +98,13 @@ const ALPHA_HUNTER_WATCHLIST = Array.from(new Set([
 const CACHE_TTL = 15 * 60 * 1000; // 15 minutes (Standard Auto-Refresh)
 
 declare global {
-    var _megaCapCacheV7: { data: ConvictionStock[], timestamp: number } | null;
-    var _alphaHunterCacheV6: { data: ConvictionStock[], timestamp: number } | null;
+    var _megaCapCacheV8: { data: ConvictionStock[], timestamp: number } | null;
+    var _alphaHunterCacheV7: { data: ConvictionStock[], timestamp: number } | null;
 }
 
-// Initialize global cache if not exists (V3 to force refresh with names)
-if (!global._megaCapCacheV7) global._megaCapCacheV7 = null;
-if (!global._alphaHunterCacheV6) global._alphaHunterCacheV6 = null;
+// Initialize global cache if not exists
+if (!global._megaCapCacheV8) global._megaCapCacheV8 = null;
+if (!global._alphaHunterCacheV7) global._alphaHunterCacheV7 = null;
 
 let isScanning = false;
 
@@ -113,19 +113,19 @@ export async function scanConviction(forceRefresh = false): Promise<ConvictionSt
 
     // Logic: If market is OFF, only scan if cache is empty (one-time baseline fetch).
     // Otherwise, always serve cache during OFF hours to prevent redundant load.
-    if (marketSession === 'OFF' && global._megaCapCacheV7 && !forceRefresh) {
+    if (marketSession === 'OFF' && global._megaCapCacheV8 && !forceRefresh) {
         console.log("🌙 Market is CLOSED. Serving preserved Top Picks cache.");
-        return global._megaCapCacheV7.data;
+        return global._megaCapCacheV8.data;
     }
 
     // Return cached data if valid and not force-refresh
-    if (!forceRefresh && global._megaCapCacheV7 && (Date.now() - global._megaCapCacheV7.timestamp < CACHE_TTL)) {
+    if (!forceRefresh && global._megaCapCacheV8 && (Date.now() - global._megaCapCacheV8.timestamp < CACHE_TTL)) {
         console.log("⚡ Returning cached mega-cap conviction data");
-        return global._megaCapCacheV7.data;
+        return global._megaCapCacheV8.data;
     }
 
     // Clear old cache to force immediate update for user
-    if (forceRefresh) global._megaCapCacheV7 = null;
+    if (forceRefresh) global._megaCapCacheV8 = null;
 
     isScanning = true;
     const results: ConvictionStock[] = [];
@@ -406,11 +406,13 @@ export async function scanConviction(forceRefresh = false): Promise<ConvictionSt
         }
     }
 
-    // Sort by score desc
-    const sorted = results.sort((a, b) => b.score - a.score);
+    // Sort by score desc and filter >= 75
+    const sorted = results
+        .filter(r => r.score >= 75)
+        .sort((a, b) => b.score - a.score);
 
     // Update Cache
-    global._megaCapCacheV7 = {
+    global._megaCapCacheV8 = {
         data: sorted,
         timestamp: Date.now()
     };
@@ -424,19 +426,19 @@ export async function scanAlphaHunter(forceRefresh = false): Promise<ConvictionS
     const marketSession = publicClient.getMarketSession();
 
     // Logic: If market is OFF, only scan if cache is empty.
-    if (marketSession === 'OFF' && global._alphaHunterCacheV6 && !forceRefresh) {
+    if (marketSession === 'OFF' && global._alphaHunterCacheV7 && !forceRefresh) {
         console.log("🌙 Market is CLOSED. Serving preserved Alpha Hunter cache.");
-        return global._alphaHunterCacheV6.data;
+        return global._alphaHunterCacheV7.data;
     }
 
     // Return cached data if valid
-    if (!forceRefresh && global._alphaHunterCacheV6 && (Date.now() - global._alphaHunterCacheV6.timestamp < CACHE_TTL)) {
+    if (!forceRefresh && global._alphaHunterCacheV7 && (Date.now() - global._alphaHunterCacheV7.timestamp < CACHE_TTL)) {
         console.log("⚡ Returning cached Alpha Hunter data");
-        return global._alphaHunterCacheV6.data;
+        return global._alphaHunterCacheV7.data;
     }
 
     // Clear old cache to force immediate update for user
-    if (forceRefresh) global._alphaHunterCacheV6 = null;
+    if (forceRefresh) global._alphaHunterCacheV7 = null;
 
     isScanning = true;
     const results: ConvictionStock[] = [];
@@ -710,11 +712,13 @@ export async function scanAlphaHunter(forceRefresh = false): Promise<ConvictionS
         }
     }
 
-    // Sort by score desc
-    const sorted = results.sort((a, b) => b.score - a.score);
+    // Sort by score desc and filter >= 75
+    const sorted = results
+        .filter(r => r.score >= 75)
+        .sort((a, b) => b.score - a.score);
 
     // Update Cache
-    global._alphaHunterCacheV6 = {
+    global._alphaHunterCacheV7 = {
         data: sorted,
         timestamp: Date.now()
     };
