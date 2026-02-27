@@ -90,9 +90,9 @@ export default function LivePriceDisplay({ symbol, fallbackPrice, enabled = true
     //     setPriceFlash(null);
     // }, [symbol]);
 
-    const displayPrice = isLive ? (priceData?.price ?? fallbackPrice) : (priceData?.regularMarketPrice ?? fallbackPrice);
-    const change = isLive ? (priceData?.change ?? 0) : (priceData?.regularMarketChange ?? 0);
-    const changePercent = isLive ? (priceData?.changePercent ?? 0) : (priceData?.regularMarketChangePercent ?? 0);
+    const displayPrice = priceData?.price || fallbackPrice;
+    const change = priceData?.change || 0;
+    const changePercent = priceData?.changePercent || 0;
     const isPositive = change >= 0;
 
     if (!displayPrice) {
@@ -170,15 +170,26 @@ export default function LivePriceDisplay({ symbol, fallbackPrice, enabled = true
             )}
 
 
-            {/* Source */}
-            {priceData?.source && (
-                <div className="flex items-center gap-1.5 opacity-60 ml-1">
-                    <Database className="w-2.5 h-2.5 text-blue-400" />
-                    <span className="text-[10px] uppercase font-bold tracking-tight text-gray-300">
-                        via {priceData.source}
-                    </span>
-                </div>
-            )}
+            {/* Source and Market Close Price */}
+            <div className="flex flex-col gap-0.5 ml-1">
+                {priceData?.source && (
+                    <div className="flex items-center gap-1.5 opacity-60">
+                        <Database className="w-2.5 h-2.5 text-blue-400" />
+                        <span className="text-[10px] uppercase font-bold tracking-tight text-gray-300">
+                            via {priceData.source}
+                        </span>
+                    </div>
+                )}
+
+                {/* Show Regular Close when in Extended Hours/Closed */}
+                {!isLive && priceData?.regularMarketPrice && (
+                    <div className="flex items-center gap-1.5 opacity-80">
+                        <span className="text-[10px] uppercase font-bold tracking-tight text-gray-400">
+                            Close: ${priceData.regularMarketPrice.toFixed(2)}
+                        </span>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

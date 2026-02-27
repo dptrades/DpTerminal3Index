@@ -20,6 +20,11 @@
         "date": "2026-02-26",
         "optionPremium": 30.75,
         "stockPrice": 1095.22
+      },
+      {
+        "date": "2026-02-27",
+        "optionPremium": 29.25,
+        "stockPrice": 1081.9606
       }
     ],
     "status": "ACTIVE"
