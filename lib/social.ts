@@ -36,6 +36,64 @@ if (!global._socialPulseLibCache) {
 
 const CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 
+/**
+ * Produces a deterministic pseudo-random float in [0, scale] seeded by a string.
+ * Uses djb2 hash so the same stock+signal always yields the same value across
+ * page loads — eliminates jitter in sentiment/retailBuyRatio scores.
+ */
+function seededScore(seed: string, scale: number = 0.1): number {
+    let hash = 5381;
+    for (let i = 0; i < seed.length; i++) {
+        hash = ((hash << 5) + hash) + seed.charCodeAt(i);
+        hash = hash & hash; // Force 32-bit integer
+    }
+    return ((hash >>> 0) / 0xffffffff) * scale;
+}
+
+/**
+ * Deterministic sentiment scorer.
+ * Returns a value in [0, 1] based on keyword frequency in the signal string.
+ * Uses seededScore for the fractional "noise" component so results are stable.
+ */
+function computeSentiment(signalStr: string, source: string, seed: string): number {
+    const s = signalStr.toLowerCase();
+
+    // Strongly bullish signals
+    if (s.includes('upgrade') || s.includes('beat') || s.includes('raises') || s.includes('record high')) {
+        return Math.min(1, 0.80 + seededScore(seed + 'bull-strong', 0.10));
+    }
+    // Options / institutional call activity
+    if (source === 'options' || s.includes('call sweep') || s.includes('unusual call')) {
+        return Math.min(1, 0.72 + seededScore(seed + 'options', 0.15));
+    }
+    // Moderately bullish
+    if (s.includes('buy') || s.includes('bullish') || s.includes('surge') || s.includes('breakout')) {
+        return Math.min(1, 0.68 + seededScore(seed + 'bull-mod', 0.14));
+    }
+    // Technical momentum
+    if (source === 'technical' || s.includes('% today') || s.includes('momentum')) {
+        return Math.min(1, 0.55 + seededScore(seed + 'tech', 0.22));
+    }
+    // Strongly bearish
+    if (s.includes('downgrade') || s.includes('miss') || s.includes('cut') || s.includes('recall')) {
+        return Math.max(0, 0.20 + seededScore(seed + 'bear-strong', 0.10));
+    }
+    // Moderately bearish
+    if (s.includes('sell') || s.includes('bearish') || s.includes('drop') || s.includes('fall')) {
+        return Math.max(0, 0.25 + seededScore(seed + 'bear-mod', 0.10));
+    }
+    // Warning/risk language
+    if (s.includes('warning') || s.includes('risk') || s.includes('concern') || s.includes('probe')) {
+        return Math.max(0, 0.30 + seededScore(seed + 'warn', 0.10));
+    }
+    // Social discovery (no strong signal)
+    if (source === 'social') {
+        return 0.35 + seededScore(seed + 'social', 0.40);
+    }
+    // Default neutral
+    return 0.48 + seededScore(seed + 'neutral', 0.12);
+}
+
 export async function scanSocialPulse(forceRefresh = false): Promise<SocialPulseItem[]> {
     const now = Date.now();
     const marketSession = publicClient.getMarketSession();
@@ -84,9 +142,8 @@ export async function scanSocialPulse(forceRefresh = false): Promise<SocialPulse
             }));
         };
 
-        await fetchBatch(batch1);
-        await fetchBatch(batch2);
-        await fetchBatch(batch3);
+        // FIX #3: Run all three batches in parallel (was sequential awaits before)
+        await Promise.all([fetchBatch(batch1), fetchBatch(batch2), fetchBatch(batch3)]);
 
         const formattedData = discoveries
             .map(d => {
@@ -97,33 +154,33 @@ export async function scanSocialPulse(forceRefresh = false): Promise<SocialPulse
                 const tickerName = detail?.longName || detail?.shortName || detail?.displayName || d.name || d.symbol;
                 const sector = sectorMap[d.symbol] || 'Other';
 
-                let sentiment = 0.50;
+                // FIX #1: Deterministic sentiment — stable across page loads for the same stock+signal
                 const signalStr = (latestHeadline + ' ' + d.signal).toLowerCase();
+                const sentimentSeed = d.symbol + signalStr.slice(0, 40);
+                const sentiment = computeSentiment(signalStr, d.source, sentimentSeed);
 
-                if (signalStr.includes('upgrade') || signalStr.includes('beat') || signalStr.includes('raises')) sentiment = 0.80 + (Math.random() * 0.1);
-                else if (d.source === 'options' || signalStr.includes('options') || signalStr.includes('call')) sentiment = 0.70 + (Math.random() * 0.15);
-                else if (signalStr.includes('buy') || signalStr.includes('bullish') || signalStr.includes('surge')) sentiment = 0.70 + (Math.random() * 0.15);
-                else if (d.source === 'technical' || signalStr.includes('% today')) sentiment = 0.55 + (Math.random() * 0.25);
-                else if (signalStr.includes('downgrade') || signalStr.includes('miss') || signalStr.includes('cut')) sentiment = 0.20 + (Math.random() * 0.1);
-                else if (signalStr.includes('sell') || signalStr.includes('bearish') || signalStr.includes('drop') || signalStr.includes('fall')) sentiment = 0.25 + (Math.random() * 0.1);
-                else if (signalStr.includes('warning') || signalStr.includes('risk') || signalStr.includes('concern')) sentiment = 0.30 + (Math.random() * 0.1);
-                else if (d.source === 'social') sentiment = 0.35 + (Math.random() * 0.40);
+                // retailBuyRatio is also seeded — clipped to ±0.1 of sentiment
+                const retailBuyRatio = Math.max(0.1, Math.min(0.95,
+                    sentiment + seededScore(sentimentSeed + 'retail', 0.2) - 0.1
+                ));
 
-                const retailBuyRatio = Math.max(0.1, Math.min(0.95, sentiment + (Math.random() * 0.2 - 0.1)));
                 const hasVerifiedName = detail?.longName || detail?.shortName || detail?.displayName;
                 const isNoise = !hasVerifiedName || tickerName.toUpperCase() === d.symbol.toUpperCase();
 
                 if (isNoise && d.symbol.length > 3) return null;
 
+                // FIX #2: Use real news article count labeled as "News Signals" (not fabricated mention count)
+                const newsSignalCount = news ? news.length : 0;
+
                 return {
                     symbol: d.symbol,
                     name: tickerName,
                     sector: sector,
-                    price: quote?.price || (75 + Math.random() * 200),
-                    change: quote?.changePercent || (Math.random() * 5 * (Math.random() > 0.5 ? 1 : -1)),
+                    price: quote?.price || 0,
+                    change: quote?.changePercent || 0,
                     heat: d.strength,
                     sentiment: sentiment,
-                    mentions: news ? Math.round(d.strength * (25 + news.length)) : Math.round(d.strength * (20 + Math.random() * 30)),
+                    mentions: newsSignalCount,   // Now = real article count, displayed as "News Signals" in card
                     retailBuyRatio: retailBuyRatio,
                     topPlatform: d.source === 'social' ? 'Twitter/X' : d.source === 'news' ? 'Google News' : d.source === 'options' ? 'Institutional Flow' : 'Market Screener',
                     description: latestHeadline,
@@ -150,3 +207,4 @@ export async function scanSocialPulse(forceRefresh = false): Promise<SocialPulse
         throw e;
     }
 }
+

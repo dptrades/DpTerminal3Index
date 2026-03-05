@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { Flame, MessageSquare, RefreshCw, Info, ChevronRight, Activity } from 'lucide-react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { Flame, MessageSquare, RefreshCw, Info, ChevronRight, Activity, TrendingUp, TrendingDown, BarChart2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 import SocialPulseCard from '@/components/SocialPulseCard';
@@ -9,16 +9,21 @@ import DataSourceIndicator from '@/components/ui/DataSourceIndicator';
 import { Loading } from '@/components/ui/Loading';
 import SectorDetailModal from '@/components/SectorDetailModal';
 import { REFRESH_INTERVALS, isMarketActive, getNextMarketOpen } from '@/lib/refresh-utils';
+import type { SocialPulseItem } from '@/lib/social';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 export default function SocialPulsePage() {
     const router = useRouter();
-    const [trending, setTrending] = useState<any[]>([]);
+    const [trending, setTrending] = useState<SocialPulseItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [showLogic, setShowLogic] = useState(false);
     const [selectedSector, setSelectedSector] = useState<any>(null);
     const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+    // #8 Sort bar state
+    type SortKey = 'heat' | 'sentiment' | 'change';
+    const [sortKey, setSortKey] = useState<SortKey>('heat');
 
     // Sidebar Props (Standardized)
     const [symbol, setSymbol] = useState('TSLA');
@@ -40,13 +45,15 @@ export default function SocialPulsePage() {
     useEffect(() => {
         fetchPulse();
 
-        // 15-minute auto-refresh during market hours
+        // #6: Adaptive auto-refresh — 15 min when market is active, 1 hour when closed
+        // The interval is set once on mount; it always fires but re-evaluates market state each tick.
+        const intervalMs = isMarketActive()
+            ? REFRESH_INTERVALS.AUTO_REFRESH
+            : REFRESH_INTERVALS.OFF_HOURS;
+
         const interval = setInterval(() => {
-            if (isMarketActive()) {
-                console.log('[Social Pulse] Auto-refreshing...');
-                fetchPulse();
-            }
-        }, REFRESH_INTERVALS.AUTO_REFRESH);
+            fetchPulse();
+        }, intervalMs);
 
         return () => clearInterval(interval);
     }, []);
@@ -174,22 +181,112 @@ export default function SocialPulsePage() {
                         <div className="h-96 flex flex-col items-center justify-center">
                             <Loading message="Scanning Social Frequency..." />
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-12">
-                            {trending.map((stock) => (
-                                <SocialPulseCard
-                                    key={stock.symbol}
-                                    stock={stock}
-                                    onSelect={(s) => router.push(`/?symbol=${s}`)}
-                                />
-                            ))}
+                    ) : trending.length === 0 ? (
+                        /* Empty state */
+                        <div className="col-span-full flex flex-col items-center justify-center gap-4 py-24 text-center">
+                            <div className="p-4 bg-orange-500/10 rounded-full border border-orange-500/20">
+                                <Flame className="w-10 h-10 text-orange-500/40" />
+                            </div>
+                            <div>
+                                <p className="text-gray-200 font-bold text-lg">No social momentum detected</p>
+                                <p className="text-gray-400 text-sm mt-1">The scanner found no strong signals right now. Markets may be quiet.</p>
+                            </div>
+                            <button
+                                onClick={fetchPulse}
+                                className="flex items-center gap-2 px-5 py-2 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 rounded-xl text-orange-400 text-sm font-bold transition-colors"
+                            >
+                                <RefreshCw className="w-4 h-4" />
+                                Retry Scan
+                            </button>
                         </div>
-                    )}
+                    ) : (() => {
+                        // #8 + #9: Sort and split into trending + rest
+                        const sorted = [...trending].sort((a, b) => {
+                            if (sortKey === 'heat') return b.heat - a.heat;
+                            if (sortKey === 'sentiment') return b.sentiment - a.sentiment;
+                            return Math.abs(b.change) - Math.abs(a.change);
+                        });
+                        const topTrending = sorted.filter(s => s.heat >= 80).slice(0, 3);
+                        const rest = sorted.filter(s => !topTrending.includes(s));
+
+                        return (
+                            <div className="space-y-8 pb-12">
+                                {/* #8 Sort Bar */}
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mr-1">Sort by:</span>
+                                    {([
+                                        { key: 'heat' as SortKey, label: 'Heat', icon: <Flame className="w-3 h-3" /> },
+                                        { key: 'sentiment' as SortKey, label: 'Sentiment', icon: <MessageSquare className="w-3 h-3" /> },
+                                        { key: 'change' as SortKey, label: '% Change', icon: <BarChart2 className="w-3 h-3" /> },
+                                    ]).map(({ key, label, icon }) => (
+                                        <button
+                                            key={key}
+                                            onClick={() => setSortKey(key)}
+                                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all border ${sortKey === key
+                                                    ? 'bg-orange-500/20 border-orange-500/40 text-orange-400'
+                                                    : 'bg-gray-800/40 border-gray-700/50 text-gray-400 hover:border-gray-600 hover:text-gray-200'
+                                                }`}
+                                        >
+                                            {icon} {label}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* #9 Top 3 Trending — Heat ≥ 80 pinned section */}
+                                {topTrending.length > 0 && (
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <Flame className="w-4 h-4 text-orange-500 animate-pulse" />
+                                            <h2 className="text-sm font-black text-orange-400 uppercase tracking-widest">Trending Now</h2>
+                                            <span className="px-2 py-0.5 text-[9px] font-black bg-orange-500/20 border border-orange-500/30 text-orange-300 rounded-full uppercase tracking-widest">Heat ≥ 80</span>
+                                        </div>
+                                        <ErrorBoundary name="Trending Cards">
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                {topTrending.map(stock => (
+                                                    <div key={stock.symbol} className="relative">
+                                                        {/* Pinned badge */}
+                                                        <div className="absolute -top-2 left-3 z-20 flex items-center gap-1 px-2 py-0.5 bg-orange-500 rounded-full shadow-lg shadow-orange-500/30">
+                                                            <Flame className="w-2.5 h-2.5 text-white" />
+                                                            <span className="text-[9px] font-black text-white uppercase tracking-wider">Trending</span>
+                                                        </div>
+                                                        <SocialPulseCard
+                                                            stock={stock}
+                                                            onSelect={(s) => router.push(`/?symbol=${s}`)}
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </ErrorBoundary>
+                                    </div>
+                                )}
+
+                                {/* #10 Main grid with ErrorBoundary */}
+                                {rest.length > 0 && (
+                                    <div>
+                                        {topTrending.length > 0 && (
+                                            <h2 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">All Signals</h2>
+                                        )}
+                                        <ErrorBoundary name="Social Pulse Feed" onRetry={fetchPulse}>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                                {rest.map((stock) => (
+                                                    <SocialPulseCard
+                                                        key={stock.symbol}
+                                                        stock={stock}
+                                                        onSelect={(s) => router.push(`/?symbol=${s}`)}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </ErrorBoundary>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })()}
 
                     {/* Footer */}
                     <footer className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-300">
                         <p className="text-[10px] font-bold uppercase tracking-widest text-center md:text-left">
-                            © 2026 AntiGravity V3 • Institutional Intelligence Engine
+                            © 2026 AntiGravity V4 • Institutional Intelligence Engine
                         </p>
                         <div className="flex gap-6">
                             <span className="text-[10px] font-bold uppercase tracking-widest hover:text-white cursor-pointer transition-colors">Documentation</span>

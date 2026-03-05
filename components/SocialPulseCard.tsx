@@ -103,7 +103,9 @@ export default function SocialPulseCard({ stock, onSelect }: SocialPulseCardProp
                 <div className="flex justify-between items-center px-1">
                     <div className="flex items-center gap-2">
                         <Users className="w-3.5 h-3.5 text-blue-400" />
-                        <span className="text-[11px] font-medium text-gray-100">{stock.mentions.toLocaleString()} Mentions</span>
+                        <span className="text-[11px] font-medium text-gray-100">
+                            {stock.mentions > 0 ? `${stock.mentions} News Signals` : 'Signal Active'}
+                        </span>
                     </div>
                     <div className="flex items-center gap-1.5 bg-gray-900/80 px-2 py-0.5 rounded-md border border-gray-700/50">
                         <Globe className="w-3 h-3 text-purple-400" />

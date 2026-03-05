@@ -6,11 +6,27 @@ import { publicClient } from './public-api';
 import { schwabClient } from './schwab';
 import { calculateGammaSqueezeProbability } from './options';
 import { finnhubClient } from './finnhub';
+import { getMarketSession } from './refresh-utils';
 
 const yahooFinance = new YahooFinance();
 
+// ── Server-side MTA Cache ──────────────────────────────────────────────────────
+// Caches the expensive fetchMultiTimeframeAnalysis result per symbol.
+// TTL: 1 minute during market hours (live data changes), 30 minutes off-hours.
+interface MtaCacheEntry {
+    data: NonNullable<Awaited<ReturnType<typeof _fetchMtaUncached>>>;
+    timestamp: number;
+}
+declare global {
+    var _mtaCache: Map<string, MtaCacheEntry>;
+}
+if (!global._mtaCache) global._mtaCache = new Map();
+
+const MTA_TTL_MARKET = 60 * 1000;        // 1 minute — live data
+const MTA_TTL_OFFHRS = 30 * 60 * 1000;  // 30 minutes — no new data off hours
+
 export interface TimeframeData {
-    timeframe: '10m' | '1h' | '4h' | '1d' | '1w';
+    timeframe: '1h' | '4h' | '1d' | '1w';  // 10m removed — too noisy, adds a full extra API call per load
     open: number;
     close: number;
     ema9: number | null;
@@ -186,12 +202,7 @@ function mapTimeframe(tf: string): {
     bars: number
 } {
     switch (tf) {
-        case '10m': return {
-            alpaca: '10Min',
-            yahoo: '5m',
-            schwab: { periodType: 'day', period: 10, frequencyType: 'minute', frequency: 10 },
-            bars: 1000
-        };
+        // 10m removed: caused an extra full API call per load with minimal analytical value
         case '1h': return {
             alpaca: '1Hour',
             yahoo: '60m',
@@ -219,8 +230,9 @@ function mapTimeframe(tf: string): {
     }
 }
 
-export async function fetchMultiTimeframeAnalysis(symbol: string, forceRefresh: boolean = false): Promise<MultiTimeframeAnalysis | null> {
-    const timeframes: ('10m' | '1h' | '4h' | '1d' | '1w')[] = ['10m', '1h', '1d', '1w'];
+// Internal uncached implementation — only call via fetchMultiTimeframeAnalysis.
+async function _fetchMtaUncached(symbol: string): Promise<MultiTimeframeAnalysis | null> {
+    const timeframes: ('1h' | '1d' | '1w')[] = ['1h', '1d', '1w']; // 10m removed
     const results: TimeframeData[] = [];
     let dailyAtr = 0;
     let avgVolume = 0;
@@ -228,16 +240,20 @@ export async function fetchMultiTimeframeAnalysis(symbol: string, forceRefresh: 
 
     const dailyConfig = mapTimeframe('1d');
 
-    // 1. Fetch Daily Data First (Primary)
     const marketSession = publicClient.getMarketSession();
     let livePrice = 0;
     let dailyData: any[] = [];
 
-    // Run concurrently for performance
-    const [dailyResult, liveData, finnhubMetrics] = await Promise.all([
+    // Run concurrently: daily bars + live price + beta + options chain (for gamma squeeze + PCR)
+    const [dailyResult, liveData, finnhubMetrics, optionsChain] = await Promise.all([
         fetchHistoricalData(symbol, dailyConfig.alpaca, dailyConfig.yahoo, dailyConfig.bars, dailyConfig.schwab),
         fetchLivePrice(symbol),
-        finnhubClient.getBasicFinancials(symbol).catch(() => null)
+        finnhubClient.getBasicFinancials(symbol).catch(() => null),
+        // Pre-fetch the options chain once — shared between gammaSqueeze and PCR (no double fetch)
+        (schwabClient.isConfigured()
+            ? schwabClient.getOptionChainNormalized(symbol).catch(() => null)
+            : Promise.resolve(null)
+        ).then(chain => chain ?? publicClient.getOptionChain(symbol).catch(() => null))
     ]);
 
     dailyData = dailyResult.bars;
@@ -293,14 +309,15 @@ export async function fetchMultiTimeframeAnalysis(symbol: string, forceRefresh: 
         }
     }
 
-    // NOW calculate Gamma Squeeze with the correct currentPrice, ATR, and NEW metrics
+    // Calculate Gamma Squeeze — passes the pre-fetched chain to avoid a second options chain fetch
     const gammaSqueeze = await calculateGammaSqueezeProbability(
         symbol,
         currentPrice,
         dailyAtr,
         fiftyTwoWeekHigh,
         fiftyTwoWeekLow,
-        historicalVolatility
+        historicalVolatility,
+        optionsChain as any
     );
 
     // Calculate 1y Volume Avg (~252 trading days)
@@ -311,7 +328,7 @@ export async function fetchMultiTimeframeAnalysis(symbol: string, forceRefresh: 
     const lastVol = dailyData[dailyData.length - 1].volume;
     const volDiff = avgVolume > 0 ? ((lastVol - avgVolume) / avgVolume) * 100 : 0;
 
-    // Analyze all timeframes
+    // Analyze all timeframes (1h, 1d, 1w — 10m removed)
     await Promise.all(timeframes.map(async (tf) => {
         let data = dailyData;
 
@@ -323,7 +340,7 @@ export async function fetchMultiTimeframeAnalysis(symbol: string, forceRefresh: 
 
         if (data && data.length > 0) {
             // HYBRID STITCH: Inject live price into intraday datasets
-            if (livePrice > 0 && (tf === '10m' || tf === '1h')) {
+            if (livePrice > 0 && tf === '1h') {
                 const lastBar = data[data.length - 1];
                 // Staleness check: allow up to 5 days (covers long holiday weekends)
                 const stalenessThreshold = 5 * 24 * 60 * 60 * 1000;
@@ -438,8 +455,8 @@ export async function fetchMultiTimeframeAnalysis(symbol: string, forceRefresh: 
         }
     }));
 
-    const order = { '10m': 1, '1h': 2, '4h': 3, '1d': 4, '1w': 5 };
-    results.sort((a, b) => order[a.timeframe] - order[b.timeframe]);
+    const order: Record<string, number> = { '1h': 1, '4h': 2, '1d': 3, '1w': 4 };
+    results.sort((a, b) => (order[a.timeframe] ?? 9) - (order[b.timeframe] ?? 9));
 
     const headerPrice = latestDaily.close;
     // For OFF sessions, currentPrice should be the post-market price from Yahoo if possible, 
@@ -469,6 +486,30 @@ export async function fetchMultiTimeframeAnalysis(symbol: string, forceRefresh: 
         dataSource: sourceString,
         marketSession
     };
+}
+
+// ── Public entry-point with caching ───────────────────────────────────────────
+export async function fetchMultiTimeframeAnalysis(
+    symbol: string,
+    forceRefresh: boolean = false
+): Promise<MultiTimeframeAnalysis | null> {
+    const now = Date.now();
+    const session = publicClient.getMarketSession();
+    const ttl = session === 'OFF' ? MTA_TTL_OFFHRS : MTA_TTL_MARKET;
+
+    if (!forceRefresh) {
+        const cached = global._mtaCache.get(symbol);
+        if (cached && (now - cached.timestamp < ttl)) {
+            console.log(`⚡ [MTA Cache] ${symbol} served from cache (${Math.round((now - cached.timestamp) / 1000)}s old)`);
+            return cached.data;
+        }
+    }
+
+    const result = await _fetchMtaUncached(symbol);
+    if (result) {
+        global._mtaCache.set(symbol, { data: result, timestamp: now });
+    }
+    return result;
 }
 
 // Deprecated but kept for internal compatibility

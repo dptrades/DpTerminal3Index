@@ -4,6 +4,38 @@ import React, { useEffect, useState } from 'react';
 import { LayoutGrid, TrendingUp, TrendingDown } from 'lucide-react';
 import type { ConvictionStock } from '@/types/stock';
 
+interface SlimStock {
+    symbol: string;
+    name: string;
+    price: number;
+    change24h: number;
+    volume: number;
+    sector: string;
+}
+
+// Minimal ConvictionStock shape for sector grouping — rich data lazy-loaded in modal
+function toSlimConvictionStock(s: SlimStock): ConvictionStock {
+    return {
+        symbol: s.symbol,
+        name: s.name,
+        price: s.price,
+        change24h: s.change24h,
+        volume: s.volume,
+        sector: s.sector,
+        score: 0,
+        technicalScore: 0,
+        fundamentalScore: 0,
+        analystScore: 0,
+        sentimentScore: 0,
+        metrics: {
+            rsi: 0,
+            trend: 'NEUTRAL',
+            socialSentiment: '',
+        },
+        reasons: [],
+    };
+}
+
 interface SectorGroup {
     name: string;
     avgChange: number;
@@ -24,17 +56,17 @@ export default function SectorPerformanceWidget({ onSectorClick }: Props) {
         const fetchSectors = async () => {
             setLoading(true);
             try {
-                const res = await fetch('/api/conviction?all=true');
+                // ✅ Fast endpoint: batch quote + sector map only (~1-3s vs 30-120s)
+                const res = await fetch('/api/sectors');
                 if (!res.ok) throw new Error('API Error');
-                const allStocks: ConvictionStock[] = await res.json();
+                const allStocks: SlimStock[] = await res.json();
 
-                // Group by Sector
+                // Group by sector
                 const groups: Record<string, ConvictionStock[]> = {};
                 allStocks.forEach(stock => {
                     const sector = stock.sector || 'Other';
-                    if (sector === 'Internals' || sector === 'Indices') return;
                     if (!groups[sector]) groups[sector] = [];
-                    groups[sector].push(stock);
+                    groups[sector].push(toSlimConvictionStock(stock));
                 });
 
                 // Calculate performance and format
@@ -44,25 +76,17 @@ export default function SectorPerformanceWidget({ onSectorClick }: Props) {
 
                     let topPerformer = stocks[0];
                     let worstPerformer = stocks[0];
-
                     stocks.forEach(s => {
                         if (s.change24h > topPerformer.change24h) topPerformer = s;
                         if (s.change24h < worstPerformer.change24h) worstPerformer = s;
                     });
 
-                    return {
-                        name,
-                        avgChange,
-                        stocks,
-                        topPerformer,
-                        worstPerformer
-                    };
+                    return { name, avgChange, stocks, topPerformer, worstPerformer };
                 });
 
-                // Sort by performance (highest first)
                 setSectors(sectorList.sort((a, b) => b.avgChange - a.avgChange));
             } catch (e) {
-                console.error("Failed to fetch sector data", e);
+                console.error('Failed to fetch sector data', e);
             } finally {
                 setLoading(false);
             }

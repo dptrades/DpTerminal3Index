@@ -5,6 +5,7 @@ export const SECTOR_MAP: Record<string, string> = {
     CGNX: 'Information Technology', FSLY: 'Information Technology', IPGP: 'Information Technology', KEYS: 'Information Technology',
     ADBE: 'Information Technology', CRM: 'Information Technology', CSCO: 'Information Technology',
     QCOM: 'Information Technology', TXN: 'Information Technology', AMAT: 'Information Technology', INTU: 'Information Technology', IBM: 'Information Technology',
+    MU: 'Information Technology', SMCI: 'Information Technology',
 
     // Consumer Discretionary
     TSLA: 'Consumer Discretionary', AMZN: 'Consumer Discretionary', HD: 'Consumer Discretionary', MCD: 'Consumer Discretionary',
@@ -99,10 +100,10 @@ export async function getSectorMap(): Promise<Record<string, string>> {
 // Increasing MAX_STOCKS_PER_SECTOR → more sector diversity in results.
 
 /** Minimum composite win-probability score (0–100) for a stock to appear in Top Picks */
-export const CONVICTION_SCORE_THRESHOLD = 75;
+export const CONVICTION_SCORE_THRESHOLD = 50;
 
 /** Maximum stocks allowed per sector in Top Picks (prevents sector concentration) */
-export const MAX_STOCKS_PER_SECTOR = 3;
+export const MAX_STOCKS_PER_SECTOR = 6;
 
 /** Minimum technical sub-score for Top Picks quality gate */
 export const MIN_TECHNICAL_SCORE = 50;

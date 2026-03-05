@@ -471,11 +471,15 @@ export async function generateOptionSignal(
 /**
  * Calculates the Put/Call ratio based on volume and open interest for a given symbol
  */
-export async function getPutCallRatio(symbol: string, skipCache: boolean = false): Promise<{ volumeRatio: number, oiRatio: number, totalCalls: number, totalPuts: number } | null> {
+export async function getPutCallRatio(
+    symbol: string,
+    skipCache: boolean = false,
+    preloadedChain?: Awaited<ReturnType<typeof schwabClient.getOptionChainNormalized>>
+): Promise<{ volumeRatio: number, oiRatio: number, totalCalls: number, totalPuts: number } | null> {
     if (!symbol) return null;
 
-    // 1. Check Cache
-    if (!skipCache) {
+    // 1. Check Cache (skip if chain was pre-loaded — caller already paid for the fetch)
+    if (!skipCache && !preloadedChain) {
         const cached = global._pcrCache.get(symbol);
         if (cached && (Date.now() - cached.timestamp < PCR_CACHE_TTL)) {
             return cached.data;
@@ -483,11 +487,14 @@ export async function getPutCallRatio(symbol: string, skipCache: boolean = false
     }
 
     try {
-        // Schwab (primary, 10-min cache) → Public.com (fallback)
-        let chain = schwabClient.isConfigured()
-            ? await schwabClient.getOptionChainNormalized(symbol)
-            : null;
-        if (!chain) chain = await publicClient.getOptionChain(symbol);
+        // Use pre-fetched chain if available, otherwise fetch fresh
+        let chain = preloadedChain ?? null;
+        if (!chain) {
+            chain = schwabClient.isConfigured()
+                ? await schwabClient.getOptionChainNormalized(symbol)
+                : null;
+            if (!chain) chain = await publicClient.getOptionChain(symbol);
+        }
         if (!chain) throw new Error("No chain data");
 
         let totalCallVolume = 0;
@@ -519,13 +526,14 @@ export async function getPutCallRatio(symbol: string, skipCache: boolean = false
             totalPuts: totalPutVolume
         };
 
-        // Update Cache
-        global._pcrCache.set(symbol, { data: result, timestamp: Date.now() });
+        // Only cache when we fetched fresh (not pre-loaded, which may be a subset)
+        if (!preloadedChain) {
+            global._pcrCache.set(symbol, { data: result, timestamp: Date.now() });
+        }
 
         return result;
     } catch (e) {
         console.error('Error calculating Put/Call ratio:', e);
-        // GRACEFUL FALLBACK: Serve stale cache if available
         const cached = global._pcrCache.get(symbol);
         if (cached) {
             console.warn(`[Options] Serving stale PCR data for ${symbol}`);
@@ -537,6 +545,8 @@ export async function getPutCallRatio(symbol: string, skipCache: boolean = false
 
 /**
  * Calculates the probability of a Gamma Squeeze (0-100)
+ * @param preloadedChain - Optional pre-fetched options chain. When provided, no additional
+ *   network fetch is made, eliminating a redundant round-trip when the caller already has the chain.
  */
 export async function calculateGammaSqueezeProbability(
     symbol: string,
@@ -544,15 +554,21 @@ export async function calculateGammaSqueezeProbability(
     atr: number,
     fiftyTwoWeekHigh?: number,
     fiftyTwoWeekLow?: number,
-    historicalVolatility?: number
+    historicalVolatility?: number,
+    preloadedChain?: Awaited<ReturnType<typeof schwabClient.getOptionChainNormalized>>
 ): Promise<{ score: number, details: string[] }> {
     try {
-        const pcrData = await getPutCallRatio(symbol);
-        // Schwab (primary, 10-min cache) → Public.com fallback
-        let chain = schwabClient.isConfigured()
-            ? await schwabClient.getOptionChainNormalized(symbol)
-            : null;
-        if (!chain) chain = await publicClient.getOptionChain(symbol);
+        // Use pre-fetched chain when available — avoids a second full options chain fetch
+        let chain = preloadedChain ?? null;
+        if (!chain) {
+            chain = schwabClient.isConfigured()
+                ? await schwabClient.getOptionChainNormalized(symbol)
+                : null;
+            if (!chain) chain = await publicClient.getOptionChain(symbol);
+        }
+
+        // Compute PCR from the same chain (no separate network call)
+        const pcrData = chain ? await getPutCallRatio(symbol, false, chain) : null;
 
         if (!pcrData || !chain) return { score: 0, details: ["Insufficient data"] };
 
