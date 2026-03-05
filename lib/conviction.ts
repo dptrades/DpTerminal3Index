@@ -218,18 +218,24 @@ export async function scanConviction(forceRefresh = false, returnAll = false): P
 
         const promises = batch.map(async (symbol) => {
             try {
-                // 1. Fetch Data (Hybrid: Alpaca for Live Price/Chart, Yahoo for Fundamentals)
+                // 1. Fetch Data (Optimized: Alpaca first, Yahoo fallback)
                 console.log(`[Conviction] Fetching data for ${symbol}...`);
-                const [quote, yahooChart, alpacaBars, socialNews] = await Promise.all([
+                const [quote, socialNews] = await Promise.all([
                     (yahooFinance.quoteSummary(symbol, { modules: ['financialData', 'defaultKeyStatistics', 'recommendationTrend', 'price', 'assetProfile', 'earningsTrend'] }) as Promise<any>).catch(e => { console.error(`[Yahoo] Quote Error ${symbol}:`, e.message); return null; }),
-                    (yahooFinance.chart(symbol, { period1: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), interval: '1d' }) as Promise<any>).catch(e => { console.error(`[Yahoo] Chart Error ${symbol}:`, e.message); return null; }),
-                    (fetchAlpacaBars(symbol, '1Day', 253).then(b => { return b; })),
                     (getNewsData(symbol, 'social') as Promise<any>).catch(e => [])
                 ]);
 
+                // Fetch chart data efficiently: Alpaca primary, Yahoo fallback
+                let alpacaBars = await fetchAlpacaBars(symbol, '1Day', 253).catch(() => null);
+                let yahooChart = null;
+
+                if (!alpacaBars || alpacaBars.length <= 50) {
+                    yahooChart = await (yahooFinance.chart(symbol, { period1: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), interval: '1d' }) as Promise<any>).catch(e => { console.error(`[Yahoo] Chart Error ${symbol}:`, e.message); return null; });
+                }
+
                 const publicQuote = publicQuoteMap.get(symbol);
 
-                // DECISION: Use Public.com for live price, Alpaca for Chart, Yahoo as fallback
+                // DECISION: Use Public.com for live price, Alpaca/Yahoo for Chart
                 let cleanData: any[] = [];
                 let currentPrice = publicQuote?.price || 0;
                 let usingAlpaca = false;
@@ -240,14 +246,14 @@ export async function scanConviction(forceRefresh = false, returnAll = false): P
                         time: new Date(b.t).getTime(),
                         open: b.o, high: b.h, low: b.l, close: b.c, volume: b.v
                     }));
-                    currentPrice = alpacaBars[alpacaBars.length - 1].c;
+                    if (!currentPrice) currentPrice = alpacaBars[alpacaBars.length - 1].c;
                 } else if (yahooChart && yahooChart.quotes && yahooChart.quotes.length > 50) {
                     cleanData = yahooChart.quotes.map((q: any) => ({
                         time: new Date(q.date).getTime(),
                         open: q.open, high: q.high, low: q.low, close: q.close, volume: q.volume
                     }));
                     // currentPrice will be set from quote later, or last close
-                    currentPrice = cleanData[cleanData.length - 1].close;
+                    if (!currentPrice) currentPrice = cleanData[cleanData.length - 1].close;
                 } else {
                     console.warn(`⚠️ Skipping ${symbol}: Missing Chart Data (Alpaca & Yahoo failed)`);
                     return null;
@@ -596,18 +602,24 @@ export async function scanAlphaHunter(forceRefresh = false, returnAll = false): 
 
         const promises = batch.map(async (symbol) => {
             try {
-                // 1. Fetch Data (Hybrid: Alpaca for Live Price/Chart, Yahoo for Fundamentals)
+                // 1. Fetch Data (Optimized: Alpaca first, Yahoo fallback)
                 console.log(`[Alpha Hunter] Fetching data for ${symbol}...`);
-                const [quote, yahooChart, alpacaBars, socialNews] = await Promise.all([
+                const [quote, socialNews] = await Promise.all([
                     (yahooFinance.quoteSummary(symbol, { modules: ['financialData', 'defaultKeyStatistics', 'recommendationTrend', 'price', 'assetProfile'] }) as Promise<any>).catch(e => { console.error(`[Yahoo] Quote Error ${symbol}:`, e.message); return null; }),
-                    (yahooFinance.chart(symbol, { period1: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), interval: '1d' }) as Promise<any>).catch(e => { console.error(`[Yahoo] Chart Error ${symbol}:`, e.message); return null; }),
-                    (fetchAlpacaBars(symbol, '1Day', 253).then(b => { return b; })),
                     (getNewsData(symbol, 'social') as Promise<any>).catch(e => [])
                 ]);
 
+                // Fetch chart data efficiently: Alpaca primary, Yahoo fallback
+                let alpacaBars = await fetchAlpacaBars(symbol, '1Day', 253).catch(() => null);
+                let yahooChart = null;
+
+                if (!alpacaBars || alpacaBars.length <= 50) {
+                    yahooChart = await (yahooFinance.chart(symbol, { period1: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000), interval: '1d' }) as Promise<any>).catch(e => { console.error(`[Yahoo] Chart Error ${symbol}:`, e.message); return null; });
+                }
+
                 const publicQuote = publicQuoteMap.get(symbol);
 
-                // DECISION: Use Public.com for live price, Alpaca for Chart, Yahoo as fallback
+                // DECISION: Use Public.com for live price, Alpaca/Yahoo for Chart
                 let cleanData: any[] = [];
                 let currentPrice = publicQuote?.price || 0;
                 let usingAlpaca = false;
@@ -619,14 +631,13 @@ export async function scanAlphaHunter(forceRefresh = false, returnAll = false): 
                         open: b.o, high: b.h, low: b.l, close: b.c, volume: b.v
                     }));
                     if (!currentPrice) currentPrice = alpacaBars[alpacaBars.length - 1].c;
-                }
-                else if (yahooChart && yahooChart.quotes && yahooChart.quotes.length > 50) {
+                } else if (yahooChart && yahooChart.quotes && yahooChart.quotes.length > 50) {
                     cleanData = yahooChart.quotes.map((q: any) => ({
                         time: new Date(q.date).getTime(),
                         open: q.open, high: q.high, low: q.low, close: q.close, volume: q.volume
                     }));
                     // currentPrice will be set from quote later, or last close
-                    currentPrice = cleanData[cleanData.length - 1].close;
+                    if (!currentPrice) currentPrice = cleanData[cleanData.length - 1].close;
                 } else {
                     console.warn(`⚠️ Skipping ${symbol}: Missing Chart Data (Alpaca & Yahoo failed)`);
                     return null;

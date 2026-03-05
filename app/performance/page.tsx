@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, TrendingDown, Clock, Activity, ChevronLeft, Target, Shield, Zap, Info, Trash2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, Clock, Activity, ChevronLeft, Target, Shield, Zap, Info, Trash2, RefreshCw } from 'lucide-react';
 import Sidebar from '@/components/Sidebar';
 import { Loading } from '@/components/ui/Loading';
 import { TrackedOption } from '@/lib/tracking';
@@ -14,22 +14,26 @@ import { calculateIndicators } from '@/lib/indicators';
 export default function PerformancePage() {
     const [trackedOptions, setTrackedOptions] = useState<TrackedOption[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-    useEffect(() => {
-        const fetchTracked = async () => {
-            try {
-                const res = await fetch('/api/options/tracked');
-                if (res.ok) {
-                    const data = await res.json();
-                    setTrackedOptions(data);
-                }
-            } catch (e) {
-                console.error('Failed to fetch tracked options:', e);
-            } finally {
-                setLoading(false);
+    const fetchTracked = async (isManualRefresh = false) => {
+        if (isManualRefresh) setIsRefreshing(true);
+        try {
+            const res = await fetch('/api/options/tracked');
+            if (res.ok) {
+                const data = await res.json();
+                setTrackedOptions(data);
             }
-        };
+        } catch (e) {
+            console.error('Failed to fetch tracked options:', e);
+        } finally {
+            if (isManualRefresh) setIsRefreshing(false);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchTracked();
     }, []);
 
@@ -131,6 +135,14 @@ export default function PerformancePage() {
                                     <p className="text-gray-400 text-sm font-medium">Real-time performance of your tactical option picks</p>
                                 </div>
                             </div>
+                            <button
+                                onClick={() => fetchTracked(true)}
+                                disabled={isRefreshing}
+                                className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-xl border border-gray-700 transition-all font-bold text-sm disabled:opacity-50 group"
+                            >
+                                <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-blue-400' : 'group-hover:text-blue-400 transition-colors'}`} />
+                                {isRefreshing ? 'Refreshing...' : 'Refresh Data'}
+                            </button>
                         </div>
                     </header>
 

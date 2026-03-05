@@ -4,7 +4,23 @@ import YahooFinance from 'yahoo-finance2';
 
 const yahooFinance = new YahooFinance();
 
+// --- News Cache ---
+// Store news results for 30 minutes to heavily reduce Yahoo API load during 300-stock Alpha Hunter scans
+interface NewsCacheEntry {
+    data: NewsItem[];
+    expiry: number;
+}
+const newsCache = new Map<string, NewsCacheEntry>();
+const NEWS_CACHE_TTL = 30 * 60 * 1000; // 30 minutes
+
 export async function getNewsData(symbol: string, type: 'news' | 'social' | 'analyst' = 'news'): Promise<NewsItem[]> {
+    // Check Cache
+    const cacheKey = `${symbol}-${type}`;
+    const cached = newsCache.get(cacheKey);
+    if (cached && Date.now() < cached.expiry) {
+        return cached.data;
+    }
+
     try {
         // Fetch articles and Finnhub NLP sentiment in parallel
         const [results, finnhubSentiment] = await Promise.all([
@@ -110,6 +126,9 @@ export async function getNewsData(symbol: string, type: 'news' | 'social' | 'ana
                     url: article.link
                 };
             });
+
+        // Save to Cache
+        newsCache.set(cacheKey, { data: items, expiry: Date.now() + NEWS_CACHE_TTL });
 
         return items;
 
