@@ -37,6 +37,7 @@ import { calculateAnchoredVWAP, VWAPAnchor } from './vwap'; export const calcula
     const ema9 = EMA.calculate({ period: 9, values: closes });
     const ema21 = EMA.calculate({ period: 21, values: closes });
     const ema50 = EMA.calculate({ period: 50, values: closes });
+    const ema100 = EMA.calculate({ period: 100, values: closes });
     const ema200 = EMA.calculate({ period: 200, values: closes });
 
     // RSI (Filter)
@@ -77,6 +78,7 @@ import { calculateAnchoredVWAP, VWAPAnchor } from './vwap'; export const calcula
             ema9: getVal(ema9, i, 8),
             ema21: getVal(ema21, i, 20),
             ema50: getVal(ema50, i, 49),
+            ema100: getVal(ema100, i, 99),
             ema200: getVal(ema200, i, 199),
             rsi14: getVal(rsi14, i, 14),
             vwap: getVal(vwap, i, 0),
