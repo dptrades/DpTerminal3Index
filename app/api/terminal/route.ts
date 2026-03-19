@@ -271,25 +271,29 @@ export async function GET(request: NextRequest) {
     const sectorSymbols = ['XLE', 'XLI', 'XLU', 'XLK', 'XLF', 'XLV', 'XLY', 'XLP', 'XLRE', 'XLC', 'XLB'];
 
     // ── Fetch all data in parallel ─────────────────────────────────────────
-    const ETF_QUOTES = ['SPY', 'QQQ', 'IWM', ...sectorSymbols];
+    const ETF_QUOTES = ['SPY', 'QQQ', 'IWM', 'VIXY', ...sectorSymbols];
 
-    const [techSnapshot, sectorData, etfQuotes, vixData, irxData, fvxData, tnxData, tyxData, dxyData, breadthInternals] = await Promise.all([
+    const [techSnapshot, sectorData, etfQuotes, irxData, fvxData, tnxData, tyxData, dxyData, yahooVix, breadthInternals] = await Promise.all([
       getTechnicalSnapshot(benchmark),
       Promise.all(sectorSymbols.map(s => getSectorTrending(s))),
       Promise.all(ETF_QUOTES.map(s => fetchAlpacaQuote(s))),
-      fetchFinnhubQuote('VIX').catch(() => null),
       fetchFinnhubQuote('^IRX').catch(() => null),
       fetchFinnhubQuote('^FVX').catch(() => null),
       fetchFinnhubQuote('^TNX').catch(() => null),
       fetchFinnhubQuote('^TYX').catch(() => null),
       fetchAlpacaQuote('UUP').catch(() => null),
+      yahooFinance.quote('^VIX').catch(() => null),
       getBreadthInternals(),
     ]);
 
     const dataMap: Record<string, { price: number; changePercent: number }> = {};
     ETF_QUOTES.forEach((sym, i) => { if (etfQuotes[i]) dataMap[sym] = etfQuotes[i]!; });
 
-    const vix = vixData?.price || dataMap['VIXY']?.price || 20;
+    // VIX handling: Primary from Yahoo index, then Alpaca VIXY, then fallback
+    const vixPrice = (yahooVix as any)?.regularMarketPrice || dataMap['VIXY']?.price || 20;
+    const vixChange = (yahooVix as any)?.regularMarketChangePercent || dataMap['VIXY']?.changePercent || 0;
+    const vix = vixPrice;
+
     const irxChange = irxData?.changePercent ?? 0;
     const fvxChange = fvxData?.changePercent ?? 0;
     const tnxChange = tnxData?.changePercent ?? 0;
@@ -543,7 +547,7 @@ export async function GET(request: NextRequest) {
         { symbol: 'SPY', price: dataMap['SPY']?.price, change: dataMap['SPY']?.changePercent },
         { symbol: 'QQQ', price: dataMap['QQQ']?.price, change: dataMap['QQQ']?.changePercent },
         { symbol: 'IWM', price: dataMap['IWM']?.price, change: dataMap['IWM']?.changePercent },
-        { symbol: 'VIX', price: vix, change: vixData?.changePercent ?? 0 },
+        { symbol: 'VIX', price: vix, change: vixChange },
       ]
     };
 
