@@ -458,10 +458,10 @@ export async function GET(request: NextRequest) {
     ];
 
     // --- Event Risk Alert ---
-    // Simple heuristic: flag if VIX > 20 and macro is spiking
-    const isEventRisk = (Math.abs(tnxChange) > 1.5 || Math.abs(dxyChange) > 0.5) && vix > 20;
+    // Only alert if Macro is a Headwind (Rising yields or dollar) AND VIX is elevated
+    const isEventRisk = (tnxChange > 2.0 || dxyChange > 0.6) && vix > 22;
     const eventAlert = isEventRisk
-      ? { active: true, message: `Macro event risk elevated — Yield ${tnxChange > 0 ? "spiking" : "falling"} ${Math.abs(tnxChange).toFixed(2)}%, DXY ${dxyChange > 0 ? "strengthening" : "weakening"}. Reduce leverage.` }
+      ? { active: true, message: `Macro Headwinds Elevated — Yield spiking ${tnxChange.toFixed(2)}%, DXY strengthening. Reduce leverage.` }
       : null;
 
     // --- Score History & Delta ---
