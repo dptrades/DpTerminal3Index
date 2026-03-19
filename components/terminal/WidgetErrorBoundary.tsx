@@ -32,14 +32,14 @@ export class WidgetErrorBoundary extends React.Component<Props, State> {
         <div className="bg-[#0B0F17]/40 border border-[#FF2E2E]/10 rounded-xl p-5 flex flex-col items-center justify-center gap-3 min-h-[100px]">
           <AlertCircle className="w-5 h-5 text-[#FF2E2E]/50" />
           <div className="text-center">
-            <p className="text-xs font-bold text-white/30 uppercase tracking-wider">
+            <p className="text-xs font-bold text-white/60 uppercase tracking-wider">
               {this.props.title || "Widget"} Unavailable
             </p>
-            <p className="text-[10px] text-white/20 mt-1">Data could not be loaded</p>
+            <p className="text-[10px] text-white/50 mt-1">Data could not be loaded</p>
           </div>
           <button
             onClick={() => this.setState({ hasError: false, errorMsg: "" })}
-            className="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 hover:bg-white/10 rounded-lg text-[10px] text-white/40 hover:text-white/60 transition-all"
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 hover:bg-white/10 rounded-lg text-[10px] text-white/70 hover:text-white/90 transition-all"
           >
             <RefreshCw className="w-3 h-3" /> Retry
           </button>

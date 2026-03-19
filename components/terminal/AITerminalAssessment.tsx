@@ -25,7 +25,7 @@ const getRiskColor = (level: string) => {
     case "Moderate":return "text-[#FFB800]";
     case "High":    return "text-[#FF2E2E]";
     case "Extreme": return "text-[#FF2E2E] animate-pulse";
-    default:        return "text-white/40";
+    default:        return "text-white/70";
   }
 };
 
@@ -40,7 +40,7 @@ const AITerminalAssessment: React.FC<AITerminalAssessmentProps> = ({ assessment,
       </div>
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-xs text-white/30 uppercase tracking-widest font-bold">Risk:</span>
+          <span className="text-xs text-white/60 uppercase tracking-widest font-bold">Risk:</span>
           <span className={`text-sm font-bold uppercase ${getRiskColor(riskLevel)}`}>{riskLevel}</span>
         </div>
         <InfoPopover title="Terminal Analysis" bullets={INFO} />
@@ -52,7 +52,7 @@ const AITerminalAssessment: React.FC<AITerminalAssessmentProps> = ({ assessment,
     <div className="pt-4 border-t border-white/5 flex flex-col gap-2">
       <div className="flex items-center gap-2">
         <CheckCircle2 className="w-4 h-4 text-[#00FF94]" />
-        <span className="text-[11px] uppercase tracking-widest font-bold text-white/40">Suggested Action</span>
+        <span className="text-[11px] uppercase tracking-widest font-bold text-white/70">Suggested Action</span>
       </div>
       <p className={`text-sm font-bold ${
         suggestedAction.toLowerCase().includes("avoid") ||

@@ -55,7 +55,7 @@ const TerminalGauge: React.FC<TerminalGaugeProps> = ({ score, label = "Swing Tra
           <span className="text-5xl font-bold tracking-tight text-white mb-1">
             {score}
           </span>
-          <span className="text-[10px] uppercase tracking-widest text-white/40 font-medium">
+          <span className="text-[10px] uppercase tracking-widest text-white/70 font-medium">
             / 100
           </span>
         </div>

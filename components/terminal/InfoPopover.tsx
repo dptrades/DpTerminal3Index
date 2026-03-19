@@ -90,7 +90,7 @@ const InfoPopover: React.FC<InfoPopoverProps> = ({ title, bullets }) => {
       <button
         ref={btnRef}
         onClick={handleOpen}
-        className="p-1 rounded-md text-white/20 hover:text-white/60 hover:bg-white/5 transition-all shrink-0"
+        className="p-1 rounded-md text-white/50 hover:text-white/80 hover:bg-white/5 transition-all shrink-0"
         aria-label={`Info: ${title}`}
       >
         <Info className="w-3.5 h-3.5" />
@@ -116,7 +116,7 @@ const InfoPopover: React.FC<InfoPopoverProps> = ({ title, bullets }) => {
               onClick={() => setOpen(false)}
               className="p-0.5 hover:bg-white/10 rounded-md transition-colors"
             >
-              <X className="w-3.5 h-3.5 text-white/40 hover:text-white" />
+              <X className="w-3.5 h-3.5 text-white/70 hover:text-white" />
             </button>
           </div>
 

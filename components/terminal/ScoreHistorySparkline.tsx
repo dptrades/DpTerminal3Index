@@ -18,7 +18,7 @@ const ScoreHistorySparkline: React.FC<ScoreHistorySparklineProps> = ({ history, 
   return (
     <div className="mt-4 w-full flex flex-col gap-2">
       <div className="flex items-center justify-between px-1">
-        <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold">Score History</span>
+        <span className="text-[10px] uppercase tracking-widest text-white/60 font-bold">Score History</span>
         <span className={`text-[10px] font-bold ${trend >= 0 ? "text-[#00FF94]" : "text-[#FF2E2E]"}`}>
           {trend >= 0 ? "▲" : "▼"} {Math.abs(trend)} pts
         </span>

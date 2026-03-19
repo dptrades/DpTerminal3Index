@@ -37,7 +37,7 @@ const ScoringWeights: React.FC<ScoringWeightsProps> = ({ weights, totalScore }) 
       <div className="flex items-center justify-between">
         <h3 className="text-xs uppercase tracking-[0.15em] font-bold text-white/60">Score Breakdown</h3>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-white/30 font-medium tabular-nums">Total: {totalScore}/100</span>
+          <span className="text-xs text-white/60 font-medium tabular-nums">Total: {totalScore}/100</span>
           <InfoPopover title="Score Breakdown" bullets={INFO} />
         </div>
       </div>
@@ -50,9 +50,9 @@ const ScoringWeights: React.FC<ScoringWeightsProps> = ({ weights, totalScore }) 
               <div className="flex items-center justify-between text-xs">
                 <span className="text-white/50 font-medium">{item.label}</span>
                 <div className="flex items-center gap-3 tabular-nums">
-                  <span className="text-white/30">{item.weight}% wt</span>
+                  <span className="text-white/60">{item.weight}% wt</span>
                   <span className={`font-bold ${c.text}`}>{item.score}</span>
-                  <span className="text-white/20">+{item.contribution}pts</span>
+                  <span className="text-white/50">+{item.contribution}pts</span>
                 </div>
               </div>
               <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
@@ -71,7 +71,7 @@ const ScoringWeights: React.FC<ScoringWeightsProps> = ({ weights, totalScore }) 
         <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
           <div className={`h-full rounded-full transition-all duration-1000 ${totalScore >= 60 ? "bg-[#00FF94]" : totalScore >= 45 ? "bg-[#FFB800]" : "bg-[#FF2E2E]"}`} style={{ width: `${totalScore}%` }} />
         </div>
-        <div className="flex justify-between text-[9px] text-white/20 mt-1 uppercase tracking-wider">
+        <div className="flex justify-between text-[9px] text-white/50 mt-1 uppercase tracking-wider">
           <span>Risk-Off</span>
           <span>60 — Deploy</span>
           <span>Strong</span>

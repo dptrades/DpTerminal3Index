@@ -22,7 +22,7 @@ const typeConfig: Record<string, { color: string; bg: string; border: string; ic
   fomc:        { color: "text-[#FF2E2E]",  bg: "bg-[#FF2E2E]/10",  border: "border-[#FF2E2E]/20",  icon: AlertTriangle, badge: "FOMC" },
   macro:       { color: "text-[#FFB800]",  bg: "bg-[#FFB800]/10",  border: "border-[#FFB800]/20",  icon: BarChart3,     badge: "ECON" },
   opex:        { color: "text-purple-400", bg: "bg-purple-400/10", border: "border-purple-400/20", icon: Zap,           badge: "OPEX" },
-  opex_weekly: { color: "text-white/40",   bg: "bg-white/5",       border: "border-white/10",      icon: Zap,           badge: "WKLY" },
+  opex_weekly: { color: "text-white/70",   bg: "bg-white/5",       border: "border-white/10",      icon: Zap,           badge: "WKLY" },
 };
 
 const INFO = [
@@ -63,7 +63,7 @@ const EventCalendar: React.FC = () => {
     <div className="bg-[#0B0F17]/40 border border-white/5 rounded-xl p-5 backdrop-blur-md flex flex-col gap-4 hover:border-white/10 transition-colors">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <CalendarDays className="w-4 h-4 text-white/40" />
+          <CalendarDays className="w-4 h-4 text-white/70" />
           <h3 className="text-xs uppercase tracking-[0.15em] font-bold text-white/60">Event Calendar</h3>
         </div>
         <div className="flex items-center gap-2">
@@ -82,7 +82,7 @@ const EventCalendar: React.FC = () => {
         <div className="flex flex-col gap-4">
           {/* Today View */}
           <div className="flex flex-col gap-2">
-            <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Today</span>
+            <span className="text-[10px] text-white/60 uppercase tracking-widest font-bold">Today</span>
             {calData.todayEvents.length > 0 ? (
               calData.todayEvents.map((ev, i) => {
                 const cfg = typeConfig[ev.type] || typeConfig.macro;
@@ -97,7 +97,7 @@ const EventCalendar: React.FC = () => {
               })
             ) : (
               <div className="px-3 py-2 rounded-lg border border-white/5 bg-white/5">
-                <span className="text-xs text-white/30">No major catalysts today</span>
+                <span className="text-xs text-white/60">No major catalysts today</span>
               </div>
             )}
           </div>
@@ -105,7 +105,7 @@ const EventCalendar: React.FC = () => {
           {/* This Week View */}
           {calData.weekEvents.filter(e => e.date !== calData.today && e.type !== "opex_weekly").length > 0 && (
             <div className="flex flex-col gap-2">
-              <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">This Week</span>
+              <span className="text-[10px] text-white/60 uppercase tracking-widest font-bold">This Week</span>
               {calData.weekEvents
                 .filter(e => e.date !== calData.today && e.type !== "opex_weekly")
                 .slice(0, 5)
@@ -113,7 +113,7 @@ const EventCalendar: React.FC = () => {
                   const cfg = typeConfig[ev.type] || typeConfig.macro;
                   return (
                     <div key={i} className="flex items-center gap-3">
-                      <span className="text-[10px] text-white/30 w-20 shrink-0">{formatDate(ev.date)}</span>
+                      <span className="text-[10px] text-white/60 w-20 shrink-0">{formatDate(ev.date)}</span>
                       <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${cfg.color.replace("text-", "bg-")}`} />
                       <span className="text-xs text-white/60 font-medium">{ev.label}</span>
                     </div>
@@ -125,14 +125,14 @@ const EventCalendar: React.FC = () => {
           {/* Next Week View */}
           {calData.nextWeekEvents.length > 0 && (
             <div className="flex flex-col gap-2 mt-1 pt-3 border-t border-white/5">
-              <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Next Week</span>
+              <span className="text-[10px] text-white/60 uppercase tracking-widest font-bold">Next Week</span>
               {calData.nextWeekEvents
                 .slice(0, 6)
                 .map((ev, i) => {
                   const cfg = typeConfig[ev.type] || typeConfig.macro;
                   return (
                     <div key={i} className="flex items-center gap-3">
-                      <span className="text-[10px] text-white/30 w-20 shrink-0">{formatDate(ev.date)}</span>
+                      <span className="text-[10px] text-white/60 w-20 shrink-0">{formatDate(ev.date)}</span>
                       <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${cfg.color.replace("text-", "bg-")}`} />
                       <span className="text-xs text-white/60 font-medium">{ev.label}</span>
                     </div>

@@ -42,7 +42,7 @@ const DecisionBanner: React.FC<DecisionBannerProps> = ({
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-1.5">
-            <span className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-bold">Market Readiness</span>
+            <span className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-bold">Market Readiness</span>
             <InfoPopover title="Market Readiness" bullets={INFO} />
           </div>
           <div className="flex items-center gap-3 mt-1">
@@ -53,12 +53,12 @@ const DecisionBanner: React.FC<DecisionBannerProps> = ({
 
         {/* Mode toggle */}
         <div className="flex flex-col items-end gap-1.5">
-          <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold">Strategy</span>
+          <span className="text-[10px] uppercase tracking-widest text-white/60 font-bold">Strategy</span>
           <div className="flex items-center bg-black/30 p-0.5 rounded-lg border border-white/10">
             {(["TACTICAL", "POSITIONAL"] as const).map(m => (
               <button key={m} onClick={() => onModeChange(m)}
                 className={`px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all ${
-                  mode === m ? `${cfg.color} bg-white/10` : "text-white/30 hover:text-white/50"
+                  mode === m ? `${cfg.color} bg-white/10` : "text-white/60 hover:text-white/80"
                 }`}>
                 {m === "TACTICAL" ? "Short-Term" : "Swing"}
               </button>
@@ -70,11 +70,11 @@ const DecisionBanner: React.FC<DecisionBannerProps> = ({
       {/* Score + Position */}
       <div className="flex items-center justify-between border-t border-white/5 pt-4">
         <div className="flex flex-col gap-1">
-          <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold">Quality Score</span>
-          <span className={`text-4xl font-black tabular-nums ${cfg.color}`}>{totalScore}<span className="text-lg text-white/30">/100</span></span>
+          <span className="text-[10px] uppercase tracking-widest text-white/60 font-bold">Quality Score</span>
+          <span className={`text-4xl font-black tabular-nums ${cfg.color}`}>{totalScore}<span className="text-lg text-white/60">/100</span></span>
         </div>
         <div className="flex flex-col items-end gap-1">
-          <span className="text-[10px] uppercase tracking-widest text-white/30 font-bold">Position Size</span>
+          <span className="text-[10px] uppercase tracking-widest text-white/60 font-bold">Position Size</span>
           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border ${cfg.border} ${cfg.bg}`}>
             <Target className={`w-3.5 h-3.5 ${cfg.color}`} />
             <span className={`text-xs font-bold ${cfg.color}`}>{positionSize}</span>

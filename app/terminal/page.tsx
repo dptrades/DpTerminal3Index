@@ -124,7 +124,7 @@ export default function TerminalPage() {
     OPEN:        { label: "MARKET OPEN",   color: "text-[#00FF94]", dot: "bg-[#00FF94]" },
     PRE_MARKET:  { label: "PRE-MARKET",    color: "text-[#FFB800]", dot: "bg-[#FFB800]" },
     AFTER_HOURS: { label: "AFTER HOURS",   color: "text-[#FFB800]", dot: "bg-[#FFB800]" },
-    CLOSED:      { label: "MARKET CLOSED", color: "text-white/30",  dot: "bg-white/20" },
+    CLOSED:      { label: "MARKET CLOSED", color: "text-white/60",  dot: "bg-white/20" },
   };
   const statusCfg = msConfig[marketStatus];
 
@@ -155,7 +155,7 @@ export default function TerminalPage() {
           {/* Left: Branding */}
           <div className="flex items-center gap-4 min-w-0">
             <Link href="/" className="p-1.5 hover:bg-white/5 rounded-lg transition-colors group shrink-0">
-              <ChevronLeft className="w-5 h-5 text-white/40 group-hover:text-white" />
+              <ChevronLeft className="w-5 h-5 text-white/70 group-hover:text-white" />
             </Link>
             <div className="flex flex-col min-w-0">
               <div className="flex items-center gap-2">
@@ -165,11 +165,11 @@ export default function TerminalPage() {
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className={`text-[10px] font-bold uppercase tracking-widest ${statusCfg.color}`}>{statusCfg.label}</span>
                 {marketStatus === "OPEN" && (
-                  <span className="text-[10px] text-white/20">
+                  <span className="text-[10px] text-white/50">
                     · {mode === "TACTICAL" ? "5m" : "15m"} refresh
                   </span>
                 )}
-                {marketStatus === "CLOSED" && <span className="text-[10px] text-white/20">· Paused</span>}
+                {marketStatus === "CLOSED" && <span className="text-[10px] text-white/50">· Paused</span>}
               </div>
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function TerminalPage() {
                 className={`px-5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
                   benchmark === sym
                     ? "bg-[#00FF94]/10 text-[#00FF94] border border-[#00FF94]/20"
-                    : "text-white/40 hover:text-white/70"
+                    : "text-white/70 hover:text-white/90"
                 }`}>
                 {sym}
               </button>
@@ -194,10 +194,10 @@ export default function TerminalPage() {
             <div className="hidden lg:flex items-center gap-4 bg-white/5 px-4 py-2 rounded-full border border-white/5">
               {data?.topBar?.map((item: any, i: number) => (
                 <div key={i} className="flex items-center gap-1.5 border-r border-white/10 pr-4 last:border-0 last:pr-0">
-                  <span className="text-[10px] font-bold text-white/40 uppercase">{item.symbol}</span>
+                  <span className="text-[10px] font-bold text-white/70 uppercase">{item.symbol}</span>
                   <span className="text-xs font-bold tabular-nums">
                     ${item.price?.toFixed(2)}
-                    {marketStatus !== "OPEN" && <span className="text-[8px] opacity-30 ml-1 font-normal tracking-tighter">CLOSE</span>}
+                    {marketStatus !== "OPEN" && <span className="text-[8px] opacity-60 ml-1 font-normal tracking-tighter text-white/50">CLOSE</span>}
                   </span>
                   <div className={`flex items-center gap-1 text-[10px] font-bold ${item.change >= 0 ? "text-[#00FF94]" : "text-[#FF2E2E]"}`}>
                     <span>{item.changeAmount >= 0 ? "+" : ""}{item.changeAmount?.toFixed(2)}</span>
@@ -217,14 +217,14 @@ export default function TerminalPage() {
                     strokeDasharray={62.8} strokeDashoffset={62.8 * (1 - progressPct / 100)} />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Clock className="w-2.5 h-2.5 text-white/40" />
+                  <Clock className="w-2.5 h-2.5 text-white/70" />
                 </div>
               </div>
               <div className="flex flex-col">
                 <span className="text-[10px] font-bold tabular-nums leading-none">
                   {minutesLeft}:{secondsLeft.toString().padStart(2, "0")}
                 </span>
-                <span className="text-[8px] text-white/20 uppercase tracking-tighter font-bold">Refresh</span>
+                <span className="text-[8px] text-white/50 uppercase tracking-tighter font-bold">Refresh</span>
               </div>
             </div>
           </div>
@@ -250,7 +250,7 @@ export default function TerminalPage() {
               </div>
               {data?.marketStatus && (
                 <div className={`px-2 py-0.5 rounded border ${data.marketStatus.isOpen ? "border-[#00FF94]/20 bg-[#00FF94]/5" : "border-white/10 bg-white/5"} select-none`}>
-                  <span className={`text-[9px] font-extrabold tracking-widest ${data.marketStatus.isOpen ? "text-[#00FF94]" : "text-white/40 uppercase"}`}>
+                  <span className={`text-[9px] font-extrabold tracking-widest ${data.marketStatus.isOpen ? "text-[#00FF94]" : "text-white/70 uppercase"}`}>
                     {data.marketStatus.label}
                   </span>
                 </div>

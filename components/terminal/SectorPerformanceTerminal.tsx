@@ -30,7 +30,7 @@ const SectorPerformanceTerminal: React.FC<SectorPerformanceTerminalProps> = ({ s
       <div className="flex items-center justify-between">
         <h3 className="text-xs uppercase tracking-[0.15em] font-bold text-white/60">Sector Performance</h3>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-white/20 font-medium">▲ = Above 20d</span>
+          <span className="text-[10px] text-white/50 font-medium">▲ = Above 20d</span>
           <InfoPopover title="Sector Performance" bullets={INFO} />
         </div>
       </div>

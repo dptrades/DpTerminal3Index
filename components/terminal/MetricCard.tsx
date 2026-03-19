@@ -29,7 +29,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
       case "positive": return "text-[#00FF94]";
       case "negative": return "text-[#FF2E2E]";
       case "warning":  return "text-[#FFB800]";
-      default:         return "text-white/40";
+      default:         return "text-white/70";
     }
   };
 
@@ -37,7 +37,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
     <div className="bg-[#0B0F17]/40 border border-white/5 rounded-xl p-5 backdrop-blur-md flex flex-col gap-4 hover:border-white/10 transition-colors group">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          {Icon && <Icon className="w-4 h-4 text-white/40 group-hover:text-white/60 transition-colors" />}
+          {Icon && <Icon className="w-4 h-4 text-white/70 group-hover:text-white transition-colors" />}
           <h3 className="text-xs uppercase tracking-[0.15em] font-bold text-white/60">{title}</h3>
         </div>
         <div className="flex items-center gap-2">
@@ -70,7 +70,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
                 <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase ${
                   metric.status === "positive" ? "text-[#00FF94] bg-[#00FF94]/10" :
                   metric.status === "negative" ? "text-[#FF2E2E] bg-[#FF2E2E]/10" :
-                  metric.status === "warning"  ? "text-[#FFB800] bg-[#FFB800]/10" : "text-white/40 bg-white/5"
+                  metric.status === "warning"  ? "text-[#FFB800] bg-[#FFB800]/10" : "text-white/70 bg-white/5"
                 }`}>{metric.statusLabel}</span>
               )}
             </div>

@@ -66,7 +66,7 @@ const SignalReadiness: React.FC<SignalReadinessProps> = ({ signals, score }) => 
                 <span className="text-xs font-medium text-white/70 truncate">{s.question}</span>
                 <span className={`text-xs font-bold shrink-0 ${getValueColor(s.status)}`}>{s.answer}</span>
               </div>
-              <span className="text-[10px] text-white/30 truncate">{s.detail}</span>
+              <span className="text-[10px] text-white/60 truncate">{s.detail}</span>
             </div>
           </div>
         ))}

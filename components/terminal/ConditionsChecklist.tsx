@@ -52,7 +52,7 @@ const ConditionsChecklist: React.FC<ConditionsChecklistProps> = ({ checklist }) 
               ? <CheckCircle2 className="w-4 h-4 text-[#00FF94] shrink-0" />
               : <XCircle className="w-4 h-4 text-[#FF2E2E]/50 shrink-0" />
             }
-            <span className={`text-xs font-medium ${item.met ? "text-white/80" : "text-white/30 line-through"}`}>
+            <span className={`text-xs font-medium ${item.met ? "text-white/90" : "text-white/60 line-through"}`}>
               {item.label}
             </span>
           </div>
