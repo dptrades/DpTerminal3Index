@@ -15,6 +15,7 @@ interface CalendarData {
   weekRisk: "Low" | "Moderate" | "High" | "Extreme";
   todayEvents: CalendarEvent[];
   weekEvents: CalendarEvent[];
+  nextWeekEvents: CalendarEvent[];
 }
 
 const typeConfig: Record<string, { color: string; bg: string; border: string; icon: any; badge: string }> = {
@@ -78,11 +79,12 @@ const EventCalendar: React.FC = () => {
       )}
 
       {calData && !loading && (
-        <>
-          {calData.todayEvents.length > 0 ? (
-            <div className="flex flex-col gap-2">
-              <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Today</span>
-              {calData.todayEvents.map((ev, i) => {
+        <div className="flex flex-col gap-4">
+          {/* Today View */}
+          <div className="flex flex-col gap-2">
+            <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Today</span>
+            {calData.todayEvents.length > 0 ? (
+              calData.todayEvents.map((ev, i) => {
                 const cfg = typeConfig[ev.type] || typeConfig.macro;
                 const Icon = cfg.icon;
                 return (
@@ -92,19 +94,39 @@ const EventCalendar: React.FC = () => {
                     <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${cfg.border} ${cfg.color} uppercase`}>{cfg.badge}</span>
                   </div>
                 );
-              })}
-            </div>
-          ) : (
-            <div className="px-3 py-2 rounded-lg border border-white/5 bg-white/5">
-              <span className="text-xs text-white/30">No major catalysts today</span>
-            </div>
-          )}
+              })
+            ) : (
+              <div className="px-3 py-2 rounded-lg border border-white/5 bg-white/5">
+                <span className="text-xs text-white/30">No major catalysts today</span>
+              </div>
+            )}
+          </div>
 
+          {/* This Week View */}
           {calData.weekEvents.filter(e => e.date !== calData.today && e.type !== "opex_weekly").length > 0 && (
             <div className="flex flex-col gap-2">
               <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">This Week</span>
               {calData.weekEvents
                 .filter(e => e.date !== calData.today && e.type !== "opex_weekly")
+                .slice(0, 5)
+                .map((ev, i) => {
+                  const cfg = typeConfig[ev.type] || typeConfig.macro;
+                  return (
+                    <div key={i} className="flex items-center gap-3">
+                      <span className="text-[10px] text-white/30 w-20 shrink-0">{formatDate(ev.date)}</span>
+                      <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${cfg.color.replace("text-", "bg-")}`} />
+                      <span className="text-xs text-white/60 font-medium">{ev.label}</span>
+                    </div>
+                  );
+                })}
+            </div>
+          )}
+
+          {/* Next Week View */}
+          {calData.nextWeekEvents.length > 0 && (
+            <div className="flex flex-col gap-2 mt-1 pt-3 border-t border-white/5">
+              <span className="text-[10px] text-white/30 uppercase tracking-widest font-bold">Next Week</span>
+              {calData.nextWeekEvents
                 .slice(0, 6)
                 .map((ev, i) => {
                   const cfg = typeConfig[ev.type] || typeConfig.macro;
@@ -118,7 +140,7 @@ const EventCalendar: React.FC = () => {
                 })}
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

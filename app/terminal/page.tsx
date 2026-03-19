@@ -196,9 +196,11 @@ export default function TerminalPage() {
                 <div key={i} className="flex items-center gap-1.5 border-r border-white/10 pr-4 last:border-0 last:pr-0">
                   <span className="text-[10px] font-bold text-white/40 uppercase">{item.symbol}</span>
                   <span className="text-xs font-bold tabular-nums">${item.price?.toFixed(2)}</span>
-                  <span className={`text-[10px] font-bold ${item.change >= 0 ? "text-[#00FF94]" : "text-[#FF2E2E]"}`}>
-                    {item.change >= 0 ? "+" : ""}{item.change?.toFixed(2)}%
-                  </span>
+                  <div className={`flex items-center gap-1 text-[10px] font-bold ${item.change >= 0 ? "text-[#00FF94]" : "text-[#FF2E2E]"}`}>
+                    <span>{item.changeAmount >= 0 ? "+" : ""}{item.changeAmount?.toFixed(2)}</span>
+                    <span className="opacity-40 text-white/20">|</span>
+                    <span>{item.change >= 0 ? "+" : ""}{item.change?.toFixed(2)}%</span>
+                  </div>
                 </div>
               ))}
             </div>

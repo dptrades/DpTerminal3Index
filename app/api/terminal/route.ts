@@ -63,7 +63,7 @@ async function fetchFinnhubQuote(symbol: string): Promise<{ price: number; chang
 }
 
 // ── Alpaca latest quote (ETF price + change%) ────────────────────────────────
-async function fetchAlpacaQuote(symbol: string): Promise<{ price: number; changePercent: number } | null> {
+async function fetchAlpacaQuote(symbol: string): Promise<{ price: number; changePercent: number; changeAmount: number } | null> {
   try {
     const apiKey = process.env.ALPACA_API_KEY || '';
     const apiSecret = process.env.ALPACA_API_SECRET || '';
@@ -78,8 +78,9 @@ async function fetchAlpacaQuote(symbol: string): Promise<{ price: number; change
     const price = d.latestTrade?.p || d.latestQuote?.ap || null;
     const prevClose = d.prevDailyBar?.c || null;
     if (!price) return null;
-    const changePercent = prevClose ? ((price - prevClose) / prevClose) * 100 : 0;
-    return { price, changePercent };
+    const changeAmount = prevClose ? price - prevClose : 0;
+    const changePercent = prevClose ? (changeAmount / prevClose) * 100 : 0;
+    return { price, changePercent, changeAmount };
   } catch { return null; }
 }
 
@@ -118,7 +119,9 @@ async function getTechnicalSnapshot(symbol: string) {
     const macdBullish = macd?.MACD !== undefined && macd?.signal !== undefined
       ? macd.MACD > macd.signal : null;
 
-    return { daily: latestDaily, weekly: latestWeekly, relVolume, bbWidth, macdBullish };
+    const divergence = latestDaily.divergence;
+
+    return { daily: latestDaily, weekly: latestWeekly, relVolume, bbWidth, macdBullish, divergence };
   } catch (e) {
     console.error(`[Terminal] Alpaca snapshot failed for ${symbol}, falling back to Yahoo:`, e);
     return getTechnicalSnapshotYahoo(symbol);
@@ -145,7 +148,8 @@ async function getTechnicalSnapshotYahoo(symbol: string) {
     const bbWidth = bb?.upper && bb?.lower && bb?.middle ? ((bb.upper - bb.lower) / bb.middle * 100) : null;
     const macd = latestDaily.macd;
     const macdBullish = macd?.MACD !== undefined && macd?.signal !== undefined ? macd.MACD > macd.signal : null;
-    return { daily: latestDaily, weekly: latestWeekly, relVolume, bbWidth, macdBullish };
+    const divergence = latestDaily.divergence;
+    return { daily: latestDaily, weekly: latestWeekly, relVolume, bbWidth, macdBullish, divergence };
   } catch (e) {
     console.error(`Yahoo snapshot failed for ${symbol}:`, e);
     return null;
@@ -264,32 +268,53 @@ export async function GET(request: NextRequest) {
     // ── Fetch all data in parallel ─────────────────────────────────────────
     const ETF_QUOTES = ['SPY', 'QQQ', 'IWM', 'VIXY', ...sectorSymbols];
 
-    const [techSnapshot, sectorData, etfQuotes, irxData, fvxData, tnxData, tyxData, dxyData, yahooVix, breadthInternals] = await Promise.all([
+    const [techSnapshot, sectorData, etfQuotes, dxyData, yahooVix, yahooDxy, yahooIrx, yahooFvx, yahooTnx, yahooTyx, yahooMain, breadthInternals] = await Promise.all([
       getTechnicalSnapshot(benchmark),
       Promise.all(sectorSymbols.map(s => getSectorTrending(s))),
       Promise.all(ETF_QUOTES.map(s => fetchAlpacaQuote(s))),
-      fetchFinnhubQuote('^IRX').catch(() => null),
-      fetchFinnhubQuote('^FVX').catch(() => null),
-      fetchFinnhubQuote('^TNX').catch(() => null),
-      fetchFinnhubQuote('^TYX').catch(() => null),
       fetchAlpacaQuote('UUP').catch(() => null),
       yahooFinance.quote('^VIX').catch(() => null),
+      yahooFinance.quote('DX-Y.NYB').catch(() => null),
+      yahooFinance.quote('^IRX').catch(() => null),
+      yahooFinance.quote('^FVX').catch(() => null),
+      yahooFinance.quote('^TNX').catch(() => null),
+      yahooFinance.quote('^TYX').catch(() => null),
+      yahooFinance.quote(['SPY', 'QQQ', 'IWM']).catch(() => []),
       getBreadthInternals(),
     ]);
 
-    const dataMap: Record<string, { price: number; changePercent: number }> = {};
-    ETF_QUOTES.forEach((sym, i) => { if (etfQuotes[i]) dataMap[sym] = etfQuotes[i]!; });
+    const dataMap: Record<string, { price: number; changePercent: number; changeAmount: number }> = {};
+    const fetchResults = etfQuotes as ({ price: number; changePercent: number; changeAmount: number } | null)[];
+    ETF_QUOTES.forEach((sym, i) => { if (fetchResults[i]) dataMap[sym] = fetchResults[i]!; });
+
+    // Yahoo fallbacks for core indices in top bar
+    (yahooMain as any[]).forEach(q => {
+      if (!dataMap[q.symbol] && q.regularMarketPrice) {
+        dataMap[q.symbol] = { 
+          price: q.regularMarketPrice, 
+          changePercent: q.regularMarketChangePercent || 0,
+          changeAmount: q.regularMarketChange || 0
+        };
+      }
+    });
 
     // VIX handling: Primary from Yahoo index, then Alpaca VIXY, then fallback
     const vixPrice = (yahooVix as any)?.regularMarketPrice || dataMap['VIXY']?.price || 20;
     const vixChange = (yahooVix as any)?.regularMarketChangePercent || dataMap['VIXY']?.changePercent || 0;
+    const vixChangeAmount = (yahooVix as any)?.regularMarketChange || dataMap['VIXY']?.changeAmount || 0;
     const vix = vixPrice;
 
-    const irxChange = irxData?.changePercent ?? 0;
-    const fvxChange = fvxData?.changePercent ?? 0;
-    const tnxChange = tnxData?.changePercent ?? 0;
-    const tyxChange = tyxData?.changePercent ?? 0;
-    const dxyChange = dxyData?.changePercent ?? 0;
+    const irxPrice = (yahooIrx as any)?.regularMarketPrice || 0;
+    const irxChange = (yahooIrx as any)?.regularMarketChangePercent || 0;
+    const fvxPrice = (yahooFvx as any)?.regularMarketPrice || 0;
+    const fvxChange = (yahooFvx as any)?.regularMarketChangePercent || 0;
+    const tnxPrice = (yahooTnx as any)?.regularMarketPrice || 0;
+    const tnxChange = (yahooTnx as any)?.regularMarketChangePercent || 0;
+    const tyxPrice = (yahooTyx as any)?.regularMarketPrice || 0;
+    const tyxChange = (yahooTyx as any)?.regularMarketChangePercent || 0;
+
+    const dxyPrice = (yahooDxy as any)?.regularMarketPrice || dxyData?.price || 100;
+    const dxyChange = (yahooDxy as any)?.regularMarketChangePercent || dxyData?.changePercent || 0;
 
     // VIX percentile (compute after we know vix)
     const vixPercentile = await getVixPercentile(vix);
@@ -302,7 +327,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Technical analysis failed" }, { status: 500 });
     }
 
-    const { daily, weekly, relVolume, bbWidth, macdBullish } = techSnapshot;
+    const { daily, weekly, relVolume, bbWidth, macdBullish, divergence } = techSnapshot;
     const price = daily.close;
     const rsi = daily.rsi14 || 50;
 
@@ -427,7 +452,7 @@ export async function GET(request: NextRequest) {
 
   SCORE: ${totalScore}/100 (${scoreDelta > 0 ? '+' : ''}${scoreDelta} change)
   TREND: Daily EMAs ${dailyBullEmas}/5 bullish | Weekly EMAs ${weeklyBullEmas}/5 bullish
-  MOMENTUM: RSI ${rsi.toFixed(1)} | MACD ${macdBullish ? 'Bullish Cross' : 'Bearish Cross'} | RelVol ${relVolume.toFixed(2)}x
+  MOMENTUM: RSI ${rsi.toFixed(1)} | MACD ${macdBullish ? 'Bullish Cross' : 'Bearish Cross'} | RelVol ${relVolume.toFixed(2)}x | Divergence: ${divergence?.type || 'None'}
   VOLATILITY: VIX ${vix.toFixed(2)} (${vixPercentile}th percentile vs 52-week) | Put/Call ${breadthInternals.putCall !== null ? breadthInternals.putCall.toFixed(2) : 'N/A'}
   BREADTH: Sectors positive ${positiveSectors.length}/11 | S&P 500 stocks above 20MA: ${breadthInternals.above20?.toFixed(1) ?? 'N/A'}% | 50MA: ${breadthInternals.above50?.toFixed(1) ?? 'N/A'}% | 200MA: ${breadthInternals.above200?.toFixed(1) ?? 'N/A'}%
   MACRO: 2Y change ${irxChange.toFixed(2)}% | 5Y change ${fvxChange.toFixed(2)}% | 10Y change ${tnxChange.toFixed(2)}% | 30Y change ${tyxChange.toFixed(2)}% | DXY change ${dxyChange.toFixed(2)}%
@@ -492,7 +517,8 @@ export async function GET(request: NextRequest) {
           subMetrics: [
             { label: "RSI(14)", value: rsi.toFixed(1), status: rsi > 40 && rsi < 70 ? "positive" : "warning" },
             { label: "MACD Signal", value: macdBullish === null ? "N/A" : macdBullish ? "Bullish Cross" : "Bearish Cross", status: macdBullish ? "positive" : "negative" },
-            { label: "Rel Volume", value: relVolume.toFixed(2) + "x", status: relVolume > 1 ? "positive" : "neutral" }
+            { label: "Rel Volume", value: relVolume.toFixed(2) + "x", status: relVolume > 1 ? "positive" : "neutral" },
+            { label: "RSI Divergence", value: divergence?.type || "None", status: divergence?.type === "BULLISH" ? "positive" : divergence?.type === "BEARISH" ? "negative" : "neutral" }
           ]
         },
         volatility: {
@@ -523,8 +549,11 @@ export async function GET(request: NextRequest) {
           status: macroScore < 40 ? "Hostile" : macroScore < 60 ? "Headwind" : "Supportive",
           type: macroScore < 40 ? "negative" : macroScore < 60 ? "warning" : "positive",
           subMetrics: [
-            { label: "Yield Curve (2-30Y)", value: yieldImpact > 0 ? "Rising" : "Stable", status: yieldImpact > 0.5 ? "negative" : "positive" },
-            { label: "US Dollar (DXY)", value: dxyChange > 0 ? "Rising" : "Falling", status: dxyChange > 0.2 ? "negative" : "positive" }
+            { label: "2Y Yield", value: irxPrice ? `${irxPrice.toFixed(2)}%` : "N/A", status: irxChange > 0 ? "negative" : "positive" },
+            { label: "5Y Yield", value: fvxPrice ? `${fvxPrice.toFixed(2)}%` : "N/A", status: fvxChange > 0 ? "negative" : "positive" },
+            { label: "10Y Yield", value: tnxPrice ? `${tnxPrice.toFixed(2)}%` : "N/A", status: tnxChange > 0 ? "negative" : "positive" },
+            { label: "30Y Yield", value: tyxPrice ? `${tyxPrice.toFixed(2)}%` : "N/A", status: tyxChange > 0 ? "negative" : "positive" },
+            { label: "US Dollar (DXY)", value: dxyPrice ? dxyPrice.toFixed(2) : "N/A", status: dxyChange > 0.2 ? "negative" : "positive" }
           ]
         }
       },
@@ -535,10 +564,10 @@ export async function GET(request: NextRequest) {
       })).sort((a: any, b: any) => b.change - a.change),
       ai: { assessment, suggestedAction, riskLevel },
       topBar: [
-        { symbol: 'SPY', price: dataMap['SPY']?.price, change: dataMap['SPY']?.changePercent },
-        { symbol: 'QQQ', price: dataMap['QQQ']?.price, change: dataMap['QQQ']?.changePercent },
-        { symbol: 'IWM', price: dataMap['IWM']?.price, change: dataMap['IWM']?.changePercent },
-        { symbol: 'VIX', price: vix, change: vixChange },
+        { symbol: 'SPY', price: dataMap['SPY']?.price, change: dataMap['SPY']?.changePercent, changeAmount: dataMap['SPY']?.changeAmount },
+        { symbol: 'QQQ', price: dataMap['QQQ']?.price, change: dataMap['QQQ']?.changePercent, changeAmount: dataMap['QQQ']?.changeAmount },
+        { symbol: 'IWM', price: dataMap['IWM']?.price, change: dataMap['IWM']?.changePercent, changeAmount: dataMap['IWM']?.changeAmount },
+        { symbol: 'VIX', price: vix, change: vixChange, changeAmount: vixChangeAmount },
       ]
     };
 

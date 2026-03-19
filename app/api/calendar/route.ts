@@ -20,6 +20,8 @@ const ECONOMIC_EVENTS_2026 = [
   { date: "2026-01-14", label: "CPI Report", type: "macro" },
   { date: "2026-03-11", label: "CPI Report", type: "macro" },
   { date: "2026-03-19", label: "Initial Jobless Claims", type: "macro" },
+  { date: "2026-03-26", label: "Initial Jobless Claims", type: "macro" },
+  { date: "2026-03-27", label: "PCE Inflation (Feb)", type: "macro" },
   { date: "2026-03-19", label: "Existing Home Sales", type: "macro" },
   { date: "2026-04-08", label: "CPI Report", type: "macro" },
   { date: "2026-05-13", label: "CPI Report", type: "macro" },
@@ -122,8 +124,13 @@ export async function GET() {
     endOfWeek.setDate(now.getDate() + daysUntilSunday);
     const endOfWeekStr = toDateStr(endOfWeek);
 
-    // Fetch real-time economic events from Finnhub
-    const finnhubEvents = await finnhubClient.getEconomicCalendar(todayStr, endOfWeekStr);
+    // Get end of next week (upcoming Sunday + 7)
+    const endOfNextWeek = new Date(endOfWeek);
+    endOfNextWeek.setDate(endOfWeek.getDate() + 7);
+    const endOfNextWeekStr = toDateStr(endOfNextWeek);
+
+    // Fetch real-time economic events from Finnhub (current + next week)
+    const finnhubEvents = await finnhubClient.getEconomicCalendar(todayStr, endOfNextWeekStr);
     const mappedFinnhub = finnhubEvents
       .filter(e => e.country === 'United States')
       .map(e => ({
@@ -150,6 +157,16 @@ export async function GET() {
       .filter((v, i, a) => a.findIndex(t => t.label === v.label && t.date === v.date) === i)
       .sort((a, b) => a.date.localeCompare(b.date));
 
+    // Next week start (Monday)
+    const nextWeekStart = new Date(endOfWeek);
+    nextWeekStart.setDate(endOfWeek.getDate() + 1);
+    const nextWeekStartStr = toDateStr(nextWeekStart);
+
+    const nextWeekEvents = allEvents
+      .filter(e => e.date >= nextWeekStartStr && e.date <= endOfNextWeekStr)
+      .filter((v, i, a) => a.findIndex(t => t.label === v.label && t.date === v.date) === i)
+      .sort((a, b) => a.date.localeCompare(b.date));
+
     // Risk rating for the week
     const fomcThisWeek = weekEvents.some(e => e.type === "fomc");
     const tripleThisWeek = weekEvents.some(e => e.label === "Triple Witching");
@@ -160,6 +177,7 @@ export async function GET() {
       weekRisk,
       todayEvents,
       weekEvents,
+      nextWeekEvents,
     });
   } catch (error) {
     console.error("Calendar API Error:", error);

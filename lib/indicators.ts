@@ -220,7 +220,71 @@ import { calculateAnchoredVWAP, VWAPAnchor } from './vwap'; export const calcula
         }
 
         d.pattern = { name: patternName, signal: patternSignal };
+        
+        // -------------------------------------------------------------------------
+        // 6. RSI DIVERGENCE DETECTION
+        // -------------------------------------------------------------------------
+        d.divergence = { type: 'NONE' };
+        if (i >= 20) {
+            const window = results.slice(i - 20, i + 1);
+            const rsiWindow = window.map(w => w.rsi14).filter((r): r is number => r !== undefined);
+            const priceWindow = window.map(w => w.close);
 
+            if (rsiWindow.length >= 15) {
+                // Bullish Divergence: Lower Low in Price, Higher Low in RSI
+                // Find local lows in price
+                const getLows = (arr: number[]) => {
+                    const lows: number[] = [];
+                    for (let j = 1; j < arr.length - 1; j++) {
+                        if (arr[j] < arr[j-1] && arr[j] < arr[j+1]) lows.push(j);
+                    }
+                    return lows;
+                };
+                
+                // Find local highs in price
+                const getHighs = (arr: number[]) => {
+                    const highs: number[] = [];
+                    for (let j = 1; j < arr.length - 1; j++) {
+                        if (arr[j] > arr[j-1] && arr[j] > arr[j+1]) highs.push(j);
+                    }
+                    return highs;
+                };
+
+                const priceLows = getLows(priceWindow);
+                if (priceLows.length >= 2) {
+                    const lastLowIdx = priceLows[priceLows.length - 1];
+                    const prevLowIdx = priceLows[priceLows.length - 2];
+                    
+                    const lastPrice = priceWindow[lastLowIdx];
+                    const prevPrice = priceWindow[prevLowIdx];
+                    const lastRsi = window[lastLowIdx].rsi14;
+                    const prevRsi = window[prevLowIdx].rsi14;
+
+                    if (lastRsi !== undefined && prevRsi !== undefined) {
+                        if (lastPrice < prevPrice && lastRsi > prevRsi && lastRsi < 40) {
+                            d.divergence = { type: 'BULLISH', price: lastPrice, rsi: lastRsi };
+                        }
+                    }
+                }
+
+                const priceHighs = getHighs(priceWindow);
+                if (priceHighs.length >= 2) {
+                    const lastHighIdx = priceHighs[priceHighs.length - 1];
+                    const prevHighIdx = priceHighs[priceHighs.length - 2];
+                    
+                    const lastPrice = priceWindow[lastHighIdx];
+                    const prevPrice = priceWindow[prevHighIdx];
+                    const lastRsi = window[lastHighIdx].rsi14;
+                    const prevRsi = window[prevHighIdx].rsi14;
+
+                    if (lastRsi !== undefined && prevRsi !== undefined) {
+                        if (lastPrice > prevPrice && lastRsi < prevRsi && lastRsi > 60) {
+                            d.divergence = { type: 'BEARISH', price: lastPrice, rsi: lastRsi };
+                        }
+                    }
+                }
+            }
+        }
     });
 
     return results;
@@ -309,7 +373,18 @@ export function calculateConfluenceScore(latest: IndicatorData): ConfluenceResul
         }
     }
 
-    // 4. VOLATILITY BANDS (Bollinger)
+    // 4. RSI DIVERGENCE (High Conviction)
+    if (latest.divergence && latest.divergence.type !== 'NONE') {
+        if (latest.divergence.type === 'BULLISH') {
+            bullScore += 20; // Strong signal
+            bullSignals.push('RSI Bullish Divergence 🎯');
+        } else if (latest.divergence.type === 'BEARISH') {
+            bearScore += 20; // Strong signal
+            bearSignals.push('RSI Bearish Divergence 🎯');
+        }
+    }
+
+    // 5. VOLATILITY BANDS (Bollinger)
     if (latest.bollinger && latest.bollinger.pb !== undefined) {
         const pb = latest.bollinger.pb;
         if (pb < 0) {
