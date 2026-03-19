@@ -42,3 +42,9 @@ next-env.d.ts
 .env*.local
 # local data
 # /data
+
+# debug output & scratch files
+output.txt
+test-*.ts
+test-*.js
+scripts/test-*

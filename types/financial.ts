@@ -25,6 +25,7 @@ export interface IndicatorData extends OHLCVData {
   ema9?: number;
   ema21?: number;
   ema50?: number;
+  ema100?: number;
   ema200?: number;
 
   rsi14?: number;

@@ -19,7 +19,7 @@
         "stockPrice": 195
       }
     ],
-    "status": "ACTIVE"
+    "status": "EXPIRED"
   },
   {
     "id": "MO260402C00069000",
@@ -41,9 +41,14 @@
         "date": "2026-03-17",
         "optionPremium": 0.5650000000000001,
         "stockPrice": 67.31
+      },
+      {
+        "date": "2026-03-18",
+        "optionPremium": 0.155,
+        "stockPrice": 65.2296
       }
     ],
-    "status": "ACTIVE"
+    "status": "LOSS"
   },
   {
     "id": "PLTR260402C00160000",
@@ -66,8 +71,13 @@
         "date": "2026-03-17",
         "optionPremium": 4.25,
         "stockPrice": 155.11
+      },
+      {
+        "date": "2026-03-18",
+        "optionPremium": 3.075,
+        "stockPrice": 152.32
       }
     ],
-    "status": "ACTIVE"
+    "status": "LOSS"
   }
 ]

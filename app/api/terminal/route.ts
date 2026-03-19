@@ -10,6 +10,21 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 // --- In-memory score history ---
 const scoreHistory: Record<string, number[]> = {};
 
+// ── 60-second response cache (key = `${benchmark}-${mode}`) ────────────────────
+const CACHE_TTL_MS = 60_000;
+interface CacheEntry { data: any; ts: number; }
+const apiCache = new Map<string, CacheEntry>();
+
+function getCached(key: string): any | null {
+  const entry = apiCache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.ts > CACHE_TTL_MS) { apiCache.delete(key); return null; }
+  return entry.data;
+}
+function setCache(key: string, data: any) {
+  apiCache.set(key, { data, ts: Date.now() });
+}
+
 // ── Alpaca bar → our bar format ──────────────────────────────────────────────
 function alpacaToBar(b: any) {
   return { time: new Date(b.t).getTime(), open: b.o, high: b.h, low: b.l, close: b.c, volume: b.v };
@@ -179,6 +194,18 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const benchmark = searchParams.get('benchmark') || 'SPY';
+    const mode = (searchParams.get('mode') || 'POSITIONAL').toUpperCase();
+    const cacheKey = `${benchmark}-${mode}`;
+
+    // ── Serve from cache if fresh ─────────────────────────────
+    const cached = getCached(cacheKey);
+    if (cached) {
+      console.log(`[Terminal] Cache hit for ${cacheKey}`);
+      return NextResponse.json(cached, {
+        headers: { 'X-Cache': 'HIT', 'X-Cache-Key': cacheKey }
+      });
+    }
+    console.log(`[Terminal] Cache miss — fetching fresh data for ${cacheKey}`);
 
     const baseSymbols = ['QQQ', 'SPY', 'IWM', '^VIX', '^TNX', 'DX-Y.NYB'];
     const sectorSymbols = ['XLE', 'XLI', 'XLU', 'XLK', 'XLF', 'XLV', 'XLY', 'XLP', 'XLRE', 'XLC', 'XLB'];
@@ -243,9 +270,6 @@ export async function GET(request: NextRequest) {
     const macroScore = Math.max(0, Math.min(100, 100 - (Math.max(0, tnxChange) * 10 + Math.max(0, dxyChange) * 10)));
 
     // --- Mode-Aware Scoring Weights ---
-    // TACTICAL = short-term (momentum/volatility heavy)
-    // POSITIONAL = swing/trend (EMA alignment/macro heavy)
-    const mode = (searchParams.get('mode') || 'POSITIONAL').toUpperCase();
     const weights = mode === 'TACTICAL'
       ? { dailyTrend: 0.25, weeklyTrend: 0.10, momentum: 0.25, volatility: 0.20, breadth: 0.10, macro: 0.10 }
       : { dailyTrend: 0.20, weeklyTrend: 0.20, momentum: 0.15, volatility: 0.15, breadth: 0.15, macro: 0.15 };
@@ -332,14 +356,20 @@ export async function GET(request: NextRequest) {
     if (process.env.GEMINI_API_KEY) {
       try {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const prompt = `Analyze ${benchmark}:
-          - Score: ${totalScore}/100 (${scoreDelta > 0 ? '+' : ''}${scoreDelta} from last)
-          - Daily EMAs: ${dailyBullEmas}/5, Weekly EMAs: ${weeklyBullEmas}/5
-          - RSI: ${rsi.toFixed(1)}, MACD: ${macdBullish ? 'Bullish' : 'Bearish'}
-          - VIX: ${vix.toFixed(2)}, Breadth: ${breadthScore.toFixed(0)}%
-          ${emaDivergence ? '⚠️ EMA DIVERGENCE DETECTED between daily and weekly' : ''}
-          Provide a 2-sentence assessment and a 3-5 word suggested action.
-          Return ONLY JSON: {"assessment": "...", "suggestedAction": "...", "riskLevel": "Low/Moderate/High/Extreme"}`;
+        const prompt = `You are a quantitative market analyst. Analyze ${benchmark} (${mode} mode) with this data:
+
+  SCORE: ${totalScore}/100 (${scoreDelta > 0 ? '+' : ''}${scoreDelta} change)
+  TREND: Daily EMAs ${dailyBullEmas}/5 bullish | Weekly EMAs ${weeklyBullEmas}/5 bullish
+  MOMENTUM: RSI ${rsi.toFixed(1)} | MACD ${macdBullish ? 'Bullish Cross' : 'Bearish Cross'} | RelVol ${relVolume.toFixed(2)}x
+  VOLATILITY: VIX ${vix.toFixed(2)} (${vixPercentile}th percentile vs 52-week) | Put/Call ${breadthInternals.putCall !== null ? breadthInternals.putCall.toFixed(2) : 'N/A'}
+  BREADTH: Sectors positive ${positiveSectors.length}/11 | S&P 500 stocks above 20MA: ${breadthInternals.above20?.toFixed(1) ?? 'N/A'}% | 50MA: ${breadthInternals.above50?.toFixed(1) ?? 'N/A'}% | 200MA: ${breadthInternals.above200?.toFixed(1) ?? 'N/A'}%
+  MACRO: 10Y yield change ${tnxChange > 0 ? '+' : ''}${tnxChange.toFixed(2)}% | DXY change ${dxyChange > 0 ? '+' : ''}${dxyChange.toFixed(2)}%
+  ${emaDivergence ? '⚠️ EMA DIVERGENCE: Daily and weekly trend conflict — high caution.' : ''}
+  ${breadthInternals.putCall !== null && breadthInternals.putCall > 1.0 ? '⚠️ Elevated put/call ratio — options market pricing in downside risk.' : ''}
+  ${vixPercentile > 75 ? '⚠️ VIX in extreme fear territory — historically a mean-reversion zone.' : ''}
+
+  Write a 2-sentence plain-English assessment focusing on the most critical signals. Then give a 3-5 word suggested action.
+  Return ONLY JSON: {"assessment": "...", "suggestedAction": "...", "riskLevel": "Low/Moderate/High/Extreme"}`;
         const result = await model.generateContent(prompt);
         const jsonMatch = result.response.text().match(/\{[\s\S]*\}/);
         if (jsonMatch) {
@@ -351,7 +381,7 @@ export async function GET(request: NextRequest) {
       } catch (e) { console.error("Gemini error:", e); }
     }
 
-    return NextResponse.json({
+    const responsePayload = {
       benchmark,
       mode,
       totalScore,
@@ -444,6 +474,11 @@ export async function GET(request: NextRequest) {
         { symbol: '10Y',  price: tnxData?.price ?? null, change: tnxChange },
         { symbol: 'DXY',  price: dxyData?.price ?? null, change: dxyChange },
       ]
+    };
+
+    setCache(cacheKey, responsePayload);
+    return NextResponse.json(responsePayload, {
+      headers: { 'X-Cache': 'MISS', 'X-Cache-Key': cacheKey }
     });
 
   } catch (error) {
