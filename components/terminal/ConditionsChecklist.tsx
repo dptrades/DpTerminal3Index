@@ -14,15 +14,14 @@ interface ConditionsChecklistProps {
 }
 
 const INFO = [
-  "A binary readiness scan — all 8 conditions should ideally be TRUE before entering new positions.",
-  "Price > Daily EMA50: The most reliable single indicator of an active uptrend on the daily chart.",
-  "Price > Weekly EMA50: Confirms the secular bull market structure is intact on a longer timeframe.",
-  "VIX < 20: Low fear environment — institutional buyers are active and risk appetite is healthy.",
-  "RSI 40-70: Momentum is in a 'Goldilocks' zone — not overbought, not capitulating.",
-  "Breadth > 60%: More than 6 of 11 sectors are up on the day — rally has broad participation.",
-  "MACD Bullish: Short-term momentum is accelerating upward — confirms the trend direction.",
-  "Price > D-EMA200: The long-term bull/bear dividing line — broken = potential bear market.",
-  "Rel Volume > 1x: Today's trading volume exceeds the 20-day average — institutional activity is elevated.",
+  "A binary readiness scan — all conditions should ideally be TRUE for full size exposure.",
+  "Price > Daily EMA50: The intermediate-term trend anchor — key institutional buying level.",
+  "Price > Weekly EMA50: Confirms the secular bull market structure is intact.",
+  "VIX < 22: Stable volatility environment — typically safe to hold and scale long positions.",
+  "RSI 40-70: Momentum is in a healthy zone — not overbought, not in capitulation.",
+  "Breadth > 60%: Over 6 of 11 sectors are up — rally has significant broad-based participation.",
+  "MACD Bullish: Short-term momentum is accelerating upward — confirms direction.",
+  "Price > D-EMA200: The long-term bull/bear dividing line — broken = potential major regime shift.",
 ];
 
 const ConditionsChecklist: React.FC<ConditionsChecklistProps> = ({ checklist }) => {

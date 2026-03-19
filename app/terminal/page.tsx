@@ -343,11 +343,11 @@ export default function TerminalPage() {
                     status={data?.metrics?.momentum?.status} statusType={data?.metrics?.momentum?.type}
                     subMetrics={data?.metrics?.momentum?.subMetrics || []}
                     info={[
-                      "Combines RSI, MACD, and Relative Volume to measure buying/selling pressure.",
+                      "Combines RSI, Divergence, MACD, and Relative Volume to measure conviction.",
+                      "RSI Divergence: Bullish (Price LL, RSI HL) or Bearish (Price HH, RSI LH) signal.",
                       "RSI(14): 40–70 range = healthy trend momentum. >70 = overbought. <30 = capitulation.",
-                      "MACD Bullish Cross: MACD line crossed above signal line — upward momentum building.",
-                      "MACD Bearish Cross: MACD dropped below signal — momentum fading, caution warranted.",
-                      "Relative Volume: Current activity vs 20-day average. >1x confirms conviction behind moves.",
+                      "MACD Signal: Bullish cross suggests momentum building; Bearish cross suggests fading.",
+                      "Relative Volume: Current activity vs 20-day average. >1.2x confirms strong conviction.",
                     ]} />
                 )}
               </WidgetErrorBoundary>
@@ -358,12 +358,12 @@ export default function TerminalPage() {
                     subMetrics={data?.metrics?.volatility?.subMetrics || []}
                     info={[
                       "Measures market fear using VIX, its 52-week percentile, and Put/Call ratio.",
-                      "VIX < 20: Complacency / low fear — institutional buyers active, safe to hold longs.",
-                      "VIX 20–28: Elevated uncertainty — reduce leverage and tighten stop losses.",
+                      "VIX < 22: Complacency / low fear — institutional buyers active, safe to hold longs.",
+                      "VIX 22–28: Elevated uncertainty — reduce leverage and tighten stop losses.",
                       "VIX > 28: Fear-driven selling likely — avoid new long positions.",
-                      "VIX Percentile: Where today's VIX sits vs the past 52 weeks. >75th = extreme fear.",
-                      "Put/Call Ratio: >1.0 = bearish bias (more puts bought). <0.7 = bullish bias (complacency).",
-                      "BB Width: Bollinger Band squeeze (<5%) signals a large move is imminent.",
+                      "VIX Percentile: Sit today's VIX sits vs the past 52 weeks. >75th = extreme fear.",
+                      "Put/Call Ratio: >1.0 = bearish bias (more puts bought). <0.7 = bullish bias.",
+                      "Macro Alert Threshold: Event risk flags if VIX > 22 and macro spikes aggressively.",
                     ]} />
                 )}
               </WidgetErrorBoundary>
@@ -388,12 +388,11 @@ export default function TerminalPage() {
                     status={data?.metrics?.macro?.status} statusType={data?.metrics?.macro?.type}
                     subMetrics={data?.metrics?.macro?.subMetrics || []}
                     info={[
-                      "Measures headwinds from rising bond yields (10Y) and U.S. Dollar strength (DXY).",
-                      "Rising yields = higher discount rate → reduces the present value of future earnings.",
-                      "Rising dollar = tighter financial conditions globally, hurts multinational earnings.",
-                      "Supportive: Both yields and dollar are flat/falling — equity tailwind.",
-                      "Headwind: One spiking — be cautious. Hostile: Both spiking simultaneously — reduce all risk.",
-                      "This is the macro 'weather forecast' for equities.",
+                      "Measures external headwinds from yields across the curve and the US Dollar.",
+                      "Yield Spiking (2Y, 5Y, 10Y, 30Y): Valuation pressure on equities (headwind).",
+                      "Stronger Dollar (DXY): Negative for multinational earnings and market liquidity.",
+                      "Macro Event Risk: Alerts trigger if VIX > 22 and TNX (> 2.0%) or DXY (> 0.6%) move sharply.",
+                      "Market Closed: Displays the last known settlement data from 4:00 PM ET close.",
                     ]} />
                 )}
               </WidgetErrorBoundary>

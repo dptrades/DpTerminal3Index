@@ -18,11 +18,11 @@ interface ScoringWeightsProps {
 
 const INFO = [
   "Shows exactly how each factor contributes to the 0-100 Market Quality Score.",
-  "Score = each factor's raw score × its weight percentage.",
-  "Contribution (pts) reveals which factor is dragging or lifting the final number.",
-  "Short-Term mode: Momentum and Volatility weighted higher for faster intraday signals.",
-  "Swing mode: EMA Trend and Macro weighted higher for longer-term reliability.",
-  "Threshold for deploying capital is 60/100 — below that, risk/reward is unfavorable.",
+  "Momentum Score (25% wt) now factors in RSI Divergence (Bullish +15, Bearish -15).",
+  "Short-Term (Tactical) mode: Momentum/Volatility weighted higher for intraday signals.",
+  "Swing (Positional) mode: Trend/Macro weighted higher for structural reliability.",
+  "Score ≥ 60 = Supportive. Score < 45 = Risk-reduction suggested.",
+  "Market Closed: Displays the 'Settlement Cache' snapshot from 4:00 PM ET close.",
 ];
 
 const ScoringWeights: React.FC<ScoringWeightsProps> = ({ weights, totalScore }) => {

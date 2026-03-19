@@ -12,11 +12,10 @@ interface AITerminalAssessmentProps {
 
 const INFO = [
   "AI-generated 2-sentence market assessment powered by Gemini 1.5 Flash.",
-  "The model is given all 6 technical sub-scores, RSI, MACD, VIX, breadth, EMAs, and the benchmark.",
+  "Analysis considers RSI Divergence (Bullish/Bearish), MACD, VIX, Breadth, and trend alignment.",
   "Assessment synthesizes the quantitative data into plain language — what the numbers collectively mean.",
-  "Suggested Action is derived from the overall score, VIX level, and trend alignment — not financial advice.",
-  "Risk Level: Low = VIX < 20 + trend intact. Moderate = mixed signals. High = breakdown. Extreme = crash risk.",
-  "Falls back to a rule-based assessment if the AI model is unavailable or slow.",
+  "Suggested Action is derived from the overall score, VIX level, and divergence signals.",
+  "Risk Level: Low = VIX < 22 + trend intact. Moderate = mixed signals. High = breakdown. Extreme = crash risk.",
 ];
 
 const getRiskColor = (level: string) => {

@@ -18,11 +18,11 @@ interface SignalReadinessProps {
 
 const INFO = [
   "4 binary checks that evaluate whether market conditions support entering new trades right now.",
-  "Momentum Confirming: MACD is bullish AND RSI > 50 — internal buying pressure supports the trend.",
-  "Structure Intact: Price is above both the daily 50 EMA and 200 EMA — the trend channel is unbroken.",
-  "Dip Demand Active: Market breadth > 50% AND relative volume confirms buyers are stepping in on dips.",
-  "Sector Rotation Healthy: Most sectors trend above their 20-day average — participation is broad, not narrow.",
-  "3-4 confirmed = strong execution window. 0-1 confirmed = wait for a better setup.",
+  "Momentum Confirming: MACD is bullish AND RSI > 50 — confirms internal buying pressure.",
+  "Structure Intact: Price is above both the daily 50 EMA and 200 EMA — trend channel is unbroken.",
+  "Dip Demand Active: Breadth > 50% — participation from majority of sectors confirms demand.",
+  "Sector Rotation Healthy: 6+/11 sectors trend above their 20-day average — broad participation.",
+  "3-4 confirmed = strong execution window. 0-1 confirmed = wait for better internal setup.",
 ];
 
 const SignalReadiness: React.FC<SignalReadinessProps> = ({ signals, score }) => {

@@ -16,12 +16,11 @@ interface DecisionBannerProps {
 
 const INFO = [
   "The top-level verdict synthesized from all technical sub-scores.",
-  "DEPLOY (score ≥ 60): All major technicals are aligned — environment supports active long exposure.",
-  "STANDBY (45–60): Mixed signals — wait for confirmation before adding new positions.",
-  "AVOID (< 45): Risk/reward is unfavorable — preserve capital, reduce or hedge existing exposure.",
-  "Position Size: SCALE IN = full size. REDUCED EXPOSURE = half size. RISK-OFF = flat or hedged.",
-  "Short-Term mode reweights toward Momentum & Volatility for faster intraday signals.",
-  "Swing mode reweights toward EMA Trend alignment and Macro for longer-term reliability.",
+  "DEPLOY (score ≥ 60): Environment supports active exposure. RSI Divergence is a key confirming signal.",
+  "STANDBY (45–60): Mixed signals — wait for confirmation or clearer sector rotation.",
+  "AVOID (< 45): Risk/reward is unfavorable — preserve capital.",
+  "Macro Event Risk: Alerts trigger if VIX > 22 and Yields (> 2.0%) or Dollar (> 0.6%) spike aggressively.",
+  "Market Closed: Displays 'Settlement Cache' data from the most recent 4 PM ET close.",
 ];
 
 const configs: Record<DeployState, { color: string; border: string; bg: string; icon: any; label: string }> = {

@@ -14,9 +14,10 @@ interface SectorPerformanceTerminalProps {
 }
 
 const INFO = [
-  "Displays the daily % change for all 11 SPDR sector ETFs (XLE, XLK, XLF, etc.).",
-  "Sectors are sorted from best to worst performers, updated with each refresh.",
-  "Green bar = positive on the day; Red bar = negative — gives a quick breadth snapshot.",
+  "Alpha Hunter measures each sector's relative performance against the S&P 500.",
+  "Positive Alpha = Sector is outperforming the benchmark.",
+  "Trending = Sector is trading above its daily 20-period moving average.",
+  "Market Closed: Displays 'Settlement Cache' data from the most recent 4 PM ET close.",
   "▲ indicator means the sector is trading above its own 20-day moving average (sustained strength).",
   "When most sectors are positive AND trending above 20d, market participation is broad and healthy.",
   "A narrow advance (only 1-2 sectors positive) is a warning sign of a weak or speculative rally.",
