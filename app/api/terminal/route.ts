@@ -180,6 +180,34 @@ function getMarketStatus() {
   return { isOpen, label: isOpen ? 'LIVE' : 'MARKET CLOSED' };
 }
 
+// ── Persistence: Full Terminal Cache ──────────────────────────────────────────
+const CACHE_FILE = path.join(process.cwd(), 'data', 'terminal_cache.json');
+
+function saveTerminalCache(key: string, data: any) {
+  try {
+    const dir = path.dirname(CACHE_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    let cache: any = {};
+    if (fs.existsSync(CACHE_FILE)) {
+      cache = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+    }
+    cache[key] = { ...data, cachedAt: new Date().toISOString() };
+    fs.writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2));
+  } catch (e) {
+    console.error("Cache save failed:", e);
+  }
+}
+
+function getTerminalCache(key: string) {
+  try {
+    if (!fs.existsSync(CACHE_FILE)) return null;
+    const cache = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+    return cache[key] || null;
+  } catch (e) {
+    return null;
+  }
+}
+
 // ── Sector trending: use Alpaca 30-day bars → check vs 20d avg ───────────────
 async function getSectorTrending(symbol: string): Promise<boolean> {
   try {
@@ -274,17 +302,23 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const benchmark = searchParams.get('benchmark') || 'SPY';
     const mode = (searchParams.get('mode') || 'POSITIONAL').toUpperCase();
-    const cacheKey = `${benchmark}-${mode}`;
+    const cacheKey = `${benchmark}_${mode}`;
+    const marketStatus = getMarketStatus();
 
-    // ── Serve from cache if fresh ─────────────────────────────
-    const cached = getCached(cacheKey);
-    if (cached) {
-      console.log(`[Terminal] Cache hit for ${cacheKey}`);
-      return NextResponse.json(cached, {
-        headers: { 'X-Cache': 'HIT', 'X-Cache-Key': cacheKey }
-      });
+    // Serve from cache if market is closed
+    if (!marketStatus.isOpen) {
+      const cached = getTerminalCache(cacheKey);
+      if (cached) {
+        console.log(`[Terminal] Cache hit for ${cacheKey} (market closed)`);
+        // Return cache but update the current marketStatus and score history
+        // Use a 24-hour window for "stale" cache (or just allow it)
+        return NextResponse.json({
+          ...cached,
+          marketStatus, // CURRENT real-time status
+        });
+      }
     }
-    console.log(`[Terminal] Cache miss — fetching fresh data for ${cacheKey}`);
+    console.log(`[Terminal] Cache miss or market open — fetching fresh data for ${cacheKey}`);
 
     const baseSymbols = ['QQQ', 'SPY', 'IWM', '^VIX', '^TNX', 'DX-Y.NYB'];
     const sectorSymbols = ['XLE', 'XLI', 'XLU', 'XLK', 'XLF', 'XLV', 'XLY', 'XLP', 'XLRE', 'XLC', 'XLB'];
@@ -513,7 +547,7 @@ export async function GET(request: NextRequest) {
       } catch (e) { console.error("Gemini error:", e); }
     }
 
-    const responsePayload = {
+    const finalResponse = {
       benchmark,
       mode,
       totalScore,
@@ -611,10 +645,13 @@ export async function GET(request: NextRequest) {
       ]
     };
 
-    setCache(cacheKey, responsePayload);
-    return NextResponse.json(responsePayload, {
-      headers: { 'X-Cache': 'MISS', 'X-Cache-Key': cacheKey }
-    });
+    // Save to cache if market is OPEN or if no cache exists yet (initial seed)
+    const existingCache = getTerminalCache(cacheKey);
+    if (marketStatus.isOpen || !existingCache) {
+      saveTerminalCache(cacheKey, finalResponse);
+    }
+
+    return NextResponse.json(finalResponse);
 
   } catch (error) {
     console.error("Terminal API Error:", error);
