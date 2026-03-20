@@ -28,7 +28,7 @@ export async function getNewsData(symbol: string, type: 'news' | 'social' | 'ana
         const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000));
 
         const [results, finnhubSentiment] = await Promise.all([
-            yahooFinance.search(symbol, { newsCount: 20 }),
+            yahooFinance.search(symbol, { newsCount: 20 }, { validateResult: false }) as Promise<any>,
             Promise.race([sentimentPromise, timeoutPromise])
         ]);
 
