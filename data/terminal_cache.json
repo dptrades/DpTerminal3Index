@@ -2,12 +2,12 @@
   "IWM_POSITIONAL": {
     "benchmark": "IWM",
     "mode": "POSITIONAL",
-    "totalScore": 50,
-    "deployCapital": "STANDBY",
+    "totalScore": 43,
+    "deployCapital": "AVOID",
     "positionSize": "RISK-OFF",
     "marketStatus": {
-      "isOpen": false,
-      "label": "MARKET CLOSED"
+      "isOpen": true,
+      "label": "LIVE"
     },
     "scoringWeights": [
       {
@@ -33,23 +33,23 @@
       },
       {
         "label": "Volatility",
-        "score": 40,
-        "weight": 15,
-        "contribution": 6,
-        "type": "negative"
-      },
-      {
-        "label": "Breadth",
-        "score": 27,
+        "score": 24,
         "weight": 15,
         "contribution": 4,
         "type": "negative"
       },
       {
-        "label": "Macro",
-        "score": 92,
+        "label": "Breadth",
+        "score": 18,
         "weight": 15,
-        "contribution": 14,
+        "contribution": 3,
+        "type": "negative"
+      },
+      {
+        "label": "Macro",
+        "score": 71,
+        "weight": 15,
+        "contribution": 11,
         "type": "positive"
       }
     ],
@@ -76,11 +76,14 @@
         "question": "Sector Rotation Healthy?",
         "answer": "Weak",
         "status": "negative",
-        "detail": "1/11 sectors trending"
+        "detail": "0/11 sectors trending"
       }
     ],
-    "eventAlert": null,
-    "scoreDelta": 0,
+    "eventAlert": {
+      "active": true,
+      "message": "Macro Headwinds Elevated — Yield spiking 2.22%, DXY strengthening. Reduce leverage."
+    },
+    "scoreDelta": -7,
     "scoreHistory": [
       39,
       47,
@@ -93,7 +96,8 @@
       50,
       47,
       50,
-      50
+      50,
+      43
     ],
     "emaDivergence": false,
     "checklist": [
@@ -127,7 +131,7 @@
       },
       {
         "label": "Rel Volume > 1x",
-        "met": true
+        "met": false
       }
     ],
     "metrics": {
@@ -142,7 +146,7 @@
             "status": "warning"
           },
           {
-            "label": "Short (9/21: $250)",
+            "label": "Short (9/21: $248)",
             "value": "Broken",
             "status": "negative"
           },
@@ -152,7 +156,7 @@
             "status": "negative"
           },
           {
-            "label": "Long (200: $244)",
+            "label": "Long (200: $239)",
             "value": "Above",
             "status": "positive"
           }
@@ -169,7 +173,7 @@
             "status": "warning"
           },
           {
-            "label": "Intermediate (21: $252)",
+            "label": "Intermediate (21: $251)",
             "value": "Bearish",
             "status": "negative"
           },
@@ -179,7 +183,7 @@
             "status": "positive"
           },
           {
-            "label": "Macro (200: $215)",
+            "label": "Macro (200: $216)",
             "value": "Bullish",
             "status": "positive"
           }
@@ -192,7 +196,7 @@
         "subMetrics": [
           {
             "label": "RSI(14)",
-            "value": "38.3",
+            "value": "32.9",
             "status": "warning"
           },
           {
@@ -202,8 +206,8 @@
           },
           {
             "label": "Rel Volume",
-            "value": "1.15x",
-            "status": "positive"
+            "value": "0.96x",
+            "status": "neutral"
           },
           {
             "label": "RSI Divergence",
@@ -213,20 +217,20 @@
         ]
       },
       "volatility": {
-        "value": 40,
+        "value": 24,
         "status": "Elevated",
         "type": "warning",
         "subMetrics": [
           {
             "label": "VIX Level",
-            "value": "24.06",
+            "value": "26.41",
             "status": "warning"
           },
           {
             "label": "VIX Percentile",
-            "value": "0th %ile",
-            "statusLabel": "Low Fear",
-            "status": "positive"
+            "value": "50th %ile",
+            "statusLabel": "Normal",
+            "status": "warning"
           },
           {
             "label": "Put/Call Ratio",
@@ -235,72 +239,72 @@
           },
           {
             "label": "BB Width",
-            "value": "10.60%",
+            "value": "11.17%",
             "status": "neutral"
           }
         ]
       },
       "breadth": {
-        "value": 27,
+        "value": 18,
         "status": "Weak",
         "type": "negative",
         "subMetrics": [
           {
             "label": "Sectors Positive",
-            "value": "3/11",
+            "value": "2/11",
             "status": "negative"
           },
           {
             "label": "Trending > 20d",
-            "value": "1/11",
+            "value": "0/11",
             "status": "warning"
           },
           {
             "label": "% > 20MA (S&P)",
-            "value": "18.0%",
+            "value": "N/A",
             "status": "negative"
           },
           {
             "label": "% > 50MA (S&P)",
-            "value": "16.0%",
+            "value": "N/A",
             "status": "negative"
           },
           {
             "label": "% > 200MA (S&P)",
-            "value": "46.0%",
+            "value": "N/A",
             "status": "negative"
           }
         ]
       },
       "macro": {
-        "value": 92,
+        "value": 71,
         "status": "Supportive",
         "type": "positive",
         "subMetrics": [
           {
             "label": "2Y Yield",
-            "value": "3.61%",
+            "value": "3.62%",
             "status": "negative"
           },
           {
             "label": "5Y Yield",
-            "value": "3.92%",
+            "value": "4.00%",
             "status": "negative"
           },
           {
             "label": "10Y Yield",
-            "value": "4.28%",
+            "value": "4.38%",
             "status": "negative"
           },
           {
             "label": "30Y Yield",
-            "value": "4.85%",
-            "status": "positive"
+            "value": "4.95%",
+            "status": "negative"
           },
           {
             "label": "US Dollar (DXY)",
-            "value": "99.20",
-            "status": "positive"
+            "value": "99.55",
+            "status": "negative"
           }
         ]
       }
@@ -308,57 +312,57 @@
     "sectors": [
       {
         "name": "XLE",
-        "change": 1.5999315537303258,
-        "trending": true
-      },
-      {
-        "name": "XLK",
-        "change": 0.33701757564776474,
+        "change": 0.6400000000000042,
         "trending": false
       },
       {
         "name": "XLF",
-        "change": 0.020420665713698206,
-        "trending": false
-      },
-      {
-        "name": "XLRE",
-        "change": -0.2023568622783022,
-        "trending": false
-      },
-      {
-        "name": "XLV",
-        "change": -0.3804864791411892,
-        "trending": false
-      },
-      {
-        "name": "XLC",
-        "change": -0.4399084990322013,
-        "trending": false
-      },
-      {
-        "name": "XLU",
-        "change": -0.4492939666238786,
-        "trending": false
-      },
-      {
-        "name": "XLI",
-        "change": -0.7022216841213128,
+        "change": 0.20416496529195882,
         "trending": false
       },
       {
         "name": "XLP",
-        "change": -0.786544046466609,
+        "change": -0.42688132699108955,
         "trending": false
       },
       {
-        "name": "XLY",
-        "change": -0.7958039428468037,
+        "name": "XLC",
+        "change": -0.7820784729586348,
+        "trending": false
+      },
+      {
+        "name": "XLV",
+        "change": -0.8525439912699495,
         "trending": false
       },
       {
         "name": "XLB",
-        "change": -1.5467106619921633,
+        "change": -1.4872224549643922,
+        "trending": false
+      },
+      {
+        "name": "XLI",
+        "change": -1.5637383405474592,
+        "trending": false
+      },
+      {
+        "name": "XLY",
+        "change": -1.6681859617137633,
+        "trending": false
+      },
+      {
+        "name": "XLRE",
+        "change": -2.027671755725194,
+        "trending": false
+      },
+      {
+        "name": "XLK",
+        "change": -2.232013868824042,
+        "trending": false
+      },
+      {
+        "name": "XLU",
+        "change": -2.7616591446378758,
         "trending": false
       }
     ],
@@ -370,29 +374,841 @@
     "topBar": [
       {
         "symbol": "SPY",
-        "price": 660.5,
-        "change": -0.15720893672339747,
-        "changeAmount": -1.0399999999999636
+        "price": 649.37,
+        "change": -1.5912225135253915,
+        "changeAmount": -10.5
       },
       {
         "symbol": "QQQ",
-        "price": 594,
-        "change": -0.13785683063784843,
-        "changeAmount": -0.82000000000005
+        "price": 582.75,
+        "change": -1.7284991568296795,
+        "changeAmount": -10.25
       },
       {
         "symbol": "IWM",
-        "price": 247.585,
-        "change": 0.623856939646412,
-        "changeAmount": 1.5349999999999966
+        "price": 242.18,
+        "change": -2.183088636225943,
+        "changeAmount": -5.405000000000001
       },
       {
         "symbol": "VIX",
-        "price": 24.06,
-        "change": -4.105224,
-        "changeAmount": -1.0300007
+        "price": 26.41,
+        "change": 9.783515,
+        "changeAmount": 2.3500004
       }
     ],
-    "cachedAt": "2026-03-19T22:05:28.809Z"
+    "cachedAt": "2026-03-20T18:25:48.386Z"
+  },
+  "SPY_POSITIONAL": {
+    "benchmark": "SPY",
+    "mode": "POSITIONAL",
+    "totalScore": 38,
+    "deployCapital": "AVOID",
+    "positionSize": "RISK-OFF",
+    "marketStatus": {
+      "isOpen": true,
+      "label": "LIVE"
+    },
+    "scoringWeights": [
+      {
+        "label": "Daily Trend",
+        "score": 0,
+        "weight": 20,
+        "contribution": 0,
+        "type": "negative"
+      },
+      {
+        "label": "Weekly Trend",
+        "score": 60,
+        "weight": 20,
+        "contribution": 12,
+        "type": "warning"
+      },
+      {
+        "label": "Momentum",
+        "score": 60,
+        "weight": 15,
+        "contribution": 9,
+        "type": "positive"
+      },
+      {
+        "label": "Volatility",
+        "score": 24,
+        "weight": 15,
+        "contribution": 4,
+        "type": "negative"
+      },
+      {
+        "label": "Breadth",
+        "score": 18,
+        "weight": 15,
+        "contribution": 3,
+        "type": "negative"
+      },
+      {
+        "label": "Macro",
+        "score": 71,
+        "weight": 15,
+        "contribution": 11,
+        "type": "positive"
+      }
+    ],
+    "signalReadiness": [
+      {
+        "question": "Momentum Confirming?",
+        "answer": "No",
+        "status": "negative",
+        "detail": "MACD Crossed Down"
+      },
+      {
+        "question": "Structure Intact?",
+        "answer": "No",
+        "status": "negative",
+        "detail": "Below Key EMAs"
+      },
+      {
+        "question": "Dip Demand Active?",
+        "answer": "No",
+        "status": "negative",
+        "detail": "Sellers In Control"
+      },
+      {
+        "question": "Sector Rotation Healthy?",
+        "answer": "Weak",
+        "status": "negative",
+        "detail": "1/11 sectors trending"
+      }
+    ],
+    "eventAlert": {
+      "active": true,
+      "message": "Macro Headwinds Elevated — Yield spiking 2.22%, DXY strengthening. Reduce leverage."
+    },
+    "scoreDelta": 4,
+    "scoreHistory": [
+      44,
+      44,
+      44,
+      44,
+      43,
+      39,
+      41,
+      42,
+      49,
+      41,
+      43,
+      48,
+      43,
+      47,
+      47,
+      47,
+      47,
+      41,
+      43,
+      47,
+      47,
+      43,
+      47,
+      47,
+      47,
+      38,
+      34,
+      38
+    ],
+    "emaDivergence": false,
+    "checklist": [
+      {
+        "label": "Price > Daily EMA50",
+        "met": false
+      },
+      {
+        "label": "Price > Weekly EMA50",
+        "met": true
+      },
+      {
+        "label": "VIX < 20",
+        "met": false
+      },
+      {
+        "label": "RSI 40–70 (Healthy)",
+        "met": false
+      },
+      {
+        "label": "Breadth > 60%",
+        "met": false
+      },
+      {
+        "label": "MACD Bullish",
+        "met": false
+      },
+      {
+        "label": "Price > D-EMA200 (Uptrend)",
+        "met": false
+      },
+      {
+        "label": "Rel Volume > 1x",
+        "met": false
+      }
+    ],
+    "metrics": {
+      "dailyTrend": {
+        "value": 0,
+        "status": "Tactical Bear",
+        "type": "negative",
+        "subMetrics": [
+          {
+            "label": "EMA Stack",
+            "value": "0/5 Bullish",
+            "status": "warning"
+          },
+          {
+            "label": "Short (9/21: $664)",
+            "value": "Broken",
+            "status": "negative"
+          },
+          {
+            "label": "Mid (50/100: $679)",
+            "value": "Below",
+            "status": "negative"
+          },
+          {
+            "label": "Long (200: $659)",
+            "value": "Below",
+            "status": "negative"
+          }
+        ]
+      },
+      "weeklyTrend": {
+        "value": 60,
+        "status": "Neutral",
+        "type": "warning",
+        "subMetrics": [
+          {
+            "label": "EMA Stack",
+            "value": "3/5 Bullish",
+            "status": "warning"
+          },
+          {
+            "label": "Intermediate (21: $673)",
+            "value": "Bearish",
+            "status": "negative"
+          },
+          {
+            "label": "Structural (50: $649)",
+            "value": "Holding",
+            "status": "positive"
+          },
+          {
+            "label": "Macro (200: $540)",
+            "value": "Bullish",
+            "status": "positive"
+          }
+        ]
+      },
+      "momentum": {
+        "value": 60,
+        "status": "Declining",
+        "type": "negative",
+        "subMetrics": [
+          {
+            "label": "RSI(14)",
+            "value": "29.7",
+            "status": "warning"
+          },
+          {
+            "label": "MACD Signal",
+            "value": "Bearish Cross",
+            "status": "negative"
+          },
+          {
+            "label": "Rel Volume",
+            "value": "0.54x",
+            "status": "neutral"
+          },
+          {
+            "label": "RSI Divergence",
+            "value": "NONE",
+            "status": "neutral"
+          }
+        ]
+      },
+      "volatility": {
+        "value": 24,
+        "status": "Elevated",
+        "type": "warning",
+        "subMetrics": [
+          {
+            "label": "VIX Level",
+            "value": "26.41",
+            "status": "warning"
+          },
+          {
+            "label": "VIX Percentile",
+            "value": "50th %ile",
+            "statusLabel": "Normal",
+            "status": "warning"
+          },
+          {
+            "label": "Put/Call Ratio",
+            "value": "N/A",
+            "status": "positive"
+          },
+          {
+            "label": "BB Width",
+            "value": "6.71%",
+            "status": "neutral"
+          }
+        ]
+      },
+      "breadth": {
+        "value": 18,
+        "status": "Weak",
+        "type": "negative",
+        "subMetrics": [
+          {
+            "label": "Sectors Positive",
+            "value": "2/11",
+            "status": "negative"
+          },
+          {
+            "label": "Trending > 20d",
+            "value": "1/11",
+            "status": "warning"
+          },
+          {
+            "label": "% > 20MA (S&P)",
+            "value": "10.0%",
+            "status": "negative"
+          },
+          {
+            "label": "% > 50MA (S&P)",
+            "value": "13.0%",
+            "status": "negative"
+          },
+          {
+            "label": "% > 200MA (S&P)",
+            "value": "43.0%",
+            "status": "negative"
+          }
+        ]
+      },
+      "macro": {
+        "value": 71,
+        "status": "Supportive",
+        "type": "positive",
+        "subMetrics": [
+          {
+            "label": "2Y Yield",
+            "value": "3.62%",
+            "status": "negative"
+          },
+          {
+            "label": "5Y Yield",
+            "value": "4.00%",
+            "status": "negative"
+          },
+          {
+            "label": "10Y Yield",
+            "value": "4.38%",
+            "status": "negative"
+          },
+          {
+            "label": "30Y Yield",
+            "value": "4.95%",
+            "status": "negative"
+          },
+          {
+            "label": "US Dollar (DXY)",
+            "value": "99.55",
+            "status": "negative"
+          }
+        ]
+      }
+    },
+    "sectors": [
+      {
+        "name": "XLE",
+        "change": 0.6400000000000042,
+        "trending": true
+      },
+      {
+        "name": "XLF",
+        "change": 0.22458146182116487,
+        "trending": false
+      },
+      {
+        "name": "XLP",
+        "change": -0.42688132699108955,
+        "trending": false
+      },
+      {
+        "name": "XLC",
+        "change": -0.7820784729586348,
+        "trending": false
+      },
+      {
+        "name": "XLV",
+        "change": -0.8354931114445466,
+        "trending": false
+      },
+      {
+        "name": "XLB",
+        "change": -1.4558022622538758,
+        "trending": false
+      },
+      {
+        "name": "XLI",
+        "change": -1.5545936718892954,
+        "trending": false
+      },
+      {
+        "name": "XLY",
+        "change": -1.6681859617137633,
+        "trending": false
+      },
+      {
+        "name": "XLRE",
+        "change": -2.027671755725194,
+        "trending": false
+      },
+      {
+        "name": "XLK",
+        "change": -2.242848887604731,
+        "trending": false
+      },
+      {
+        "name": "XLU",
+        "change": -2.750913389211264,
+        "trending": false
+      }
+    ],
+    "ai": {
+      "assessment": "Trend breakdown identified. Price below major moving averages on high timeframes.",
+      "suggestedAction": "Preserve Capital",
+      "riskLevel": "High"
+    },
+    "topBar": [
+      {
+        "symbol": "SPY",
+        "price": 649.28,
+        "change": -1.6048615636413281,
+        "changeAmount": -10.590000000000032
+      },
+      {
+        "symbol": "QQQ",
+        "price": 582.735,
+        "change": -1.7310286677908915,
+        "changeAmount": -10.264999999999986
+      },
+      {
+        "symbol": "IWM",
+        "price": 242.17,
+        "change": -2.1871276531292367,
+        "changeAmount": -5.4150000000000205
+      },
+      {
+        "symbol": "VIX",
+        "price": 26.41,
+        "change": 9.783515,
+        "changeAmount": 2.3500004
+      }
+    ],
+    "cachedAt": "2026-03-20T18:25:56.863Z"
+  },
+  "QQQ_POSITIONAL": {
+    "benchmark": "QQQ",
+    "mode": "POSITIONAL",
+    "totalScore": 41,
+    "deployCapital": "AVOID",
+    "positionSize": "RISK-OFF",
+    "marketStatus": {
+      "isOpen": true,
+      "label": "LIVE"
+    },
+    "scoringWeights": [
+      {
+        "label": "Daily Trend",
+        "score": 20,
+        "weight": 20,
+        "contribution": 4,
+        "type": "negative"
+      },
+      {
+        "label": "Weekly Trend",
+        "score": 60,
+        "weight": 20,
+        "contribution": 12,
+        "type": "warning"
+      },
+      {
+        "label": "Momentum",
+        "score": 50,
+        "weight": 15,
+        "contribution": 8,
+        "type": "warning"
+      },
+      {
+        "label": "Volatility",
+        "score": 24,
+        "weight": 15,
+        "contribution": 4,
+        "type": "negative"
+      },
+      {
+        "label": "Breadth",
+        "score": 18,
+        "weight": 15,
+        "contribution": 3,
+        "type": "negative"
+      },
+      {
+        "label": "Macro",
+        "score": 71,
+        "weight": 15,
+        "contribution": 11,
+        "type": "positive"
+      }
+    ],
+    "signalReadiness": [
+      {
+        "question": "Momentum Confirming?",
+        "answer": "No",
+        "status": "negative",
+        "detail": "MACD Crossed Down"
+      },
+      {
+        "question": "Structure Intact?",
+        "answer": "No",
+        "status": "negative",
+        "detail": "Below Key EMAs"
+      },
+      {
+        "question": "Dip Demand Active?",
+        "answer": "No",
+        "status": "negative",
+        "detail": "Sellers In Control"
+      },
+      {
+        "question": "Sector Rotation Healthy?",
+        "answer": "Weak",
+        "status": "negative",
+        "detail": "0/11 sectors trending"
+      }
+    ],
+    "eventAlert": {
+      "active": true,
+      "message": "Macro Headwinds Elevated — Yield spiking 2.22%, DXY strengthening. Reduce leverage."
+    },
+    "scoreDelta": -11,
+    "scoreHistory": [
+      48,
+      55,
+      53,
+      51,
+      52,
+      53,
+      53,
+      53,
+      52,
+      41
+    ],
+    "emaDivergence": false,
+    "checklist": [
+      {
+        "label": "Price > Daily EMA50",
+        "met": false
+      },
+      {
+        "label": "Price > Weekly EMA50",
+        "met": true
+      },
+      {
+        "label": "VIX < 20",
+        "met": false
+      },
+      {
+        "label": "RSI 40–70 (Healthy)",
+        "met": false
+      },
+      {
+        "label": "Breadth > 60%",
+        "met": false
+      },
+      {
+        "label": "MACD Bullish",
+        "met": false
+      },
+      {
+        "label": "Price > D-EMA200 (Uptrend)",
+        "met": true
+      },
+      {
+        "label": "Rel Volume > 1x",
+        "met": false
+      }
+    ],
+    "metrics": {
+      "dailyTrend": {
+        "value": 20,
+        "status": "Tactical Bear",
+        "type": "negative",
+        "subMetrics": [
+          {
+            "label": "EMA Stack",
+            "value": "1/5 Bullish",
+            "status": "warning"
+          },
+          {
+            "label": "Short (9/21: $596)",
+            "value": "Broken",
+            "status": "negative"
+          },
+          {
+            "label": "Mid (50/100: $607)",
+            "value": "Below",
+            "status": "negative"
+          },
+          {
+            "label": "Long (200: $580)",
+            "value": "Above",
+            "status": "positive"
+          }
+        ]
+      },
+      "weeklyTrend": {
+        "value": 60,
+        "status": "Neutral",
+        "type": "warning",
+        "subMetrics": [
+          {
+            "label": "EMA Stack",
+            "value": "3/5 Bullish",
+            "status": "warning"
+          },
+          {
+            "label": "Intermediate (21: $602)",
+            "value": "Bearish",
+            "status": "negative"
+          },
+          {
+            "label": "Structural (50: $579)",
+            "value": "Holding",
+            "status": "positive"
+          },
+          {
+            "label": "Macro (200: $464)",
+            "value": "Bullish",
+            "status": "positive"
+          }
+        ]
+      },
+      "momentum": {
+        "value": 50,
+        "status": "Declining",
+        "type": "negative",
+        "subMetrics": [
+          {
+            "label": "RSI(14)",
+            "value": "35.5",
+            "status": "warning"
+          },
+          {
+            "label": "MACD Signal",
+            "value": "Bearish Cross",
+            "status": "negative"
+          },
+          {
+            "label": "Rel Volume",
+            "value": "0.80x",
+            "status": "neutral"
+          },
+          {
+            "label": "RSI Divergence",
+            "value": "NONE",
+            "status": "neutral"
+          }
+        ]
+      },
+      "volatility": {
+        "value": 24,
+        "status": "Elevated",
+        "type": "warning",
+        "subMetrics": [
+          {
+            "label": "VIX Level",
+            "value": "26.37",
+            "status": "warning"
+          },
+          {
+            "label": "VIX Percentile",
+            "value": "50th %ile",
+            "statusLabel": "Normal",
+            "status": "warning"
+          },
+          {
+            "label": "Put/Call Ratio",
+            "value": "N/A",
+            "status": "positive"
+          },
+          {
+            "label": "BB Width",
+            "value": "5.09%",
+            "status": "neutral"
+          }
+        ]
+      },
+      "breadth": {
+        "value": 18,
+        "status": "Weak",
+        "type": "negative",
+        "subMetrics": [
+          {
+            "label": "Sectors Positive",
+            "value": "2/11",
+            "status": "negative"
+          },
+          {
+            "label": "Trending > 20d",
+            "value": "0/11",
+            "status": "warning"
+          },
+          {
+            "label": "% > 20MA (S&P)",
+            "value": "N/A",
+            "status": "negative"
+          },
+          {
+            "label": "% > 50MA (S&P)",
+            "value": "N/A",
+            "status": "negative"
+          },
+          {
+            "label": "% > 200MA (S&P)",
+            "value": "N/A",
+            "status": "negative"
+          }
+        ]
+      },
+      "macro": {
+        "value": 71,
+        "status": "Supportive",
+        "type": "positive",
+        "subMetrics": [
+          {
+            "label": "2Y Yield",
+            "value": "3.62%",
+            "status": "negative"
+          },
+          {
+            "label": "5Y Yield",
+            "value": "4.00%",
+            "status": "negative"
+          },
+          {
+            "label": "10Y Yield",
+            "value": "4.38%",
+            "status": "negative"
+          },
+          {
+            "label": "30Y Yield",
+            "value": "4.95%",
+            "status": "negative"
+          },
+          {
+            "label": "US Dollar (DXY)",
+            "value": "99.54",
+            "status": "negative"
+          }
+        ]
+      }
+    },
+    "sectors": [
+      {
+        "name": "XLE",
+        "change": 0.6484210526315756,
+        "trending": false
+      },
+      {
+        "name": "XLF",
+        "change": 0.20416496529195882,
+        "trending": false
+      },
+      {
+        "name": "XLP",
+        "change": -0.43907793633369857,
+        "trending": false
+      },
+      {
+        "name": "XLC",
+        "change": -0.8041710851891098,
+        "trending": false
+      },
+      {
+        "name": "XLV",
+        "change": -0.8866457509207553,
+        "trending": false
+      },
+      {
+        "name": "XLB",
+        "change": -1.4872224549643922,
+        "trending": false
+      },
+      {
+        "name": "XLI",
+        "change": -1.5637383405474592,
+        "trending": false
+      },
+      {
+        "name": "XLY",
+        "change": -1.6681859617137633,
+        "trending": false
+      },
+      {
+        "name": "XLRE",
+        "change": -2.027671755725194,
+        "trending": false
+      },
+      {
+        "name": "XLK",
+        "change": -2.2392372146778348,
+        "trending": false
+      },
+      {
+        "name": "XLU",
+        "change": -2.7724049000644726,
+        "trending": false
+      }
+    ],
+    "ai": {
+      "assessment": "Market consolidating near key EMA levels. Sentiment is neutral-to-cautious.",
+      "suggestedAction": "Wait for Clarity",
+      "riskLevel": "Moderate"
+    },
+    "topBar": [
+      {
+        "symbol": "SPY",
+        "price": 649.27,
+        "change": -1.6063770136542082,
+        "changeAmount": -10.600000000000023
+      },
+      {
+        "symbol": "QQQ",
+        "price": 582.62,
+        "change": -1.7504215851602014,
+        "changeAmount": -10.379999999999995
+      },
+      {
+        "symbol": "IWM",
+        "price": 242.1,
+        "change": -2.215400771452234,
+        "changeAmount": -5.485000000000014
+      },
+      {
+        "symbol": "VIX",
+        "price": 26.37,
+        "change": 9.641074,
+        "changeAmount": 2.3100014
+      }
+    ],
+    "cachedAt": "2026-03-20T18:25:42.254Z"
   }
 }
