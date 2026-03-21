@@ -1,4 +1,4 @@
-import { OHLCVData, IndicatorData } from '../types/financial';
+import { OHLCVData, IndicatorData, ConfluenceResult, MultiTimeframeConfluenceResult } from '../types/financial';
 import { EMA, RSI, MACD, BollingerBands, ADX } from 'technicalindicators';
 
 // @ts-ignore
@@ -294,14 +294,6 @@ import { calculateAnchoredVWAP, VWAPAnchor } from './vwap'; export const calcula
  * Unified Technical Confluence Scorer
  * Synchronizes logic between Scanners and Deep Dive
  */
-export interface ConfluenceResult {
-    bullScore: number;
-    bearScore: number;
-    bullSignals: string[];
-    bearSignals: string[];
-    trend: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
-    strength: number; // 0-100 normalized tech score
-}
 
 export function calculateConfluenceScore(latest: IndicatorData): ConfluenceResult {
     let bullScore = 0;
@@ -455,5 +447,88 @@ export function calculateConfluenceScore(latest: IndicatorData): ConfluenceResul
         bearSignals,
         trend: isBull ? 'BULLISH' : (isBear ? 'BEARISH' : 'NEUTRAL'),
         strength
+    };
+}
+
+/**
+ * Calculates a unified score across 1h, 1d, and 1w timeframes.
+ * Weights: 1d (50%), 1w (30%), 1h (20%)
+ */
+export function calculateMultiTimeframeConfluence(timeframes: IndicatorData[]): MultiTimeframeConfluenceResult {
+    const results: { [key: string]: ConfluenceResult } = {};
+    const tfMap: { [key: string]: IndicatorData } = {};
+
+    timeframes.forEach(tf => {
+        if (tf.timeframe) {
+            tfMap[tf.timeframe] = tf;
+            results[tf.timeframe] = calculateConfluenceScore(tf);
+        }
+    });
+
+    const h1 = results['1h'] || { strength: 50, trend: 'NEUTRAL', bullSignals: [], bearSignals: [] };
+    const d1 = results['1d'] || { strength: 50, trend: 'NEUTRAL', bullSignals: [], bearSignals: [] };
+    const w1 = results['1w'] || { strength: 50, trend: 'NEUTRAL', bullSignals: [], bearSignals: [] };
+
+    // Weighted Score (normalized to 0-100 where 50 is neutral)
+    const totalScore = (d1.strength * 0.5) + (w1.strength * 0.3) + (h1.strength * 0.2);
+
+    const reasons: string[] = [];
+    
+    const addReason = (tf: string, res: ConfluenceResult) => {
+        const trendLabel = res.trend === 'BULLISH' ? 'Bullish' : res.trend === 'BEARISH' ? 'Bearish' : 'Neutral';
+        const weight = tf === '1d' ? '50%' : tf === '1w' ? '30%' : '20%';
+        reasons.push(`${tf.toUpperCase()} Timeframe is ${trendLabel} (${weight} weight)`);
+    };
+
+    addReason('1w', w1 as ConfluenceResult);
+    addReason('1d', d1 as ConfluenceResult);
+    addReason('1h', h1 as ConfluenceResult);
+
+    // Summary logic
+    let finalTrend: 'BULLISH' | 'BEARISH' | 'NEUTRAL' = 'NEUTRAL';
+    if (totalScore > 65) finalTrend = 'BULLISH';
+    else if (totalScore < 35) finalTrend = 'BEARISH';
+
+    // Execution Action logic
+    let executionAction: 'BUY' | 'WAIT' = 'WAIT';
+    const executionReasons: string[] = [];
+
+    const isStrongBull = totalScore > 70;
+    const isStrongBear = totalScore < 30;
+    const isAgree1d = (finalTrend === 'BULLISH' && d1.trend === 'BULLISH') || (finalTrend === 'BEARISH' && d1.trend === 'BEARISH');
+    const isAgree1w = (finalTrend === 'BULLISH' && w1.trend !== 'BEARISH') || (finalTrend === 'BEARISH' && w1.trend !== 'BULLISH');
+    
+    // Check RSI extremes from 1d data if available
+    const rsi1d = tfMap['1d']?.rsi14 || 50;
+    const rsiOverextended = (finalTrend === 'BULLISH' && rsi1d > 75) || (finalTrend === 'BEARISH' && rsi1d < 25);
+
+    if (finalTrend !== 'NEUTRAL' && (isStrongBull || isStrongBear) && isAgree1d && isAgree1w && !rsiOverextended) {
+        executionAction = 'BUY';
+        executionReasons.push(`High conviction ${finalTrend.toLowerCase()} alignment across Daily and Weekly.`);
+        executionReasons.push(`Volume and Momentum are in synchronization.`);
+        executionReasons.push(`Market structure supports immediate entry.`);
+    } else {
+        executionAction = 'WAIT';
+        if (finalTrend === 'NEUTRAL') {
+            executionReasons.push("Market is currently in an indecision phase; wait for a clear directional breakout.");
+        } else {
+            if (rsiOverextended) executionReasons.push("Price is currently overextended; wait for a mean reversion or pullback.");
+            if (!isAgree1d) executionReasons.push("Daily trend is not yet fully aligned; wait for price to clear key EMA levels.");
+            if (!isAgree1w) executionReasons.push("Weekly macro trend is opposing; wait for higher-timeframe trend shift.");
+            if (!isStrongBull && !isStrongBear) executionReasons.push("Confluence score is below high-conviction entry threshold (70%).");
+        }
+    }
+
+    return {
+        score: Math.round(totalScore),
+        trend: finalTrend,
+        reasons,
+        executionAction,
+        executionReasons,
+        timeframeDetails: {
+            '1h': { score: h1.strength, trend: h1.trend, signals: h1.trend === 'BULLISH' ? h1.bullSignals : h1.bearSignals },
+            '1d': { score: d1.strength, trend: d1.trend, signals: d1.trend === 'BULLISH' ? d1.bullSignals : d1.bearSignals },
+            '1w': { score: w1.strength, trend: w1.trend, signals: w1.trend === 'BULLISH' ? w1.bullSignals : w1.bearSignals },
+        }
     };
 }

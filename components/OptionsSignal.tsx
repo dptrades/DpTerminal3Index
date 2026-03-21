@@ -420,6 +420,51 @@ export default function OptionsSignal({ data, loading, onRefresh, companyName, u
                 </div>
             </div>
 
+            {/* === SMART EXECUTION SIGNAL === */}
+            {data.multiTimeframeConfluence && (
+                <div className={`mt-4 p-4 rounded-xl border transition-all duration-500 ${data.multiTimeframeConfluence.executionAction === 'BUY' 
+                    ? 'bg-emerald-500/10 border-emerald-500/40 shadow-[0_0_15px_-3px_rgba(16,185,129,0.2)]' 
+                    : 'bg-amber-500/10 border-amber-500/40 shadow-[0_0_15px_-3px_rgba(245,158,11,0.2)]'}`}>
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                            <Zap className={`w-4 h-4 ${data.multiTimeframeConfluence.executionAction === 'BUY' ? 'text-emerald-400' : 'text-amber-400'}`} />
+                            <h4 className="text-xs font-black text-white uppercase tracking-widest">Smart Execution Signal</h4>
+                        </div>
+                        <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${data.multiTimeframeConfluence.executionAction === 'BUY' 
+                            ? 'bg-emerald-500 text-white animate-pulse' 
+                            : 'bg-amber-500 text-white'}`}>
+                            {data.multiTimeframeConfluence.executionAction === 'BUY' ? 'BUY / ENTER' : 'WAIT FOR SETUP'}
+                        </div>
+                    </div>
+
+                    <div className="space-y-2">
+                        {data.multiTimeframeConfluence.executionReasons.map((reason, i) => (
+                            <div key={i} className="flex items-start gap-2.5 group/item">
+                                <div className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 transition-transform group-hover/item:scale-125 ${data.multiTimeframeConfluence?.executionAction === 'BUY' ? 'bg-emerald-400' : 'bg-amber-400'}`}></div>
+                                <span className="text-[11px] font-bold text-gray-100 leading-tight tracking-tight opacity-90">
+                                    {reason}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between">
+                        <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Multi-Timeframe Alpha</span>
+                        <div className="flex gap-1">
+                            {['1W', '1D', '1H'].map(tf => {
+                                const details = data.multiTimeframeConfluence?.timeframeDetails[tf.toLowerCase()];
+                                const trendColor = details?.trend === 'BULLISH' ? 'text-emerald-400' : details?.trend === 'BEARISH' ? 'text-rose-400' : 'text-gray-400';
+                                return (
+                                    <span key={tf} className={`text-[8px] font-black px-1.5 py-0.5 rounded bg-black/40 border border-white/5 ${trendColor}`}>
+                                        {tf}
+                                    </span>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* === TRADE EXECUTION PLAN === */}
             {data.entryPrice && (
                 <div className="space-y-3 pt-4 border-t border-gray-700/50">

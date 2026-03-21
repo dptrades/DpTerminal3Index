@@ -6,7 +6,7 @@ export async function POST(request: Request) {
         const body = await request.json();
         const {
             currentPrice, atr, trend, rsi, ema50, indicators, symbol,
-            fundamentalConfirmations, socialConfirmations, refresh
+            fundamentalConfirmations, socialConfirmations, refresh, allTimeframes
         } = body;
 
         if (currentPrice === undefined || atr === undefined || !trend) {
@@ -24,8 +24,10 @@ export async function POST(request: Request) {
             indicators,
             symbol,
             fundamentalConfirmations,
+            undefined, // industryTrend
             socialConfirmations,
-            skipCache
+            skipCache,
+            allTimeframes
         );
 
         return NextResponse.json(signal, {

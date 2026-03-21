@@ -46,6 +46,11 @@
         "date": "2026-03-18",
         "optionPremium": 0.155,
         "stockPrice": 65.2296
+      },
+      {
+        "date": "2026-03-20",
+        "optionPremium": 0.19,
+        "stockPrice": 64.8018
       }
     ],
     "status": "LOSS"
@@ -76,6 +81,11 @@
         "date": "2026-03-18",
         "optionPremium": 3.075,
         "stockPrice": 152.32
+      },
+      {
+        "date": "2026-03-20",
+        "optionPremium": 2.145,
+        "stockPrice": 151.96
       }
     ],
     "status": "LOSS"

@@ -2,7 +2,8 @@ import type { OptionRecommendation } from '../types/options';
 import type { IndicatorData } from '../types/financial';
 import { publicClient, PublicOptionChain } from './public-api';
 import { schwabClient } from './schwab';
-import { calculateConfluenceScore } from './indicators';
+import { calculateConfluenceScore, calculateMultiTimeframeConfluence } from './indicators';
+import { MultiTimeframeConfluenceResult } from '../types/financial';
 export type { OptionRecommendation } from '../types/options';
 
 // In-memory cache for PCR and unusual volume
@@ -67,14 +68,20 @@ export async function generateOptionSignal(
     indicators?: IndicatorData,
     symbol?: string,
     fundamentalConfirmations?: number,
+    industryTrend?: 'bullish' | 'bearish' | 'neutral',
     socialConfirmations?: number,
-    skipCache: boolean = false
+    skipCache: boolean = false,
+    allTimeframes?: IndicatorData[]
 ): Promise<OptionRecommendation> {
     const effectiveAtr = (atr && !isNaN(atr) && atr > 0) ? atr : (currentPrice * 0.02);
 
     const confluence = indicators
         ? calculateConfluenceScore(indicators)
         : { bullScore: 0, bearScore: 0, bullSignals: [], bearSignals: [], strength: 50, trend: 'NEUTRAL' as any };
+    
+    // ── NEW: Multi-Timeframe Confluence ──────────────────────────────────────
+    const mtc = allTimeframes ? calculateMultiTimeframeConfluence(allTimeframes) : null;
+    
     const { bullScore, bearScore, bullSignals, bearSignals } = confluence;
 
     const isCall = (bullScore > bearScore && bullScore >= 15);
@@ -326,6 +333,15 @@ export async function generateOptionSignal(
         + Math.min(9, (fundamentalConfirmations || 0) * 3)           // fundamentals → up to +9
         + Math.min(6, (socialConfirmations || 0) * 2);               // social → up to +6
 
+    // Multi-Timeframe Alignment Bonus
+    if (mtc) {
+        // Boost confidence based on MT strength (scale 50-100 to 0-15 bonus)
+        const mtBonus = direction === 'CALL' 
+            ? Math.max(0, (mtc.score - 50) * 0.3)
+            : Math.max(0, (50 - mtc.score) * 0.3);
+        confidence += mtBonus;
+    }
+
     let pcrNote = '';
     if (pcr) {
         const pv = pcr.volumeRatio;
@@ -422,9 +438,13 @@ export async function generateOptionSignal(
         technicalConfirmations: techConfirmations,
         fundamentalConfirmations: fundamentalConfirmations || 1,
         socialConfirmations: socialConfirmations || 1,
-        technicalDetails: signals,
+        technicalDetails: [
+            ...signals,
+            ...(mtc ? mtc.reasons : [])
+        ],
         fundamentalDetails,
         socialDetails,
+        multiTimeframeConfluence: mtc || undefined,
         symbol: realOption.symbol || `${symbol}_${finalExpiry}_${realOption.strike || intendedStrike}${isCall ? 'C' : 'P'}`,
         probabilityITM: realOption.greeks?.delta ? Math.abs(realOption.greeks.delta) : probabilityITM,
         dte: finalDte

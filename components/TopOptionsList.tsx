@@ -11,9 +11,10 @@ interface TopOptionsListProps {
     loading?: boolean;
     companyName?: string;
     underlyingPrice?: number;
+    isSideColumn?: boolean;
 }
 
-export default function TopOptionsList({ options, symbol, loading, companyName, underlyingPrice }: TopOptionsListProps) {
+export default function TopOptionsList({ options, symbol, loading, companyName, underlyingPrice, isSideColumn }: TopOptionsListProps) {
     const [priceFlashes, setPriceFlashes] = useState<Record<string, 'up' | 'down' | null>>({});
     const [prevPrices, setPrevPrices] = useState<Record<string, number>>({});
     const [trackedSymbols, setTrackedSymbols] = useState<Record<string, boolean>>({});
@@ -145,7 +146,7 @@ export default function TopOptionsList({ options, symbol, loading, companyName, 
                 <span className="text-[10px] font-mono text-gray-200 uppercase tracking-widest bg-gray-900/50 px-2 py-0.5 rounded border border-gray-700">Live Feedback</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className={`grid grid-cols-1 ${isSideColumn ? '' : 'md:grid-cols-3'} gap-4`}>
                 {options.map((opt, idx) => (
                     <div key={idx} className="bg-gray-900/40 border border-gray-700/30 rounded-lg p-4 hover:border-blue-500/30 transition-all group">
                         <div className="flex justify-between items-start mb-3">

@@ -22,6 +22,7 @@ export interface BollingerBandsOutput {
 }
 
 export interface IndicatorData extends OHLCVData {
+  timeframe?: string;
   ema9?: number;
   ema21?: number;
   ema50?: number;
@@ -58,4 +59,29 @@ export interface ChartDataPoints {
   price: number;
   // ... any other flat fields needed for Recharts
   [key: string]: string | number | undefined;
+}
+
+
+export interface ConfluenceResult {
+    bullScore: number;
+    bearScore: number;
+    bullSignals: string[];
+    bearSignals: string[];
+    trend: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
+    strength: number; // 0-100 normalized tech score
+}
+
+export interface MultiTimeframeConfluenceResult {
+    score: number;
+    trend: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
+    reasons: string[];
+    executionAction: 'BUY' | 'WAIT';
+    executionReasons: string[];
+    timeframeDetails: {
+        [key: string]: {
+            score: number;
+            trend: string;
+            signals: string[];
+        };
+    };
 }

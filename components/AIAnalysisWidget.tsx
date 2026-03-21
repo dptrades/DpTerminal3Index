@@ -1,5 +1,4 @@
-
-import { Activity, TrendingUp, TrendingDown, AlertTriangle, BookOpen, Target } from "lucide-react";
+import { Activity, TrendingUp, TrendingDown, Target, Zap, Clock } from "lucide-react";
 import { MultiTimeframeAnalysis } from "@/lib/market-data";
 import { UnusualOption } from "@/lib/options-flow";
 
@@ -22,61 +21,144 @@ interface AIAnalysisWidgetProps {
 }
 
 export default function AIAnalysisWidget({ symbol, analysis, optionsFlow, fundamentals }: AIAnalysisWidgetProps) {
-    const { signal, score, reasons, summary } = generateSignal(symbol, analysis, optionsFlow, fundamentals);
+    const { 
+        signal, 
+        score, 
+        executionAction, 
+        entryPrice, 
+        entryReason, 
+        techDetails 
+    } = generateSignal(symbol, analysis, optionsFlow, fundamentals);
 
-    const scoreColor = score >= 7 ? "text-green-400" : score <= 3 ? "text-red-400" : "text-yellow-400";
-    const bgGradient = score >= 7 ? "from-green-500/10 to-transparent" : score <= 3 ? "from-red-500/10 to-transparent" : "from-yellow-500/10 to-transparent";
-    const borderColor = score >= 7 ? "border-green-500/30" : score <= 3 ? "border-red-500/30" : "border-yellow-500/30";
+    const isBullish = score >= 6.5;
+    const isBearish = score <= 4;
+    const scoreColor = isBullish ? "text-[#00FF94]" : isBearish ? "text-[#FF2E2E]" : "text-[#FFB800]";
+    const borderColor = isBullish ? "border-[#00FF94]/20" : isBearish ? "border-[#FF2E2E]/20" : "border-[#FFB800]/20";
+    const bgGlow = isBullish ? "shadow-[0_0_30px_-10px_rgba(0,255,148,0.2)]" : isBearish ? "shadow-[0_0_30px_-10px_rgba(255,46,46,0.2)]" : "shadow-[0_0_30px_-10px_rgba(255,184,0,0.2)]";
 
     return (
-        <div className={`p-4 rounded-xl border ${borderColor} bg-gradient-to-r ${bgGradient} relative overflow-hidden`}>
-            <div className="flex flex-row gap-4 items-center">
-
-                {/* LEFT: SIGNAL & SCORE (compact) */}
-                <div className="flex-shrink-0 flex flex-col items-center gap-2">
-                    <div className="text-center">
-                        <div className="text-[10px] font-medium text-gray-200 uppercase tracking-widest mb-1">AI Signal</div>
-                        <div className={`text-xl font-bold ${scoreColor} leading-tight mb-0.5`}>{signal}</div>
-                        <div className="text-3xl font-black text-white leading-none">
-                            {score}<span className="text-sm text-gray-200">/10</span>
+        <div className={`relative bg-[#0B0F17]/90 backdrop-blur-2xl rounded-2xl border ${borderColor} p-8 ${bgGlow} transition-all duration-700 overflow-hidden`}>
+            {/* Background Texture */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.05] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+            
+            <div className="relative z-10 flex flex-col lg:grid lg:grid-cols-12 gap-8">
+                
+                {/* LEFT COLUMN: PRIMARY SIGNAL & EXECUTION (4/12) */}
+                <div className="lg:col-span-4 flex flex-col gap-6">
+                    {/* 1. AI SIGNAL */}
+                    <div className="bg-white/5 rounded-2xl p-6 border border-white/5 flex flex-col items-center text-center shadow-xl">
+                        <div className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-4">AI Terminal Signal</div>
+                        <div className={`text-3xl font-black ${scoreColor} tracking-tighter mb-1 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]`}>{signal}</div>
+                        <div className="text-6xl font-black text-white tracking-tighter">
+                            {score}<span className="text-xl text-white/30 font-bold ml-1">/10</span>
                         </div>
                     </div>
+
+                    {/* 2. EXECUTION STRATEGY */}
+                    <div className={`p-6 rounded-2xl border flex flex-col gap-3 shadow-xl ${executionAction === 'BUY' ? 'bg-[#00FF94]/5 border-[#00FF94]/20' : 'bg-[#FFB800]/5 border-[#FFB800]/20'}`}>
+                        <div className="flex items-center gap-2">
+                            <Clock className={`w-4 h-4 ${executionAction === 'BUY' ? 'text-[#00FF94]' : 'text-[#FFB800]'}`} />
+                            <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Execution Strategy</span>
+                        </div>
+                        <div className={`text-2xl font-black ${executionAction === 'BUY' ? 'text-[#00FF94]' : 'text-[#FFB800]'}`}>
+                            {executionAction === 'BUY' ? 'BUY / ENTER NOW' : 'WAIT FOR SETUP'}
+                        </div>
+                        <div className="text-xs font-bold text-white/80 leading-relaxed bg-black/20 p-3 rounded-lg border border-white/5">
+                            {executionAction === 'BUY' 
+                                ? `Primary Entry: $${entryPrice.toFixed(2)}`
+                                : "No immediate entry. Await confluence reversal or 1h EMAs to clear overhead supply."}
+                        </div>
+                    </div>
+
+                    {/* 3. TARGET PRICE */}
                     {fundamentals.targetMeanPrice && (
-                        <div className="text-xs text-gray-100 bg-gray-800/80 px-3 py-1.5 rounded-lg border border-gray-700/50 flex flex-col items-center gap-0.5 mt-1 shadow-md">
-                            <div className="flex items-center gap-1 font-bold uppercase text-[9px] text-gray-200 tracking-wider">
-                                <Target className="w-2.5 h-2.5 text-blue-400" /> Target Price
+                        <div className="bg-[#161B22] rounded-2xl p-6 border border-white/5 flex flex-col gap-2 shadow-2xl">
+                            <div className="flex items-center gap-1.5 text-[9px] font-black text-white/40 uppercase tracking-widest">
+                                <Target className="w-4 h-4 text-blue-400" /> Analyst Target (Mean)
                             </div>
-                            <div className="flex items-baseline gap-1">
-                                <span className="text-white text-base font-bold">${fundamentals.targetMeanPrice.toFixed(0)}</span>
-                                <span className={`text-[10px] font-bold px-1 py-0.5 rounded ${analysis.currentPrice < fundamentals.targetMeanPrice ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
-                                    {((fundamentals.targetMeanPrice - analysis.currentPrice) / analysis.currentPrice * 100).toFixed(1)}%
-                                </span>
+                            <div className="flex items-center justify-between">
+                                <span className="text-3xl font-black text-white">${fundamentals.targetMeanPrice.toFixed(0)}</span>
+                                <div className={`flex flex-col items-end`}>
+                                    <span className={`text-[11px] font-black px-2 py-0.5 rounded-md ${analysis.currentPrice < fundamentals.targetMeanPrice ? "bg-[#00FF94]/10 text-[#00FF94]" : "bg-[#FF2E2E]/10 text-[#FF2E2E]"}`}>
+                                        {analysis.currentPrice < fundamentals.targetMeanPrice ? "+" : ""}{((fundamentals.targetMeanPrice - analysis.currentPrice) / analysis.currentPrice * 100).toFixed(1)}% Implied
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     )}
                 </div>
 
-                {/* DIVIDER */}
-                <div className="w-px h-16 bg-gray-700/50 flex-shrink-0 hidden md:block" />
+                {/* RIGHT COLUMN: TECHNICAL CONFLUENCE & ENTRY LOGIC (8/12) */}
+                <div className="lg:col-span-8 flex flex-col gap-6">
+                    {/* TECHNICAL DETAIL BREAKDOWN */}
+                    <div className="bg-white/5 rounded-2xl p-8 border border-white/5 flex-grow shadow-xl">
+                        <div className="flex items-center gap-3 mb-6">
+                            <Activity className="w-5 h-5 text-blue-400" />
+                            <h4 className="text-sm font-black text-white uppercase tracking-widest">Technical Confluence Analysis</h4>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                            {/* EMA & RSI Group */}
+                            <div className="space-y-6">
+                                <div className="space-y-3">
+                                    <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Trend & EMAs</div>
+                                    <div className="space-y-2.5">
+                                        {techDetails.emas.map((point, i) => (
+                                            <div key={i} className="flex items-start gap-3">
+                                                <div className={`mt-1.5 w-1.5 h-1.5 rounded-full ${point.sentiment === 'positive' ? 'bg-[#00FF94]' : point.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-gray-500'}`}></div>
+                                                <span className="text-xs text-white/70 font-bold leading-snug">{point.text}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
 
-                {/* RIGHT: SUMMARY + DRIVERS (compact) */}
-                <div className="flex-grow min-w-0">
-                    <p className="text-gray-100 text-sm md:text-base leading-relaxed mb-3 font-medium">
-                        {summary}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                        {reasons.slice(0, 4).map((reason, i) => (
-                            <span key={i} className="flex items-center gap-1.5 text-[11px] text-gray-100 bg-gray-800/60 px-2.5 py-1.5 rounded-lg border border-gray-700/50 shadow-sm">
-                                {reason.sentiment === 'positive' ? (
-                                    <TrendingUp className="w-3.5 h-3.5 text-green-400" />
-                                ) : reason.sentiment === 'negative' ? (
-                                    <TrendingDown className="w-3.5 h-3.5 text-red-400" />
-                                ) : (
-                                    <Activity className="w-3.5 h-3.5 text-yellow-400" />
-                                )}
-                                <span className="font-semibold">{reason.text}</span>
-                            </span>
-                        ))}
+                                <div className="space-y-3">
+                                    <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Momentum (RSI)</div>
+                                    <div className="flex items-start gap-3">
+                                        <div className={`mt-1.5 w-1.5 h-1.5 rounded-full ${techDetails.rsi.sentiment === 'positive' ? 'bg-[#00FF94]' : techDetails.rsi.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-[#FFB800]'}`}></div>
+                                        <span className="text-xs text-white/70 font-bold leading-snug">{techDetails.rsi.text}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Volatility & Liquidity Group */}
+                            <div className="space-y-6">
+                                <div className="space-y-3">
+                                    <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Bollinger Bands</div>
+                                    <div className="flex items-start gap-3">
+                                        <div className={`mt-1.5 w-1.5 h-1.5 rounded-full ${techDetails.bb.sentiment === 'positive' ? 'bg-[#00FF94]' : techDetails.bb.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-gray-500'}`}></div>
+                                        <span className="text-xs text-white/70 font-bold leading-snug">{techDetails.bb.text}</span>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-3">
+                                    <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Fair Value Gaps (FVG)</div>
+                                    <div className="flex items-start gap-3">
+                                        <div className={`mt-1.5 w-1.5 h-1.5 rounded-full ${techDetails.fvg.sentiment === 'positive' ? 'bg-[#00FF94]' : 'bg-[#FF2E2E]'}`}></div>
+                                        <span className="text-xs text-white/70 font-bold leading-snug">{techDetails.fvg.text}</span>
+                                    </div>
+                                </div>
+                                
+                                <div className="space-y-3">
+                                    <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Institutional Flow</div>
+                                    <div className="flex items-start gap-3">
+                                        <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                                        <span className="text-xs text-white/70 font-bold leading-snug">{techDetails.options.text}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ENTRY PRICE LOGIC EXPLANATION */}
+                    <div className="bg-[#00FF94]/5 rounded-2xl p-6 border border-[#00FF94]/20 shadow-xl">
+                        <div className="flex items-center gap-3 mb-4">
+                            <Zap className="w-5 h-5 text-[#00FF94]" />
+                            <h4 className="text-sm font-black text-white uppercase tracking-widest">Entry Condition & Strategy</h4>
+                        </div>
+                        <p className="text-xs font-bold text-[#00FF94]/80 leading-relaxed italic">
+                            {entryReason}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -86,129 +168,122 @@ export default function AIAnalysisWidget({ symbol, analysis, optionsFlow, fundam
 
 function generateSignal(symbol: string, analysis: MultiTimeframeAnalysis, options: UnusualOption[], fundamentals: Fundamentals) {
     let score = 5.0; // Neutral Start
-    const reasons: { text: string, sentiment: 'positive' | 'negative' | 'neutral' }[] = [];
+    
+    // Detailed Technical Object
+    const techDetails = {
+        emas: [] as { text: string, sentiment: 'positive' | 'negative' | 'neutral' }[],
+        rsi: { text: '', sentiment: 'neutral' as 'positive' | 'negative' | 'neutral' },
+        bb: { text: '', sentiment: 'neutral' as 'positive' | 'negative' | 'neutral' },
+        fvg: { text: 'No significant Fair Value Gaps detected in immediate price action.', sentiment: 'neutral' as 'positive' | 'negative' | 'neutral' },
+        options: { text: 'Neutral participation detected in institutional flow.', sentiment: 'neutral' as 'positive' | 'negative' | 'neutral' }
+    };
 
-    // 1. TECHNICALS (FVG + Trends)
     const daily = analysis.timeframes.find(t => t.timeframe === '1d');
-    const hourly = analysis.timeframes.find(t => t.timeframe === '1h');
+    const price = analysis.currentPrice;
 
-    // 0. CRITICAL TECHNICAL WARNINGS (Crosses)
-    if (daily && daily.ema50 && daily.ema200) {
-        const gap = (daily.ema50 - daily.ema200) / daily.ema200;
-        if (gap > 0 && gap < 0.02) {
-            score -= 1.0; // Higher penalty for proximity
-            reasons.push({ text: "⚠️ Nearing Death Cross (Critical Trend Risk)", sentiment: 'negative' });
-        } else if (daily.ema50 < daily.ema200) {
-            score -= 1.5;
-            reasons.push({ text: "💀 Death Cross Active (Major Bearish Trend)", sentiment: 'negative' });
-        }
-    }
-
-    // 1. TECHNICALS (FVG + Trends)
+    // 1. EMA ANALYSIS
     if (daily) {
-        if (daily.trend === 'BULLISH') {
-            score += 1.5;
-            reasons.push({ text: "Daily Trend is Bullish (Price > 50 EMA)", sentiment: 'positive' });
-        } else if (daily.trend === 'BEARISH') {
-            score -= 1.5;
-            reasons.push({ text: "Daily Trend is Bearish", sentiment: 'negative' });
-        }
-
-        // FVG Check
-        if (daily.fvg?.type === 'BULLISH') {
-            score += 0.8;
-            reasons.push({ text: "Active Bullish Fair Value Gap (Institutional Support)", sentiment: 'positive' });
-        } else if (daily.fvg?.type === 'BEARISH') {
-            score -= 0.8;
-            reasons.push({ text: "Active Bearish Fair Value Gap (Price Imbalance)", sentiment: 'negative' });
-        }
-
-        // EMA 200 (Long Term) & Death Cross check
-        if (daily.ema200 && daily.close > daily.ema200) {
-            score += 0.7;
-            reasons.push({ text: "Stable above 200-Day Moving Average", sentiment: 'positive' });
-        }
-    }
-
-    // 2. GAMMA SQUEEZE & OPTIONS DYNAMICS
-    const gamma = analysis.metrics.gammaSqueeze;
-    if (gamma && gamma.score > 60) {
-        const boost = (gamma.score / 100) * 1.5;
-        score += boost;
-        reasons.push({ text: `High Gamma Squeeze Probability (${gamma.score}%)`, sentiment: 'positive' });
-    }
-
-    // P/C Ratio Calculation
-    const callFlow = options.filter(o => o.type === 'CALL').length;
-    const putFlow = options.filter(o => o.type === 'PUT').length;
-    const totalFlow = callFlow + putFlow;
-
-    if (totalFlow > 0) {
-        const pcRatio = putFlow / callFlow;
-        if (pcRatio < 0.6) {
-            score += 0.7;
-            reasons.push({ text: `Bullish P/C Balance (${pcRatio.toFixed(2)})`, sentiment: 'positive' });
-        } else if (pcRatio > 1.4) {
-            score -= 0.7;
-            reasons.push({ text: `Bearish P/C Balance (${pcRatio.toFixed(2)})`, sentiment: 'negative' });
-        }
-    }
-
-    // 3. FUNDAMENTALS & RISK (BETA)
-    const beta = fundamentals.beta || analysis.metrics.beta;
-    if (beta) {
-        if (beta > 1.3 && score > 6) {
-            score += 0.5; // High beta momentum tailwind
-            reasons.push({ text: `High Beta (${beta.toFixed(2)}) amplification on trend`, sentiment: 'positive' });
-        } else if (beta < 0.8) {
-            reasons.push({ text: `Low Beta (${beta.toFixed(2)}) - Defensive profile`, sentiment: 'neutral' });
-        }
-    }
-
-    if (fundamentals.recommendationKey === 'strong_buy' || fundamentals.recommendationKey === 'buy') {
-        score += 0.8;
-        reasons.push({ text: "Institutional Consensus: BUY", sentiment: 'positive' });
-    }
-
-    // 4. PRICE TARGET & VOLUME
-    if (fundamentals.targetMeanPrice) {
-        const upside = ((fundamentals.targetMeanPrice - analysis.currentPrice) / analysis.currentPrice) * 100;
-        if (upside > 15) {
+        if (price > daily.ema200!) {
+            techDetails.emas.push({ text: "Price is holding above the 200-day EMA, maintaining long-term bullish structural integrity.", sentiment: 'positive' });
             score += 0.5;
-            reasons.push({ text: `Analyst Target: ${upside.toFixed(0)}% Upside`, sentiment: 'positive' });
+        } else {
+            techDetails.emas.push({ text: "Price is currently below the 200-day EMA, indicating a secular bearish regime.", sentiment: 'negative' });
+            score -= 1.0;
+        }
+
+        if (price > (daily.ema50 || 0)) {
+            techDetails.emas.push({ text: "Medium-term momentum is positive as price sustains levels above the 50-day EMA.", sentiment: 'positive' });
+            score += 0.5;
+        } else {
+            techDetails.emas.push({ text: "Significant overhead resistance found at the 50-day EMA; trend remains suppressed.", sentiment: 'negative' });
+            score -= 0.5;
+        }
+
+        if ((daily.ema9 || 0) > (daily.ema21 || 0)) {
+            techDetails.emas.push({ text: "Short-term trend acceleration: 9 EMA has crossed above the 21 EMA (Bullish Cross).", sentiment: 'positive' });
+            score += 0.5;
+        } else {
+            techDetails.emas.push({ text: "Negative short-term stack: 9 EMA is trending below the 21 EMA.", sentiment: 'negative' });
+            score -= 0.5;
         }
     }
 
-    if (analysis.metrics.volumeDiff > 30) {
-        score += 0.5;
-        reasons.push({ text: "Institutional Accumulation (High Vol)", sentiment: 'positive' });
+    // 2. RSI ANALYSIS
+    if (daily && daily.rsi) {
+        if (daily.rsi > 70) {
+            techDetails.rsi = { text: `RSI is Overextended at ${daily.rsi.toFixed(1)}, suggesting a high probability of exhaustion or short-term pullback.`, sentiment: 'negative' };
+            score -= 1.0;
+        } else if (daily.rsi < 30) {
+            techDetails.rsi = { text: `RSI is Oversold at ${daily.rsi.toFixed(1)}, indicating a potential bottoming process or mean reversion bounce.`, sentiment: 'positive' };
+            score += 1.0;
+        } else {
+            techDetails.rsi = { text: `RSI is Neutral at ${daily.rsi.toFixed(0)}, leaving room for expansion in either direction without immediate exhaustion.`, sentiment: 'neutral' };
+        }
+    }
+
+    // 3. BOLLINGER BANDS
+    if (daily && daily.bollinger) {
+        const { pb } = daily.bollinger;
+        if (pb > 0.9) {
+            techDetails.bb = { text: "Price is riding the Upper Bollinger Band, signaling extreme strength but also high relative extension.", sentiment: 'positive' };
+            score += 0.5;
+        } else if (pb < 0.1) {
+            techDetails.bb = { text: "Price is tagging the Lower Bollinger Band; historically a zone for institutional dip-buying.", sentiment: 'negative' }; // negative position, positive opportunity
+        } else {
+            techDetails.bb = { text: "Price is consolidating within the bands; volatility is contracting, suggesting an upcoming expansion.", sentiment: 'neutral' };
+        }
+    }
+
+    // 4. FVG Analysis
+    if (daily?.fvg?.type === 'BULLISH') {
+        techDetails.fvg = { text: `Bullish FVG support identified between $${daily.fvg.gapLow.toFixed(2)} - $${daily.fvg.gapHigh.toFixed(2)}. This acts as a magnet for buy orders.`, sentiment: 'positive' };
+        score += 1.0;
+    } else if (daily?.fvg?.type === 'BEARISH') {
+        techDetails.fvg = { text: `Bearish FVG resistance active between $${daily.fvg.gapLow.toFixed(2)} - $${daily.fvg.gapHigh.toFixed(2)}. Expect supply to hit at these levels.`, sentiment: 'negative' };
+        score -= 1.0;
+    }
+
+    // 5. Options Flow
+    const callVol = options.filter(o => o.type === 'CALL').reduce((a, b) => a + (b.volume || 0), 0);
+    const putVol = options.filter(o => o.type === 'PUT').reduce((a, b) => a + (b.volume || 0), 0);
+    if (callVol > putVol * 1.5) {
+        techDetails.options = { text: "Heavy call flow detected; institutional participants are positioning for upside momentum.", sentiment: 'positive' };
+        score += 1.0;
+    } else if (putVol > callVol * 1.5) {
+        techDetails.options = { text: "Aggressive put buying dominance suggests cautious or bearish institutional bias.", sentiment: 'negative' };
+        score -= 1.0;
     }
 
     // Clamp Score
     score = Math.min(10, Math.max(0, score));
     score = Number(score.toFixed(1));
 
-    // Determine Signal
+    // Determine Signal & Strategy
     let signal = "NEUTRAL";
     if (score >= 8) signal = "STRONG BUY";
     else if (score >= 6.5) signal = "BUY";
     else if (score <= 2) signal = "STRONG SELL";
     else if (score <= 4) signal = "SELL";
 
-    // Natural Language Summary
-    let summary = `Our AI analysis of ${symbol} across technical imbalances and options flow indicates a ${signal} signal with a ${score}/10 conviction score. `;
+    const executionAction = score >= 6.5 ? 'BUY' : 'WAIT';
+    
+    // Entry Point Explanation
+    let entryReason = "";
+    const entryPrice = price;
 
-    if (daily?.fvg?.type === 'BULLISH' || (gamma && gamma.score > 70)) {
-        summary += "Strong institutional imbalances suggest a supply-demand mismatch favoring bulls. ";
-    }
-
-    if (score > 7) {
-        summary += `The combination of ${daily?.trend === 'BULLISH' ? 'trend alignment' : 'strong metrics'} and ${gamma && gamma.score > 50 ? 'Gamma Squeeze risk' : 'Options flow'} creates a high-probability setup. `;
-    } else if (score < 4) {
-        summary += "Technical structure remains weak with significant overhead supply or bearish options sentiment. ";
+    if (executionAction === 'BUY') {
+        if (daily?.fvg?.type === 'BULLISH') {
+            entryReason = `Long entry recommended near the top of the Bullish Fair Value Gap ($${daily.fvg.gapHigh.toFixed(2)}) or on a retest of the daily 21 EMA. Overall confluence suggests high conviction for upside expansion with minimal drawdown expected.`;
+        } else {
+            entryReason = `Current market price is attractive for a momentum entry. Scaling in near the 9 EMA ($${daily?.ema9?.toFixed(2)}) is advised to maintain a tight risk-to-reward ratio while trend remains intact.`;
+        }
     } else {
-        summary += "Market forces are currently balanced; wait for FVG filling or trend breakout for clear entry. ";
+        if (daily?.fvg?.type === 'BEARISH') {
+            entryReason = `Wait for a daily close above the Bearish Fair Value Gap ($${daily.fvg.gapHigh.toFixed(2)}) before seeking long entry. Current overhead supply of $${daily.fvg.gapLow.toFixed(2)} is acting as a hard ceiling for price action.`;
+        } else {
+            entryReason = `Market is currently in 'Price Discovery' mode with no clear confluence. Patience is required. Monitor for a breach of the daily 50 EMA or an RSI divergence before deploying capital.`;
+        }
     }
 
-    return { signal, score, reasons, summary };
+    return { signal, score, executionAction, entryPrice, entryReason, techDetails };
 }

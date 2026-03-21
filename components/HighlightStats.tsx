@@ -14,8 +14,8 @@ export default function HighlightStats({ stats }: { stats: PriceStats | null }) 
     ];
 
     return (
-        <div className="bg-gray-800 border-gray-700 border rounded-xl p-3">
-            <div className="grid grid-cols-2 gap-2">
+        <div className="bg-gray-800/20 border-gray-700/50 border rounded-xl p-4">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
                 {items.map((item, i) => (
                     <div key={i} className="flex flex-col bg-gray-900/50 p-2 rounded-lg border border-gray-700/50">
                         <span className="text-[10px] text-gray-100 uppercase tracking-wider font-bold mb-1">{item.label}</span>

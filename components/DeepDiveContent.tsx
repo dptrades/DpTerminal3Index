@@ -12,6 +12,7 @@ interface DeepDiveContentProps {
     onRefresh?: () => void;
     refreshKey?: number;
     priceRefreshKey?: number;
+    externalAnalysis?: any;
 }
 
 interface DetailData {
@@ -24,7 +25,7 @@ interface DetailData {
     putCallRatio: { volumeRatio: number, oiRatio: number, totalCalls: number, totalPuts: number } | null;
 }
 
-export default function DeepDiveContent({ symbol, showOptionsFlow = true, onRefresh, refreshKey, priceRefreshKey }: DeepDiveContentProps) {
+export default function DeepDiveContent({ symbol, showOptionsFlow = true, onRefresh, refreshKey, priceRefreshKey, externalAnalysis }: DeepDiveContentProps) {
     const [data, setData] = useState<DetailData | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -32,13 +33,19 @@ export default function DeepDiveContent({ symbol, showOptionsFlow = true, onRefr
 
     useEffect(() => {
         if (symbol) {
-            setData(null);
-            setError("");
-            fetchDetails(symbol);
+            if (externalAnalysis && externalAnalysis.symbol === symbol) {
+                // Use external data: convictionRes matches DetailData exactly!
+                setData(externalAnalysis);
+                setLoading(false);
+            } else {
+                setData(null);
+                setError("");
+                fetchDetails(symbol);
+            }
         } else {
             setData(null);
         }
-    }, [symbol, refreshKey]);
+    }, [symbol, refreshKey, externalAnalysis]);
 
     const fetchDetails = async (sym: string, isManual: boolean = false) => {
         setLoading(true);
@@ -372,14 +379,6 @@ export default function DeepDiveContent({ symbol, showOptionsFlow = true, onRefr
                         * Highlights indicate price is within 0.5% of the EMA (Support/Resistance Watch)
                     </p>
                 </div>
-
-                {/* 2.5 AI ANALYSIS WIDGET */}
-                <AIAnalysisWidget
-                    symbol={symbol}
-                    analysis={data.analysis}
-                    optionsFlow={data.optionsFlow}
-                    fundamentals={data.fundamentals}
-                />
 
                 {/* 3. UNUSUAL OPTIONS FLOW */}
                 {

@@ -3,7 +3,10 @@
  * Types for options trading recommendations and signals
  */
 
+import { MultiTimeframeConfluenceResult } from './financial';
+
 export interface OptionRecommendation {
+    multiTimeframeConfluence?: MultiTimeframeConfluenceResult;
     type: 'CALL' | 'PUT' | 'WAIT';
     strike: number;
     expiry: string;

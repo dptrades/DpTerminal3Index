@@ -19,6 +19,7 @@ import HighlightStats from '../components/HighlightStats';
 import OptionsSignal from '../components/OptionsSignal';
 import TopOptionsList from '../components/TopOptionsList';
 import DeepDiveContent from '../components/DeepDiveContent';
+import AIAnalysisWidget from '../components/AIAnalysisWidget';
 import HeaderSentiment from '../components/HeaderSentiment';
 import HeaderSignals from '../components/HeaderSignals';
 import HeaderPattern from '../components/HeaderPattern';
@@ -51,6 +52,7 @@ export default function Dashboard() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [analystData, setAnalystData] = useState<NewsItem[]>([]);
   const [stats, setStats] = useState<PriceStats | null>(null);
+  const [analysis, setAnalysis] = useState<any>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   // Initialize from localStorage if available, otherwise default to SPY
@@ -195,6 +197,7 @@ export default function Dashboard() {
       setStats(null);
       setNews([]);
       setAnalystData([]);
+      setAnalysis(null);
       setOptionsSignal(null); // Clear signal too
       setTop3Options([]); // Clear discovery too
 
@@ -245,15 +248,19 @@ export default function Dashboard() {
             if (latest.rsi14 < 30 && trend === 'bearish') trend = 'neutral'; // Oversold
           }
 
-          // Fetch News & Analyst Concurrent
-          const [newsItems, analystItems] = await Promise.all([
+          // Fetch News, Analyst & Conviction Concurrent
+          const [newsItems, analystItems, convictionRes] = await Promise.all([
             fetchStockNews(targetSymbol, trend),
-            fetchAnalystRatings(targetSymbol)
+            fetchAnalystRatings(targetSymbol),
+            fetch(`/api/conviction/${targetSymbol.toLowerCase()}`).then(r => r.ok ? r.json() : null)
           ]);
-
+          
           if (!ignore) {
             setNews(newsItems);
             setAnalystData(analystItems);
+            if (convictionRes) {
+              setAnalysis(convictionRes);
+            }
           }
         }
       } catch (err) {
@@ -341,8 +348,8 @@ export default function Dashboard() {
       // Clear old data immediately to prevent stale UI during load
       setOptionsSignal(null);
       setTop3Options([]);
-
-      if (latest && stats && latest.atr14) {
+      
+      if (latest && stats && latest.atr14 && analysis) {
         try {
           // 1. Fetch Option Signal via API
           const sigRes = await fetch('/api/options/signal', {
@@ -357,7 +364,8 @@ export default function Dashboard() {
               indicators: latest,
               symbol: symbol,
               fundamentalConfirmations: analystData.filter(a => a.sentiment === (currentTrend === 'bullish' ? 'positive' : 'negative')).length,
-              socialConfirmations: Math.floor(Math.abs(sentimentScore - 50) / 15) + 1
+              socialConfirmations: Math.floor(Math.abs(sentimentScore - 50) / 15) + 1,
+              allTimeframes: analysis.analysis.timeframes
             })
           });
           if (sigRes.ok && !ignore) {
@@ -380,7 +388,7 @@ export default function Dashboard() {
     };
     fetchSignal();
     return () => { ignore = true; };
-  }, [latest, stats, currentTrend, analystData.length, sentimentScore, symbol, refreshTrigger]);
+  }, [latest, stats, currentTrend, analystData.length, sentimentScore, symbol, refreshTrigger, analysis]);
 
   // 4. Passive Tracking Update Trigger (Market Close)
   useEffect(() => {
@@ -541,6 +549,22 @@ export default function Dashboard() {
                 {/* Deep Dive - Takes 3/4 - FIRST in DOM = LEFT */}
                 <div className="lg:col-span-2 xl:col-span-3 overflow-x-auto pb-2 scrollbar-hide">
                   <div className="min-w-[600px] lg:min-w-0">
+                    {/* 1. AI TERMINAL ASSESSMENT (Strategic Stock Signal) - CENTER TOP */}
+                    {analysis && (
+                      <div className="space-y-4 mb-8">
+                        <h3 className="text-sm font-bold text-gray-100 uppercase tracking-wider px-1">AI Terminal Assessment</h3>
+                        <ErrorBoundary name="AI Analysis" onRetry={handleManualRefresh}>
+                          <AIAnalysisWidget
+                            symbol={symbol || ''}
+                            analysis={analysis.analysis}
+                            optionsFlow={analysis.optionsFlow}
+                            fundamentals={analysis.fundamentals}
+                          />
+                        </ErrorBoundary>
+                      </div>
+                    )}
+
+                    {/* 2. DEEP DIVE CONTENT */}
                     <ErrorBoundary name="Deep Dive" onRetry={handleManualRefresh}>
                       <DeepDiveContent
                         key={symbol}
@@ -549,13 +573,23 @@ export default function Dashboard() {
                         onRefresh={handleManualRefresh}
                         refreshKey={refreshTrigger}
                         priceRefreshKey={priceRefreshKey}
+                        externalAnalysis={analysis}
                       />
                     </ErrorBoundary>
+
+                    {/* 3. PRICE STATISTICS - BOTTOM OF CENTER COLUMN */}
+                    <div className="mt-8">
+                      <h3 className="text-sm font-bold text-gray-100 uppercase tracking-wider mb-4 px-1">Price Statistics</h3>
+                      <ErrorBoundary name="Price Statistics">
+                        <HighlightStats stats={stats} />
+                      </ErrorBoundary>
+                    </div>
                   </div>
                 </div>
 
-                {/* Right Column - AI Option Play + Price Stats stacked vertically */}
+                {/* Right Column - AI Option Play + TOP OPTIONS DISCOVERY */}
                 <div className="lg:col-span-1 xl:col-span-1 space-y-6">
+                  {/* Tactical Option Play */}
                   <div className="bg-gray-800/10 rounded-xl">
                     <h3 className="text-sm font-bold text-gray-100 uppercase tracking-wider mb-2 flex items-center gap-2">
                       <Zap className="w-4 h-4 text-blue-400" /> Tactical Option Play
@@ -571,28 +605,20 @@ export default function Dashboard() {
                     </ErrorBoundary>
                   </div>
 
-                  {/* Price Statistics - Below AI Option Play */}
-                  <div>
-                    <h3 className="text-sm font-bold text-gray-100 uppercase tracking-wider mb-2 px-1 text-center lg:text-left">Price Statistics</h3>
-                    <ErrorBoundary name="Price Statistics">
-                      <HighlightStats stats={stats} />
-                    </ErrorBoundary>
-                  </div>
+                  {/* TOP 3 OPTIONS DISCOVERY (Moved from bottom to side) */}
+                  <ErrorBoundary name="Top Options" onRetry={handleManualRefresh}>
+                    <TopOptionsList
+                      options={top3Options}
+                      symbol={symbol || ''}
+                      loading={loading || (top3Options.length === 0 && !error)}
+                      companyName={companyName}
+                      underlyingPrice={latest?.close}
+                      isSideColumn={true}
+                    />
+                  </ErrorBoundary>
                 </div>
               </div>
 
-              {/* TOP 3 OPTIONS DISCOVERY (Moved below Deep Dive) */}
-              <div className="space-y-6">
-                <ErrorBoundary name="Top Options" onRetry={handleManualRefresh}>
-                  <TopOptionsList
-                    options={top3Options}
-                    symbol={symbol || ''}
-                    loading={loading || (top3Options.length === 0 && !error)}
-                    companyName={companyName}
-                    underlyingPrice={latest?.close}
-                  />
-                </ErrorBoundary>
-              </div>
 
               {/* ROW 5: Live News - BELOW AI Insight */}
               <div>
