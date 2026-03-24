@@ -11,6 +11,7 @@ import SectorDetailModal from '@/components/SectorDetailModal';
 import { REFRESH_INTERVALS, isMarketActive, getNextMarketOpen } from '@/lib/refresh-utils';
 import type { SocialPulseItem } from '@/lib/social';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import RefreshClock from '@/components/RefreshClock';
 
 export default function SocialPulsePage() {
     const router = useRouter();
@@ -24,6 +25,7 @@ export default function SocialPulsePage() {
     // #8 Sort bar state
     type SortKey = 'heat' | 'sentiment' | 'change';
     const [sortKey, setSortKey] = useState<SortKey>('heat');
+    const [countdown, setCountdown] = useState(900); // 15m
 
     // Sidebar Props (Standardized)
     const [symbol, setSymbol] = useState('TSLA');
@@ -45,17 +47,21 @@ export default function SocialPulsePage() {
     useEffect(() => {
         fetchPulse();
 
-        // #6: Adaptive auto-refresh — 15 min when market is active, 1 hour when closed
-        // The interval is set once on mount; it always fires but re-evaluates market state each tick.
-        const intervalMs = isMarketActive()
-            ? REFRESH_INTERVALS.AUTO_REFRESH
-            : REFRESH_INTERVALS.OFF_HOURS;
+        const tick = setInterval(() => {
+            if (isMarketActive()) {
+                setCountdown(prev => {
+                    if (prev <= 1) {
+                        fetchPulse();
+                        return 900;
+                    }
+                    return prev - 1;
+                });
+            } else {
+                setCountdown(3600); // 1h off-hours
+            }
+        }, 1000);
 
-        const interval = setInterval(() => {
-            fetchPulse();
-        }, intervalMs);
-
-        return () => clearInterval(interval);
+        return () => clearInterval(tick);
     }, []);
 
     const fetchPulse = async () => {
@@ -70,6 +76,7 @@ export default function SocialPulsePage() {
         } finally {
             setLoading(false);
             setRefreshing(false);
+            setCountdown(isMarketActive() ? 900 : 3600);
         }
     };
 
@@ -133,10 +140,13 @@ export default function SocialPulsePage() {
                                     <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-500/10 text-orange-400 border border-orange-500/20 uppercase tracking-wider">
                                         Source: Social Intelligence AI
                                     </span>
-                                    {lastUpdated && (
-                                        <span className="text-[10px] text-gray-300 font-mono">
-                                            Last Updated: {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                                        </span>
+                                     {lastUpdated && (
+                                        <div className="flex items-center gap-3 mt-1">
+                                            <span className="text-[10px] text-gray-300 font-mono">
+                                                Last Updated: {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                            </span>
+                                            <RefreshClock countdown={countdown} total={isMarketActive() ? 900 : 3600} label="Scan" size="xs" color="#F97316" />
+                                        </div>
                                     )}
                                 </div>
                                 <p className="text-gray-200 max-w-2xl text-sm font-medium leading-relaxed">
