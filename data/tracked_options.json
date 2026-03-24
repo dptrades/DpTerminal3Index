@@ -108,5 +108,61 @@
       }
     ],
     "status": "ACTIVE"
+  },
+  {
+    "id": "PLTR260410C00165000",
+    "ticker": "PLTR",
+    "companyName": "Palantir Technologies Inc.",
+    "strike": 165,
+    "expiry": "2026-04-10",
+    "type": "CALL",
+    "entryPremium": 2.85,
+    "entryStockPrice": 154.83,
+    "entryDate": "2026-03-24",
+    "reasoning": [
+      "Price > EMA50",
+      "Price > EMA200",
+      "MACD Bullish Cross",
+      "Bollinger Uptrend",
+      "1W Timeframe is Bullish (30% weight)",
+      "1D Timeframe is Bullish (50% weight)",
+      "1H Timeframe is Bullish (20% weight)"
+    ],
+    "history": [
+      {
+        "date": "2026-03-24",
+        "optionPremium": 2.85,
+        "stockPrice": 154.83
+      }
+    ],
+    "status": "ACTIVE"
+  },
+  {
+    "id": "DELL260410C00172500",
+    "ticker": "DELL",
+    "companyName": "Dell Technologies Inc.",
+    "strike": 172.5,
+    "expiry": "2026-04-10",
+    "type": "CALL",
+    "entryPremium": 4.725,
+    "entryStockPrice": 166.915,
+    "entryDate": "2026-03-24",
+    "reasoning": [
+      "Price > EMA50",
+      "Price > EMA200",
+      "EMA Stack Bullish (Short > Mid > Long)",
+      "MACD Bullish Cross",
+      "1W Timeframe is Bullish (30% weight)",
+      "1D Timeframe is Bullish (50% weight)",
+      "1H Timeframe is Bullish (20% weight)"
+    ],
+    "history": [
+      {
+        "date": "2026-03-24",
+        "optionPremium": 4.725,
+        "stockPrice": 166.915
+      }
+    ],
+    "status": "ACTIVE"
   }
 ]

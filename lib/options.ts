@@ -162,7 +162,10 @@ export async function generateOptionSignal(
 
     const marketSession = publicClient.getMarketSession();
     const isRegularMarket = marketSession === 'REG';
-    const volumeThreshold = isRegularMarket ? 2 : 0;
+    // --- STRENGTHENED LIQUIDITY FLOORS ---
+    // Increase volume threshold significantly to ensure liquidity
+    const volumeThreshold = isRegularMarket ? 100 : 25; 
+    const oiThreshold = 250; 
 
     // ── 5. Delta-targeted strike selection ─────────────────────────
     // Target 0.40 - 0.45Δ: best practice for directional plays (better PoP than .30, cheaper than .50)
@@ -184,8 +187,8 @@ export async function generateOptionSignal(
             const opt = isCall ? strikeData?.call : strikeData?.put;
             if (!opt) continue;
 
-            // ── Min OI filter: skip illiquid contracts ──
-            if ((opt.openInterest || 0) < 50 && (opt.volume || 0) < Math.max(volumeThreshold, 1)) continue;
+            // ── Min Liquidity filter: ensure high-liquidity contracts ──
+            if ((opt.openInterest || 0) < oiThreshold && (opt.volume || 0) < volumeThreshold) continue;
 
             const distPct = Math.abs(strike - currentPrice) / currentPrice;
             
@@ -709,9 +712,10 @@ export async function findTopOptions(
                     if (!opt) continue;
 
                     // 2. High-Liquidity Floor
-                    const volumeThreshold = isMarketOpen ? 5 : 0;
-                    const oiThreshold = isMarketOpen ? 0 : 50;
-                    if ((opt.volume || 0) < volumeThreshold && (opt.openInterest || 0) < oiThreshold) continue;
+                    // Significantly higher floors for Top Options List to filter out noise
+                    const volFloor = isMarketOpen ? 50 : 20;
+                    const oiFloor = 200;
+                    if ((opt.volume || 0) < volFloor && (opt.openInterest || 0) < oiFloor) continue;
 
                     // 3. Directional Alignment
                     if (trend === 'bullish' && type === 'PUT') continue;
@@ -722,17 +726,17 @@ export async function findTopOptions(
                     if (contractPrice < 0.05) continue;
 
                     /**
-                     * 5. Refined Scoring Logic v2
-                     * - deltaProxy: Measures moneyness (0.5 max for ATM)
-                     * - deltaQuality: Bonus for being in the 0.20–0.50 optimal delta zone
-                     * - volume/oi: Capped to prevent single block trades from dominating
-                     * - moneyness: High weight to keep suggestions realistic
+                     * 5. Refined Scoring Logic v3 (Liquidity Optimized)
+                     * - volume: significantly weighted (up to 200 pts)
+                     * - openInterest: weighted for baseline liquidity (up to 100 pts)
+                     * - moneyness: High weight to stay realistic (up to 100 pts)
+                     * - deltaQuality: Bonus for sweet spot (up to 80 pts)
                      */
                     const deltaProxy = 0.5 - distance;
-                    const volumeScore = Math.min(opt.volume || 0, 500) * 2;
-                    const oiScore = Math.min(opt.openInterest || 0, 2000) * 0.75; // Raised OI weight
+                    const volumeScore = Math.min(opt.volume || 0, 1000) * 0.2; // Up to 200 pts
+                    const oiScore = Math.min(opt.openInterest || 0, 5000) * 0.02; // Up to 100 pts
                     const moneynessScore = deltaProxy * 200; // Up to 100 pts
-
+                    
                     // Actual delta quality bonus: reward contracts in the 0.35–0.50 delta "sweet spot"
                     const actualDelta = opt.greeks?.delta ? Math.abs(opt.greeks.delta) : null;
                     const deltaQuality = actualDelta !== null
