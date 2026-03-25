@@ -244,18 +244,30 @@ function generateSignal(symbol: string, analysis: MultiTimeframeAnalysis, option
         }
     }
 
-    // 2. RSI & DIVERGENCE ANALYSIS
-    if (daily && daily.rsi) {
-        if (daily.rsi > 70) {
-            techDetails.rsi.push({ text: `RSI Overextended at ${daily.rsi.toFixed(1)}, suggesting high probability of terminal exhaustion.`, sentiment: 'negative' });
-            score -= 1.0;
-        } else if (daily.rsi < 30) {
-            techDetails.rsi.push({ text: `RSI Oversold at ${daily.rsi.toFixed(1)}, indicating a potential bottoming process or mean reversion bounce.`, sentiment: 'positive' });
-            score += 1.0;
-        } else {
-            techDetails.rsi.push({ text: `RSI Neutral at ${daily.rsi.toFixed(0)}, leaving room for expansion before immediate rejection.`, sentiment: 'neutral' });
+    // 2. MULTI-TIMEFRAME RSI ANALYSIS
+    const rsiTimeframes = [
+        { label: 'H1', data: analysis.timeframes.find(t => t.timeframe === '1h') },
+        { label: 'D1', data: analysis.timeframes.find(t => t.timeframe === '1d') },
+        { label: 'W1', data: analysis.timeframes.find(t => t.timeframe === '1w') }
+    ];
+
+    rsiTimeframes.forEach(tf => {
+        if (tf.data && tf.data.rsi) {
+            const rsi = tf.data.rsi;
+            if (rsi > 70) {
+                techDetails.rsi.push({ text: `${tf.label} RSI Overextended at ${rsi.toFixed(1)}, suggesting high exhaustion risk.`, sentiment: 'negative' });
+                score -= tf.label === 'D1' ? 1.0 : 0.5;
+            } else if (rsi < 30) {
+                techDetails.rsi.push({ text: `${tf.label} RSI Oversold at ${rsi.toFixed(1)}, indicating a potential bottoming process.`, sentiment: 'positive' });
+                score += tf.label === 'D1' ? 1.0 : 0.5;
+            } else {
+                // Only show neutral for D1 to avoid clutter, or if there are NO other RSI points
+                if (tf.label === 'D1' || techDetails.rsi.length === 0) {
+                    techDetails.rsi.push({ text: `${tf.label} RSI Neutral at ${rsi.toFixed(0)}, leaving room for expansion.`, sentiment: 'neutral' });
+                }
+            }
         }
-    }
+    });
 
     // Multi-Timeframe Divergence Bullet Points
     const divTimeframes = [
