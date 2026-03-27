@@ -130,11 +130,8 @@ import { calculateAnchoredVWAP, VWAPAnchor } from './vwap'; export const calcula
 
     results.forEach((d, i) => {
         d.atr14 = atrs[i];
-        // ADX result is an object { adx: number, pdi: number, mdi: number }
-        // We need to handle the offset (usually period * 2 or similar depending on library)
-        // For technicalindicators, result array length is usually len - period + 1
-        // Let's safe map it
-        const adxVal = i >= (14) ? adx[i - 14] : undefined;
+        // ADX(14) in technicalindicators needs 14 (DM) + 14 (smoothing) = 28 bars for the first valid result at index 27
+        const adxVal = i >= 27 ? adx[i - 27] : undefined;
         d.adx14 = adxVal?.adx;
 
         // -------------------------------------------------------------------------

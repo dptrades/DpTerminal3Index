@@ -368,13 +368,14 @@ async function _fetchMtaUncached(symbol: string): Promise<MultiTimeframeAnalysis
             const hoursDiff = (now - lastBar.time) / (1000 * 60 * 60);
 
             // 1. Simulation/Stale Environment Shift
-            // If data is > 3 intervals stale, shift the whole history to align with "now"
-            // This is critical for indicators that use absolute dates (like VWAP anchors) 
-            // especially when fetching 2025 data in a 2026 local environment.
+            // If data is > 3 intervals stale, shift the whole history to align with the current timeframe boundary
             if (hoursDiff > (timeframeMs / (1000 * 60 * 60)) * 3) {
-                const timeShift = now - lastBar.time;
-                let priceScale = 1;
+                // Align to the top of the current timeframe unit (e.g., top of hour for 1h)
+                const nowRounded = Math.floor(now / timeframeMs) * timeframeMs;
+                const lastRounded = Math.floor(lastBar.time / timeframeMs) * timeframeMs;
+                const timeShift = nowRounded - lastRounded;
 
+                let priceScale = 1;
                 if (livePrice > 0 && lastBar.close > 0) {
                     const rawChange = Math.abs(livePrice - lastBar.close) / lastBar.close;
                     if (rawChange > 0.05) {
