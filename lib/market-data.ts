@@ -91,7 +91,7 @@ export interface MultiTimeframeAnalysis {
 }
 
 // 1. Live Price Waterfall: Public -> Schwab -> Alpaca -> Yahoo
-export async function fetchLivePrice(symbol: string): Promise<{ price: number, source: string, volume?: number } | null> {
+export async function fetchLivePrice(symbol: string): Promise<{ price: number, source: string, volume?: number, changePercent?: number } | null> {
     const start = Date.now();
 
     // A. Public.com (Primary for Real-Time) - 60s Cache internal
@@ -102,7 +102,8 @@ export async function fetchLivePrice(symbol: string): Promise<{ price: number, s
             return { 
                 price: publicQuote.price, 
                 source: 'Public.com',
-                volume: publicQuote.volume
+                volume: publicQuote.volume,
+                changePercent: publicQuote.changePercent
             };
         }
     } catch (e) {
@@ -143,9 +144,10 @@ export async function fetchLivePrice(symbol: string): Promise<{ price: number, s
         if (quote && quote.regularMarketPrice) {
             console.log(`[Waterfall] ${symbol} resolved via Yahoo in ${Date.now() - start}ms`);
             return { 
-                price: quote.regularMarketPrice, 
+                price: quote.regularMarketPrice!, 
                 source: 'Yahoo Finance',
-                volume: quote.regularMarketVolume
+                volume: quote.regularMarketVolume,
+                changePercent: quote.regularMarketChangePercent
             };
         }
     } catch (e) {
@@ -227,13 +229,22 @@ async function fetchHistoricalData(symbol: string, alpacaTf: string, yahooTf: st
     try {
         const bars = await fetchAlpacaBars(symbol, alpacaTf as any, limit);
         if (bars && bars.length > 0) {
-            return {
-                bars: bars.map((b: any) => ({
-                    time: new Date(b.t).getTime(),
-                    open: b.o, high: b.h, low: b.l, close: b.c, volume: b.v
-                })),
-                source: 'Alpaca (HF)'
-            };
+            const isIndex = ['SPY', 'QQQ', 'IWM', '^GSPC', '^NDX', '^DJI'].includes(symbol.toUpperCase());
+            const lastBarTime = new Date(bars[bars.length - 1].t).getTime();
+            const staleHours = (Date.now() - lastBarTime) / (1000 * 60 * 60);
+            
+            if (isIndex && staleHours > 24) {
+                console.warn(`[Waterfall] Alpaca bars for ${symbol} are ${staleHours.toFixed(1)}h stale. Rejecting for HF tiers.`);
+                // Fall through to next tier
+            } else {
+                return {
+                    bars: bars.map((b: any) => ({
+                        time: new Date(b.t).getTime(),
+                        open: b.o, high: b.h, low: b.l, close: b.c, volume: b.v
+                    })),
+                    source: 'Alpaca (HF)'
+                };
+            }
         }
     } catch (e) {
         console.warn(`[Waterfall] Alpaca failed for ${symbol}, falling to Finnhub...`);
@@ -243,29 +254,54 @@ async function fetchHistoricalData(symbol: string, alpacaTf: string, yahooTf: st
     if (finnhubClient) {
         try {
             const nowSec = Math.floor(Date.now() / 1000);
-            const fromSec = nowSec - (limit * 3600 * 2); // Buffer
+            
+            // Adjust lookback based on timeframe
+            let multiplier = 3600 * 1.5; // Default for hourly
+            if (alpacaTf === '1Day') multiplier = 86400 * 1.5;
+            else if (alpacaTf === '15Min') multiplier = 900 * 1.5;
+            
+            const fromSec = nowSec - (limit * multiplier);
             const res = (alpacaTf === '1Day') ? 'D' : (alpacaTf === '1Hour') ? '60' : (alpacaTf === '15Min') ? '15' : 'D';
             
             const data = await finnhubClient.getCandles(symbol, res as any, fromSec, nowSec);
             if (data && data.s === 'ok') {
-                const bars = data.t.map((t: number, i: number) => ({
-                    time: t * 1000,
-                    open: data.o[i],
-                    high: data.h[i],
-                    low: data.l[i],
-                    close: data.c[i],
-                    volume: data.v[i]
-                }));
-                return { bars, source: 'Finnhub (HF)' };
+                const isIndex = ['SPY', 'QQQ', 'IWM', '^GSPC', '^NDX', '^DJI'].includes(symbol.toUpperCase());
+                const lastBarTime = data.t[data.t.length - 1] * 1000;
+                const staleHours = (Date.now() - lastBarTime) / (1000 * 60 * 60);
+
+                if (isIndex && staleHours > 24) {
+                    console.warn(`[Waterfall] Finnhub bars for ${symbol} are ${staleHours.toFixed(1)}h stale. Rejecting for HF tiers.`);
+                } else {
+                    const bars = data.t.map((t: number, i: number) => ({
+                        time: t * 1000,
+                        open: data.o[i],
+                        high: data.h[i],
+                        low: data.l[i],
+                        close: data.c[i],
+                        volume: data.v[i]
+                    }));
+                    return { bars, source: 'Finnhub (HF)' };
+                }
             }
         } catch (e) {
             console.warn(`[Waterfall] Finnhub failed for ${symbol}, falling to Yahoo...`);
         }
     }
 
-    // Tier 4: Yahoo Finance (Optimized for Intraday)
+    // Tier 4: Yahoo Finance (Selective Failsafe for Indices)
+    const isIndex = ['SPY', 'QQQ', 'IWM', '^GSPC', '^NDX', '^DJI'].includes(symbol.toUpperCase());
+    
+    // If we've already tried HF sources and they failed or are stale,
+    // only use Yahoo if those sources didn't provide recent bars.
     try {
         const now = new Date();
+        const sixtyMinWindow = 60 * 60 * 1000;
+        
+        // If it's an index and we need data, Yahoo is better than 17 days stale bars.
+        // We only come here if Tier 1, 2, 3 failed to return anything *fresh*.
+        if (isIndex) {
+            console.log(`[Waterfall] Using Yahoo Selective Fallback for ${symbol} indices.`);
+        }
         
         // If 1H timeframe, attempt 5m aggregation for the current session's latest bars
         if (yahooTf === '60m') {
@@ -357,6 +393,7 @@ async function _fetchMtaUncached(symbol: string): Promise<MultiTimeframeAnalysis
 
     dailyData = dailyResult.bars;
     livePrice = liveData?.price || 0;
+    const liveChange = liveData?.changePercent || 0;
     const liveVolume = liveData?.volume || 0;
     const beta = finnhubMetrics?.metric?.beta;
     const dataOrigin = dailyResult.source;
@@ -466,45 +503,41 @@ async function _fetchMtaUncached(symbol: string): Promise<MultiTimeframeAnalysis
             const hoursDiff = (now - lastBar.time) / (1000 * 60 * 60);
             let priceScale = 1;
 
-            // 1. Simulation/Stale Environment Shift
-            // If data is > 3 units stale, shift the history by FULL DAYS to preserve timeframe boundaries and session starts
-            if (hoursDiff > (timeframeMs / (1000 * 60 * 60)) * 3) {
+            // 1. Staleness Protection & Environment Shift
+            // If data is > 24 hours stale, we DO NOT bridge it. Bridging 17 days of data erases trend and RSI.
+            const isExtremelyStale = hoursDiff > 24;
+            
+            if (isExtremelyStale) {
+                console.warn(`[Integrity] ${symbol} ${tf} is ${hoursDiff.toFixed(1)}h stale. DISCARDING stale history.`);
+                data = []; // Wipe useless history to prevent indicator distortion
+            } else if (hoursDiff > (timeframeMs / (1000 * 60 * 60)) * 1) {
+                // Shift time if slightly stale (e.g. over weekend) but within reasonable bounds
                 const oneDayMs = 24 * 60 * 60 * 1000;
-                // Calculate day difference
                 const dayDiffMs = now - lastBar.time;
                 const fullDaysShift = Math.floor(dayDiffMs / oneDayMs) * oneDayMs;
-                
-                // If it's less than a day but still stale, we still need to shift to "Today"
-                // but we align the last bar's TIME-OF-DAY to the last bar in history
                 const timeShift = fullDaysShift > 0 ? fullDaysShift : (Math.floor(now / oneDayMs) * oneDayMs - Math.floor(lastBar.time / oneDayMs) * oneDayMs);
-
-                if (livePrice > 0 && lastBar.close > 0) {
-                    const rawChange = Math.abs(livePrice - lastBar.close) / lastBar.close;
-                    // Lower threshold to 0.5% for indices like SPY where 4% is massive
-                    if (rawChange > 0.005) {
-                        priceScale = livePrice / lastBar.close;
-                    }
-                }
 
                 data = data.map(b => ({
                     ...b,
-                    time: b.time + timeShift,
-                    open: b.open * priceScale,
-                    high: b.high * priceScale,
-                    low: b.low * priceScale,
-                    close: b.close * priceScale
+                    time: b.time + timeShift
                 }));
             }
 
             // 2. Intraday Gap Filling (Bridge history to now)
-            // If the last bar is from a previous day or significantly earlier today,
-            // we synthesize intermediate bars to "warm up" indicators.
-            if (livePrice > 0 && hoursDiff > 1.1) {
+            // Safety: ONLY bridge if staleness is reasonable (e.g. < 24h).
+            if (livePrice > 0 && hoursDiff > 0.9 && hoursDiff < 24) {
                 let bridgeTime = lastBar.time + timeframeMs;
-                const limit = 24; // Safety limit: don't synth more than 24 bars
+                const limit = 24; 
                 let count = 0;
-                const bridgePrice = lastBar.close * priceScale; // Use scaled price for bridge
+                const startPrice = lastBar.close;
+                const endPrice = livePrice;
+                const steps = Math.min(limit, Math.floor(hoursDiff));
+                
                 while (bridgeTime < now - timeframeMs/2 && count < limit) {
+                    // Linear interpolation for price so RSI/EMA "catch up" smoothly
+                    const t = (count + 1) / (steps + 1);
+                    const bridgePrice = startPrice + (endPrice - startPrice) * t;
+                    
                     data.push({
                         time: bridgeTime,
                         open: bridgePrice,
@@ -515,6 +548,44 @@ async function _fetchMtaUncached(symbol: string): Promise<MultiTimeframeAnalysis
                     });
                     bridgeTime += timeframeMs;
                     count++;
+                }
+            }
+
+            // 2b. Emergency Stale Synthesis (Day-Session Warmup)
+            // If data is > 24h stale, we have a Gap that Bridge logic (above) ignores.
+            // We fill today's session with a basic Open-to-Now path so RSI/EMA "wake up".
+            if (livePrice > 0 && isExtremelyStale) {
+                const dayStart = new Date();
+                dayStart.setHours(9, 30, 0, 0); // 9:30 AM EST
+                const sessionStart = dayStart.getTime();
+                
+                if (now > sessionStart) {
+                    let synthTime = sessionStart;
+                    // We need at least 14 bars for RSI, so we increase granularity if today's session is short.
+                    // This creates a "momentum track" for today's price action from Open.
+                    const sessionMinutes = (now - sessionStart) / (1000 * 60);
+                    // 40 bars for stability (RSI 14 + EMA 21 need warm-up)
+                    const synthInterval = Math.max(2, Math.floor(sessionMinutes / 40)) * 60000;
+                    const sessionBars = Math.floor(sessionMinutes / (synthInterval / 60000));
+                    
+                    const openPrice = livePrice - (livePrice * (liveChange / 100)); // Approx Open from Price/Change
+                    
+                    let count = 0;
+                    // Limit to 50 synth bars to avoid flooding
+                    while (synthTime < now - (synthInterval / 2) && count < 50) {
+                        const t = (count + 1) / (sessionBars + 1);
+                        const synthPrice = openPrice + (livePrice - openPrice) * t;
+                        data.push({
+                            time: synthTime,
+                            open: synthPrice,
+                            high: Math.max(synthPrice, openPrice, livePrice),
+                            low: Math.min(synthPrice, openPrice, livePrice),
+                            close: synthPrice,
+                            volume: 1000
+                        });
+                        synthTime += synthInterval;
+                        count++;
+                    }
                 }
             }
 
