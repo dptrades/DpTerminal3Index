@@ -19,11 +19,12 @@ interface MtaCacheEntry {
 }
 declare global {
     var _mtaCache: Map<string, MtaCacheEntry>;
+    var _mtaCacheV2: Map<string, MtaCacheEntry>;
 }
-if (!global._mtaCache) global._mtaCache = new Map();
+if (!global._mtaCacheV2) global._mtaCacheV2 = new Map();
 
-const MTA_TTL_MARKET = 60 * 1000;        // 1 minute — live data
-const MTA_TTL_OFFHRS = 30 * 60 * 1000;  // 30 minutes — no new data off hours
+const MTA_TTL_MARKET = 5 * 1000;         // 5 seconds — practically live
+const MTA_TTL_OFFHRS = 60 * 1000;        // 1 minute — no new data off hours
 
 export interface TimeframeData {
     timeframe: '1h' | '4h' | '1d' | '1w';  // 10m removed — too noisy, adds a full extra API call per load
@@ -85,6 +86,7 @@ export interface MultiTimeframeAnalysis {
     };
     dataSource: string;
     marketSession: 'PRE' | 'REG' | 'POST' | 'OFF';
+    lastUpdated: number;
 }
 
 // 1. Live Price Waterfall: Public -> Schwab -> Alpaca -> Yahoo
@@ -531,7 +533,8 @@ async function _fetchMtaUncached(symbol: string): Promise<MultiTimeframeAnalysis
             gammaSqueeze
         },
         dataSource: sourceString,
-        marketSession
+        marketSession,
+        lastUpdated: Date.now()
     };
 }
 
@@ -544,17 +547,9 @@ export async function fetchMultiTimeframeAnalysis(
     const session = publicClient.getMarketSession();
     const ttl = session === 'OFF' ? MTA_TTL_OFFHRS : MTA_TTL_MARKET;
 
-    if (!forceRefresh) {
-        const cached = global._mtaCache.get(symbol);
-        if (cached && (now - cached.timestamp < ttl)) {
-            console.log(`⚡ [MTA Cache] ${symbol} served from cache (${Math.round((now - cached.timestamp) / 1000)}s old)`);
-            return cached.data;
-        }
-    }
-
     const result = await _fetchMtaUncached(symbol);
     if (result) {
-        global._mtaCache.set(symbol, { data: result, timestamp: now });
+        global._mtaCacheV2.set(symbol, { data: result, timestamp: now });
     }
     return result;
 }
