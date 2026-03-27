@@ -2,13 +2,8 @@
  * Environment Variable Configuration
  * Centralizes environment variable access with validation and defaults
  */
-import { config } from 'dotenv';
-
-// Load .env.local if present (useful for standalone scripts/tsx)
-if (typeof window === 'undefined') {
-    config({ path: '.env.local' });
-    config(); // Also load default .env
-}
+// Environment variables are automatically loaded by Next.js in the app.
+// For standalone scripts, load dotenv in the script entry point instead of here.
 
 // Helper to get required env var (throws if missing in production)
 function getEnvOrThrow(key: string): string {
