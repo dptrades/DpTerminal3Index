@@ -1,3 +1,4 @@
+import { OHLCVData } from '../types/financial';
 import { fetchAlpacaBars, fetchAlpacaPrice } from './alpaca';
 import YahooFinance from 'yahoo-finance2';
 import { calculateIndicators, calculateConfluenceScore } from './indicators';
@@ -154,6 +155,54 @@ export async function fetchLivePrice(symbol: string): Promise<{ price: number, s
     return null;
 }
 
+/**
+ * Fetches 5-minute bars from Yahoo and aggregates them into 1-hour candles
+ * to provide real-time accuracy for the current session.
+ */
+async function fetchAggregatedYahoo1H(symbol: string, limit: number): Promise<OHLCVData[]> {
+    try {
+        const now = new Date();
+        const period1 = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // Last 7 days to be safe
+        const result = await yahooFinance.chart(symbol, { period1, interval: '5m' });
+        
+        if (!result || !result.quotes || result.quotes.length === 0) return [];
+
+        const aggregated: OHLCVData[] = [];
+        let currentBucket: OHLCVData | null = null;
+
+        result.quotes.forEach(q => {
+            if (!q.date || q.close === null) return;
+            
+            const date = new Date(q.date);
+            // Round down to the top of the hour
+            const bucketTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), 0, 0, 0).getTime();
+
+            if (!currentBucket || currentBucket.time !== bucketTime) {
+                if (currentBucket) aggregated.push(currentBucket);
+                currentBucket = {
+                    time: bucketTime,
+                    open: q.open!,
+                    high: q.high!,
+                    low: q.low!,
+                    close: q.close!,
+                    volume: q.volume || 0
+                };
+            } else {
+                currentBucket.high = Math.max(currentBucket.high, q.high!);
+                currentBucket.low = Math.min(currentBucket.low, q.low!);
+                currentBucket.close = q.close!;
+                currentBucket.volume += (q.volume || 0);
+            }
+        });
+
+        if (currentBucket) aggregated.push(currentBucket);
+        return aggregated.slice(-limit);
+    } catch (e) {
+        console.error(`[Aggregator] Failed to aggregate Yahoo 5m for ${symbol}`, e);
+        return [];
+    }
+}
+
 // 2. Multi-Level Timeframe Fallback Strategy
 async function fetchHistoricalData(symbol: string, alpacaTf: string, yahooTf: string, limit: number, schwabConfig?: any) {
     // Tier 1: Schwab Professional
@@ -190,9 +239,18 @@ async function fetchHistoricalData(symbol: string, alpacaTf: string, yahooTf: st
         console.warn(`[Waterfall] Alpaca historical failed for ${symbol}, falling to Yahoo...`);
     }
 
-    // Tier 3: Yahoo Finance
+    // Tier 3: Yahoo Finance (Optimized for Intraday)
     try {
         const now = new Date();
+        
+        // If 1H timeframe, attempt 5m aggregation for the current session's latest bars
+        if (yahooTf === '60m') {
+            const realtimeBars = await fetchAggregatedYahoo1H(symbol, limit);
+            if (realtimeBars.length > 5) {
+                return { bars: realtimeBars, source: 'Yahoo real-time (5m agg)' };
+            }
+        }
+
         let daysBack = (yahooTf === '1d') ? 365 * 3 : (yahooTf === '1wk') ? 365 * 10 : (yahooTf === '60m') ? 120 : (yahooTf === '5m') ? 20 : 45;
         const period1 = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
         const result = await yahooFinance.chart(symbol, { period1, interval: yahooTf as any });
