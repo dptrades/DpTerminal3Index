@@ -389,7 +389,7 @@ export default function PreMarketMovers() {
                         {lastUpdated && (
                             <div className="text-[10px] text-gray-500 font-mono hidden sm:block">
                                 <Clock className="w-3 h-3 inline mr-1" />
-                                {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                {lastUpdated.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: '2-digit', minute: '2-digit' })}
                             </div>
                         )}
                         <button

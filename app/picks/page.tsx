@@ -143,7 +143,7 @@ export default function TopPicksPage() {
                                 </span>
                                 {lastUpdated && (
                                     <span className="text-[10px] text-gray-300 font-mono">
-                                        Last Updated: {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                        Last Scan: {lastUpdated.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                                     </span>
                                 )}
                             </div>

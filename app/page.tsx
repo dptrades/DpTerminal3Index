@@ -526,7 +526,7 @@ export default function Dashboard() {
                   {lastUpdated && (
                     <div className="flex items-center gap-3 mt-1">
                       <span className="text-[10px] text-gray-400 font-mono">
-                        Last Updated: {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                        Last Updated: {lastUpdated.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                       </span>
                       <div className="flex items-center gap-2 px-2 py-0.5 bg-gray-800/50 rounded-full border border-gray-700/50">
                         <span className="text-[9px] text-gray-400 uppercase tracking-tighter font-bold">Refresh</span>

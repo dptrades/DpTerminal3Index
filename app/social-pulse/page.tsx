@@ -143,7 +143,7 @@ export default function SocialPulsePage() {
                                      {lastUpdated && (
                                         <div className="flex items-center gap-3 mt-1">
                                             <span className="text-[10px] text-gray-300 font-mono">
-                                                Last Updated: {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                Last Updated: {lastUpdated.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: '2-digit', minute: '2-digit' })}
                                             </span>
                                             <RefreshClock countdown={countdown} total={isMarketActive() ? 900 : 3600} label="Scan" size="xs" color="#F97316" />
                                         </div>
