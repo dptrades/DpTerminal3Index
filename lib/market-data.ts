@@ -1,6 +1,6 @@
 import { fetchAlpacaBars, fetchAlpacaPrice } from './alpaca';
 import YahooFinance from 'yahoo-finance2';
-import { calculateIndicators } from './indicators';
+import { calculateIndicators, calculateConfluenceScore } from './indicators';
 import { ConvictionStock } from '../types/stock';
 import { publicClient } from './public-api';
 import { schwabClient } from './schwab';
@@ -478,10 +478,9 @@ async function _fetchMtaUncached(symbol: string): Promise<MultiTimeframeAnalysis
             // Check if "Near" (within 0.5%)
             const isNear = [Math.abs(ema9Diff), Math.abs(ema21Diff), Math.abs(ema50Diff), Math.abs(ema200Diff)].some(d => d < 0.5);
 
-            // Determine Trend
-            let trend: 'BULLISH' | 'BEARISH' | 'NEUTRAL' = 'NEUTRAL';
-            if (last.close > (last.ema50 || 0)) trend = 'BULLISH';
-            else if (last.close < (last.ema50 || 0)) trend = 'BEARISH';
+            // Determine Trend using unified confluence logic
+            const score = calculateConfluenceScore(last);
+            const trend = score.trend;
 
             const macdData = last.macd ? {
                 macd: last.macd.MACD || 0,

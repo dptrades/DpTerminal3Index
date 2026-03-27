@@ -344,11 +344,13 @@ export function calculateConfluenceScore(latest: IndicatorData): ConfluenceResul
         bearScore += 5;
         bearSignals.push('Developing Bearish Momentum');
     } else if (rsi < 30) {
-        bullScore += 10;
-        bullSignals.push('RSI Oversold ⚠️');
+        // RSI < 30 is oversold (Price is dumping) - NOT a bull signal for Trend
+        bearScore += 5; 
+        bearSignals.push('RSI Oversold (Bearish Momentum) ⚠️');
     } else if (rsi > 80) {
-        bearScore += 10;
-        bearSignals.push('RSI Overbought ⚠️');
+        // RSI > 80 is overbought (Price is pumping) - NOT a bear signal for Trend
+        bullScore += 5;
+        bullSignals.push('RSI Overbought (Bullish Momentum) ⚠️');
     }
 
     // 3. TREND CONFIRMATION (MACD)
