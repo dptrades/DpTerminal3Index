@@ -46,7 +46,9 @@ export class SchwabClient {
             const response = await axios.post(AUTH_URL,
                 new URLSearchParams({
                     grant_type: 'refresh_token',
-                    refresh_token: this.refreshToken!
+                    refresh_token: this.refreshToken!,
+                    client_id: this.clientId,
+                    client_secret: this.clientSecret
                 }),
                 {
                     headers: {
@@ -68,6 +70,9 @@ export class SchwabClient {
                 this.throttledUntil = Date.now() + (30 * 1000);
             }
             console.error('[SchwabAPI] Failed to refresh token:', error.response?.data || error.message);
+            if (error.response?.data && typeof error.response.data === 'object') {
+                console.error('[SchwabAPI] Error Details:', JSON.stringify(error.response.data, null, 2));
+            }
         }
         return '';
     }

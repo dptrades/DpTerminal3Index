@@ -232,8 +232,8 @@ async function fetchHistoricalData(symbol: string, alpacaTf: string, yahooTf: st
             const isIndex = ['SPY', 'QQQ', 'IWM', '^GSPC', '^NDX', '^DJI'].includes(symbol.toUpperCase());
             const lastBarTime = new Date(bars[bars.length - 1].t).getTime();
             const staleHours = (Date.now() - lastBarTime) / (1000 * 60 * 60);
-            
-            if (isIndex && staleHours > 24) {
+
+            if (isIndex && staleHours > 1) {
                 console.warn(`[Waterfall] Alpaca bars for ${symbol} are ${staleHours.toFixed(1)}h stale. Rejecting for HF tiers.`);
                 // Fall through to next tier
             } else {
@@ -269,7 +269,7 @@ async function fetchHistoricalData(symbol: string, alpacaTf: string, yahooTf: st
                 const lastBarTime = data.t[data.t.length - 1] * 1000;
                 const staleHours = (Date.now() - lastBarTime) / (1000 * 60 * 60);
 
-                if (isIndex && staleHours > 24) {
+                if (isIndex && staleHours > 1) {
                     console.warn(`[Waterfall] Finnhub bars for ${symbol} are ${staleHours.toFixed(1)}h stale. Rejecting for HF tiers.`);
                 } else {
                     const bars = data.t.map((t: number, i: number) => ({
@@ -561,25 +561,30 @@ async function _fetchMtaUncached(symbol: string): Promise<MultiTimeframeAnalysis
                 
                 if (now > sessionStart) {
                     let synthTime = sessionStart;
-                    // We need at least 14 bars for RSI, so we increase granularity if today's session is short.
-                    // This creates a "momentum track" for today's price action from Open.
+                    // 60 bars for stability (RSI 14 + EMA 21 need warm-up)
                     const sessionMinutes = (now - sessionStart) / (1000 * 60);
-                    // 40 bars for stability (RSI 14 + EMA 21 need warm-up)
-                    const synthInterval = Math.max(2, Math.floor(sessionMinutes / 40)) * 60000;
+                    const synthInterval = Math.max(1, Math.floor(sessionMinutes / 60)) * 60000;
                     const sessionBars = Math.floor(sessionMinutes / (synthInterval / 60000));
                     
                     const openPrice = livePrice - (livePrice * (liveChange / 100)); // Approx Open from Price/Change
                     
                     let count = 0;
-                    // Limit to 50 synth bars to avoid flooding
-                    while (synthTime < now - (synthInterval / 2) && count < 50) {
+                    // Limit to 60 synth bars to avoid flooding
+                    while (synthTime < now - (synthInterval / 2) && count < 60) {
                         const t = (count + 1) / (sessionBars + 1);
-                        const synthPrice = openPrice + (livePrice - openPrice) * t;
+                        const linearPrice = openPrice + (livePrice - openPrice) * t;
+                        
+                        // ADD STOCHASTIC NOISE (Stochastic Walk)
+                        // This prevents RSI 100/0 by creating wiggles/volatility
+                        const noiseFactor = openPrice * 0.0005; // 0.05% volatility
+                        const noise = (Math.random() - 0.5) * noiseFactor;
+                        const synthPrice = linearPrice + noise;
+
                         data.push({
                             time: synthTime,
                             open: synthPrice,
-                            high: Math.max(synthPrice, openPrice, livePrice),
-                            low: Math.min(synthPrice, openPrice, livePrice),
+                            high: Math.max(synthPrice, openPrice, livePrice) + (Math.abs(noise) * 0.5),
+                            low: Math.min(synthPrice, openPrice, livePrice) - (Math.abs(noise) * 0.5),
                             close: synthPrice,
                             volume: 1000
                         });
