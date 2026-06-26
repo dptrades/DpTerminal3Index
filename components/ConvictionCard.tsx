@@ -1,7 +1,6 @@
-import React from 'react';
-import Link from 'next/link';
+import React, { useState } from 'react';
 import type { ConvictionStock } from '../types/stock';
-import { TrendingUp, Users, BarChart3, PieChart, Info } from 'lucide-react';
+import { TrendingUp, Users, BarChart3, PieChart, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 
 interface Props {
     stock: ConvictionStock;
@@ -9,6 +8,8 @@ interface Props {
 }
 
 export default function ConvictionCard({ stock, onSelect }: Props) {
+    const [isExpanded, setIsExpanded] = useState(false);
+
     // Color coding for score
     const getScoreColor = (s: number) => {
         if (s >= 80) return 'text-green-400';
@@ -17,30 +18,90 @@ export default function ConvictionCard({ stock, onSelect }: Props) {
         return 'text-red-400';
     };
 
-    const getBarColor = (s: number) => {
-        if (s >= 80) return 'bg-green-500';
-        if (s >= 60) return 'bg-blue-500';
-        if (s >= 40) return 'bg-yellow-500';
-        return 'bg-red-500';
-    };
-
     const isCall = stock.suggestedOption?.type === 'CALL';
     const isPut = stock.suggestedOption?.type === 'PUT';
     const cardBg = isCall ? 'bg-green-800' : isPut ? 'bg-red-800' : 'bg-gray-800';
     const cardBorder = isCall ? 'border-green-500 hover:border-green-400' : isPut ? 'border-red-500 hover:border-red-400' : 'border-gray-700 hover:border-gray-500';
 
+    const handleSelect = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Avoid triggering expansion toggling
+        if (onSelect) {
+            onSelect(stock.symbol);
+        }
+    };
+
+    // Collapsed View
+    if (!isExpanded) {
+        return (
+            <div
+                onClick={() => setIsExpanded(true)}
+                className={`${cardBg} border ${cardBorder} rounded-xl p-4 transition-all shadow-md cursor-pointer hover:brightness-110 flex items-center justify-between w-full`}
+            >
+                {/* Ticker, Sector, Name */}
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div 
+                        onClick={handleSelect}
+                        className="flex items-center gap-1 bg-gray-900/60 hover:bg-blue-600/30 px-2.5 py-1 rounded-lg border border-gray-700/50 transition-all group shrink-0"
+                        title="Go to Live Dashboard"
+                    >
+                        <span className="text-lg font-bold text-white tracking-tight group-hover:text-blue-400 transition-colors">{stock.symbol}</span>
+                        <ExternalLink className="w-3.5 h-3.5 text-gray-400 group-hover:text-blue-400 shrink-0" />
+                    </div>
+                    <div className="min-w-0">
+                        <span className="text-[9px] text-gray-200 bg-gray-900/60 px-2 py-0.5 rounded border border-gray-700/50 uppercase tracking-widest block w-fit shrink-0 truncate max-w-[100px]">
+                            {stock.sector || 'Stock'}
+                        </span>
+                        <p className="text-[10px] text-gray-400 truncate max-w-[140px] mt-0.5 hidden sm:block">{stock.name}</p>
+                    </div>
+                </div>
+
+                {/* Price and 24h change */}
+                <div className="text-right shrink-0 mx-4">
+                    <div className="text-sm font-mono font-bold text-white">
+                        ${stock.price?.toFixed(2) ?? 'N/A'}
+                    </div>
+                    <div className={`text-[10px] font-bold ${stock.change24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {stock.change24h > 0 ? '+' : ''}{stock.change24h?.toFixed(2) ?? '0.00'}%
+                    </div>
+                </div>
+
+                {/* Signal Badge */}
+                <div className="shrink-0 mr-4">
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${stock.metrics.trend === 'BULLISH' ? 'bg-green-900/40 text-green-400 border border-green-500/20' : 'bg-red-900/40 text-red-400 border border-red-500/20'}`}>
+                        {stock.metrics.trend}
+                    </span>
+                </div>
+
+                {/* Score and Toggle */}
+                <div className="flex items-center gap-3 shrink-0">
+                    <div className="text-center bg-gray-900/80 px-2.5 py-1 rounded-lg border border-gray-800/80 min-w-[56px]">
+                        <div className={`text-lg font-mono font-bold ${getScoreColor(stock.score)}`}>{stock.score}</div>
+                        <div className="text-[8px] text-gray-300 uppercase font-bold tracking-wider -mt-1">Alpha</div>
+                    </div>
+                    <ChevronDown className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
+                </div>
+            </div>
+        );
+    }
+
+    // Expanded View (Original detailed card layout)
     return (
         <div
-            onClick={() => onSelect && onSelect(stock.symbol)}
-            className={`${cardBg} border ${cardBorder} rounded-xl p-5 transition-all shadow-lg cursor-pointer transform hover:-translate-y-1`}
+            onClick={() => setIsExpanded(false)}
+            className={`${cardBg} border ${cardBorder} rounded-xl p-5 transition-all shadow-lg cursor-pointer`}
         >
             {/* Header */}
             <div className="flex justify-between items-start mb-4">
                 <div>
                     <div className="flex items-center gap-2 mb-1">
-                        <Link href={`/?symbol=${stock.symbol}&market=stocks`} className="hover:underline cursor-pointer">
-                            <h3 className="text-2xl font-bold text-white tracking-tight hover:text-blue-400 transition-colors">{stock.symbol}</h3>
-                        </Link>
+                        <div 
+                            onClick={handleSelect}
+                            className="flex items-center gap-1 hover:underline cursor-pointer group"
+                            title="Go to Live Dashboard"
+                        >
+                            <h3 className="text-2xl font-bold text-white tracking-tight group-hover:text-blue-400 transition-colors">{stock.symbol}</h3>
+                            <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-blue-400" />
+                        </div>
                         <span className="text-[10px] text-gray-100 bg-gray-700/50 px-2 py-0.5 rounded border border-gray-600 uppercase tracking-widest">{stock.sector || 'Stock'}</span>
                     </div>
                     <p className="text-xs text-gray-100 mb-2 truncate max-w-[180px]">{stock.name}</p>
@@ -54,9 +115,14 @@ export default function ConvictionCard({ stock, onSelect }: Props) {
                     </div>
                 </div>
 
-                <div className="text-center bg-gray-900 p-2 rounded-lg border border-gray-800">
-                    <div className={`text-3xl font-bold ${getScoreColor(stock.score)}`}>{stock.score}</div>
-                    <div className="text-[10px] text-gray-200 uppercase font-bold tracking-wider">Alpha Score</div>
+                <div className="flex items-center gap-3">
+                    <div className="text-center bg-gray-900 p-2 rounded-lg border border-gray-850">
+                        <div className={`text-3xl font-bold ${getScoreColor(stock.score)}`}>{stock.score}</div>
+                        <div className="text-[10px] text-gray-200 uppercase font-bold tracking-wider">Alpha Score</div>
+                    </div>
+                    <div className="p-1.5 bg-gray-900/50 hover:bg-gray-700 rounded-lg text-gray-400 transition-colors">
+                        <ChevronUp className="w-5 h-5 text-gray-400 hover:text-white" />
+                    </div>
                 </div>
             </div>
 
@@ -132,7 +198,6 @@ export default function ConvictionCard({ stock, onSelect }: Props) {
                     </div>
                 </div>
             )}
-
         </div>
     );
 }
