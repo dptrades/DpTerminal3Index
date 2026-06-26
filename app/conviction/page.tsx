@@ -306,15 +306,6 @@ export default function ConvictionPage() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="p-5 rounded-xl bg-white/5 border border-white/10">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-                                                <span className="font-bold text-white text-sm uppercase tracking-wider">Smart Discovery Multiplier (40%)</span>
-                                            </div>
-                                            <p className="text-sm text-gray-100 leading-relaxed">
-                                                Unusual Options Flow, Volume Breakouts, and Volatility News.
-                                            </p>
-                                        </div>
                                     </div>
                                     <div className="mt-8 flex justify-end">
                                         <button onClick={() => setShowLogic(false)} className="bg-gray-800 hover:bg-gray-700 text-white px-6 py-2 rounded-xl border border-gray-700 transition-all font-bold text-sm">I Understand</button>
