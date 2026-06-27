@@ -27,6 +27,12 @@
     },
     "app/api/options/discovery/route.ts": {
       "maxDuration": 60
+    },
+    "app/api/cron/forward-test/route.ts": {
+      "maxDuration": 300
+    },
+    "app/api/forward-test/route.ts": {
+      "maxDuration": 300
     }
   }
 }

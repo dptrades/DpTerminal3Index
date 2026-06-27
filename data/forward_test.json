@@ -1,0 +1,30 @@
+{
+  "config": {
+    "convictionThreshold": 60,
+    "stopAtrMultiple": 2,
+    "targetAtrMultiple": 3,
+    "maxHoldingDays": 30,
+    "riskPercent": 1.5,
+    "maxPositions": 6,
+    "maxPerSector": 2,
+    "maxNotional": 2000,
+    "initialBalance": 1000,
+    "cashModeVixThreshold": 30,
+    "blacklistLookback": 20,
+    "blacklistMinWinRate": 0.25,
+    "blacklistSuspendDays": 30
+  },
+  "startDate": "2026-06-27",
+  "account": {
+    "cash": 1000,
+    "equity": 1000,
+    "initialBalance": 1000
+  },
+  "positions": [],
+  "trades": [],
+  "signals": [],
+  "dailyLog": [],
+  "blacklist": {},
+  "lastRunDate": "",
+  "totalRuns": 0
+}
