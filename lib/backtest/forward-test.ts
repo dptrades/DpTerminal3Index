@@ -24,6 +24,9 @@ const CONFIG = {
     blacklistLookback: 20,
     blacklistMinWinRate: 0.25,
     blacklistSuspendDays: 30,
+    scaleOut1Pct: 0.30,         // sell 30% at 1x ATR profit
+    scaleOut2Pct: 0.30,         // sell 30% at 2x ATR profit
+    trailingStopAtr: 1.5,       // trail remaining 40% at 1.5x ATR
 };
 
 // ── Types ───────────────────────────────────────────────────────────────────
@@ -39,6 +42,10 @@ export interface FTPosition {
     entryScore: number;
     entryReasons: string[];
     source: 'top_picks' | 'alpha_hunter' | 'both';
+    atr: number;
+    originalQty: number;
+    scaleLevel: number;        // 0=full, 1=after scale1, 2=after scale2
+    highWaterMark: number;
 }
 
 export interface FTTrade {
@@ -48,7 +55,7 @@ export interface FTTrade {
     entryDate: string;
     exitPrice: number;
     exitDate: string;
-    exitReason: 'stop' | 'target' | 'time_exit' | 'manual';
+    exitReason: 'stop' | 'target' | 'time_exit' | 'manual' | 'scale_1' | 'scale_2' | 'trail_stop';
     pnl: number;
     pnlPercent: number;
     holdingDays: number;
@@ -334,33 +341,89 @@ export async function runForwardTest(): Promise<{ state: ForwardTestState; summa
     const cashMode = await checkCashMode();
     logs.push(`VIX: ${cashMode.vix.toFixed(1)}, SPY<200EMA: ${cashMode.spyBelow200}, Cash Mode: ${cashMode.active}`);
 
-    // ── Step 2: Process exits on existing positions ──
-    const toClose: { pos: FTPosition; price: number; reason: 'stop' | 'target' | 'time_exit' }[] = [];
+    // ── Step 2: Process exits with scale-out logic ──
+    const toFullClose: { pos: FTPosition; price: number; reason: FTTrade['exitReason'] }[] = [];
+    const toPartialClose: { pos: FTPosition; price: number; sellQty: number; reason: 'scale_1' | 'scale_2'; newStop: number }[] = [];
 
     for (const pos of state.positions) {
         try {
             const liveData = await fetchLivePrice(pos.symbol);
             const price = (liveData as any)?.price || pos.entryPrice;
+            const atr = pos.atr || (pos.entryPrice * 0.02);
 
+            // Update high water mark
+            if (price > pos.highWaterMark) pos.highWaterMark = price;
+
+            // Check stop-loss / trailing stop
             if (price <= pos.stopLoss) {
-                toClose.push({ pos, price: pos.stopLoss, reason: 'stop' });
-                continue;
-            }
-            if (price >= pos.takeProfit) {
-                toClose.push({ pos, price: pos.takeProfit, reason: 'target' });
+                const reason: FTTrade['exitReason'] = pos.scaleLevel >= 2 ? 'trail_stop' : 'stop';
+                toFullClose.push({ pos, price: pos.stopLoss, reason });
                 continue;
             }
 
+            // Scale-out level 1: entry + 1x ATR
+            const scale1Price = pos.entryPrice + atr;
+            if (pos.scaleLevel === 0 && price >= scale1Price) {
+                const sellQty = Math.max(1, Math.floor(pos.originalQty * CONFIG.scaleOut1Pct));
+                if (sellQty < pos.qty) {
+                    toPartialClose.push({ pos, price: scale1Price, sellQty, reason: 'scale_1', newStop: pos.entryPrice });
+                } else {
+                    toFullClose.push({ pos, price: scale1Price, reason: 'scale_1' });
+                }
+                continue;
+            }
+
+            // Scale-out level 2: entry + 2x ATR
+            const scale2Price = pos.entryPrice + (atr * 2);
+            if (pos.scaleLevel === 1 && price >= scale2Price) {
+                const sellQty = Math.max(1, Math.floor(pos.originalQty * CONFIG.scaleOut2Pct));
+                if (sellQty < pos.qty) {
+                    toPartialClose.push({ pos, price: scale2Price, sellQty, reason: 'scale_2', newStop: scale1Price });
+                } else {
+                    toFullClose.push({ pos, price: scale2Price, reason: 'scale_2' });
+                }
+                continue;
+            }
+
+            // Trailing stop for remaining shares (after scale 2)
+            if (pos.scaleLevel >= 2) {
+                const trailStop = pos.highWaterMark - (atr * CONFIG.trailingStopAtr);
+                if (trailStop > pos.stopLoss) pos.stopLoss = trailStop;
+            }
+
+            // Time exit
             const daysHeld = Math.round((new Date(today).getTime() - new Date(pos.entryDate).getTime()) / (1000 * 3600 * 24));
             if (daysHeld >= CONFIG.maxHoldingDays) {
-                toClose.push({ pos, price, reason: 'time_exit' });
+                toFullClose.push({ pos, price, reason: 'time_exit' });
             }
         } catch (e) {
             console.error(`[ForwardTest] Exit check failed for ${pos.symbol}:`, e);
         }
     }
 
-    for (const { pos, price, reason } of toClose) {
+    // Process partial closes (scale-outs)
+    for (const { pos, price, sellQty, reason, newStop } of toPartialClose) {
+        const pnl = (price - pos.entryPrice) * sellQty;
+        const pnlPct = ((price - pos.entryPrice) / pos.entryPrice) * 100;
+        const holdDays = Math.round((new Date(today).getTime() - new Date(pos.entryDate).getTime()) / (1000 * 3600 * 24));
+
+        state.trades.push({
+            symbol: pos.symbol, qty: sellQty, entryPrice: pos.entryPrice,
+            entryDate: pos.entryDate, exitPrice: price, exitDate: today,
+            exitReason: reason, pnl, pnlPercent: pnlPct,
+            holdingDays: holdDays, entryScore: pos.entryScore, sector: pos.sector,
+            source: pos.source,
+        });
+        state.account.cash += sellQty * price;
+        pos.qty -= sellQty;
+        pos.stopLoss = newStop;
+        pos.scaleLevel += 1;
+        exitsExecuted++;
+        logs.push(`SCALE ${pos.symbol}: ${reason} — sold ${sellQty} @ $${price.toFixed(2)} | PnL: $${pnl.toFixed(2)} (+${pnlPct.toFixed(1)}%) | ${pos.qty} shares remain, stop → $${newStop.toFixed(2)}`);
+    }
+
+    // Process full closes
+    for (const { pos, price, reason } of toFullClose) {
         const pnl = (price - pos.entryPrice) * pos.qty;
         const pnlPct = ((price - pos.entryPrice) / pos.entryPrice) * 100;
         const holdDays = Math.round((new Date(today).getTime() - new Date(pos.entryDate).getTime()) / (1000 * 3600 * 24));
@@ -378,6 +441,9 @@ export async function runForwardTest(): Promise<{ state: ForwardTestState; summa
         exitsExecuted++;
         logs.push(`EXIT ${pos.symbol}: ${reason} @ $${price.toFixed(2)} | PnL: $${pnl.toFixed(2)} (${pnlPct.toFixed(1)}%) | Source: ${pos.source}`);
     }
+
+    // Remove positions with 0 qty
+    state.positions = state.positions.filter(p => p.qty > 0);
 
     // ── Step 3: Discover candidates from live scanners and enter ──
 
@@ -427,9 +493,10 @@ export async function runForwardTest(): Promise<{ state: ForwardTestState; summa
                                 entryDate: today, stopLoss, takeProfit,
                                 sector: c.sector, entryScore: c.techScore,
                                 entryReasons: c.reasons, source: c.source,
+                                atr: c.atr, originalQty: qty, scaleLevel: 0, highWaterMark: c.price,
                             });
                             entriesExecuted++;
-                            logs.push(`ENTRY ${c.symbol}: ${qty} shares @ $${c.price.toFixed(2)} | Tech:${c.techScore} Conv:${c.convictionScore} | Stop:$${stopLoss.toFixed(2)} Target:$${takeProfit.toFixed(2)} | ${c.source}`);
+                            logs.push(`ENTRY ${c.symbol}: ${qty} shares @ $${c.price.toFixed(2)} | Tech:${c.techScore} Conv:${c.convictionScore} | Stop:$${stopLoss.toFixed(2)} | Scale1:$${(c.price + c.atr).toFixed(2)} Scale2:$${(c.price + c.atr * 2).toFixed(2)} | ${c.source}`);
                         }
                     }
                 }
