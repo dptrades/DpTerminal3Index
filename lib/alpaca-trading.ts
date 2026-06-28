@@ -256,6 +256,62 @@ export async function getOrders(status: 'open' | 'closed' | 'all' = 'all', limit
 }
 
 /**
+ * Submit a market sell order (for scale-out partial exits)
+ */
+export async function submitMarketSell(symbol: string, qty: number): Promise<AlpacaOrder | null> {
+    if (qty <= 0) return null;
+    try {
+        const response = await fetch(`${PAPER_API_URL}/v2/orders`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({
+                symbol, qty: qty.toString(), side: 'sell',
+                type: 'market', time_in_force: 'day',
+            }),
+            cache: 'no-store'
+        });
+        if (!response.ok) {
+            console.error('[Alpaca Trading] Sell error:', await response.text());
+            return null;
+        }
+        const order = await response.json();
+        console.log(`[Alpaca Trading] Sell order submitted: ${symbol} x${qty} -> ${order.id}`);
+        return order;
+    } catch (e) {
+        console.error('[Alpaca Trading] Failed to submit sell:', e);
+        return null;
+    }
+}
+
+/**
+ * Submit a market buy order (simple, no bracket)
+ */
+export async function submitMarketBuy(symbol: string, qty: number): Promise<AlpacaOrder | null> {
+    if (qty <= 0) return null;
+    try {
+        const response = await fetch(`${PAPER_API_URL}/v2/orders`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({
+                symbol, qty: qty.toString(), side: 'buy',
+                type: 'market', time_in_force: 'day',
+            }),
+            cache: 'no-store'
+        });
+        if (!response.ok) {
+            console.error('[Alpaca Trading] Buy error:', await response.text());
+            return null;
+        }
+        const order = await response.json();
+        console.log(`[Alpaca Trading] Buy order submitted: ${symbol} x${qty} -> ${order.id}`);
+        return order;
+    } catch (e) {
+        console.error('[Alpaca Trading] Failed to submit buy:', e);
+        return null;
+    }
+}
+
+/**
  * Cancel an order
  */
 export async function cancelOrder(orderId: string): Promise<boolean> {
