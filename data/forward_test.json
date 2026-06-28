@@ -1,0 +1,6154 @@
+{
+  "config": {
+    "convictionThreshold": 60,
+    "stopAtrMultiple": 2,
+    "targetAtrMultiple": 3,
+    "maxHoldingDays": 30,
+    "riskPercent": 1.5,
+    "maxPositions": 6,
+    "maxPerSector": 2,
+    "maxNotional": 2000,
+    "initialBalance": 1000,
+    "cashModeVixThreshold": 30,
+    "blacklistLookback": 20,
+    "blacklistMinWinRate": 0.25,
+    "blacklistSuspendDays": 30,
+    "scaleOut1Pct": 0.3,
+    "scaleOut2Pct": 0.3,
+    "trailingStopAtr": 1.5
+  },
+  "startDate": "2026-06-28",
+  "account": {
+    "cash": 9.027999999999935,
+    "equity": 991.6411999999999,
+    "initialBalance": 1000
+  },
+  "positions": [
+    {
+      "symbol": "APH",
+      "qty": 1,
+      "entryPrice": 164,
+      "entryDate": "2026-06-28",
+      "stopLoss": 151.17072814162634,
+      "takeProfit": 183.2439077875605,
+      "sector": "Technology",
+      "entryScore": 100,
+      "entryReasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "source": "top_picks",
+      "atr": 6.41463592918683,
+      "originalQty": 1,
+      "scaleLevel": 0,
+      "highWaterMark": 164
+    },
+    {
+      "symbol": "C",
+      "qty": 2,
+      "entryPrice": 141.7626,
+      "entryDate": "2026-06-28",
+      "stopLoss": 134.51869980324824,
+      "takeProfit": 152.6284502951276,
+      "sector": "Financials",
+      "entryScore": 100,
+      "entryReasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "source": "both",
+      "atr": 3.6219500983758754,
+      "originalQty": 2,
+      "scaleLevel": 0,
+      "highWaterMark": 141.7626
+    },
+    {
+      "symbol": "KO",
+      "qty": 4,
+      "entryPrice": 82.4317,
+      "entryDate": "2026-06-28",
+      "stopLoss": 79.25304689685595,
+      "takeProfit": 87.19967965471609,
+      "sector": "Consumer Staples",
+      "entryScore": 100,
+      "entryReasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "source": "both",
+      "atr": 1.5893265515720292,
+      "originalQty": 4,
+      "scaleLevel": 0,
+      "highWaterMark": 82.4317
+    },
+    {
+      "symbol": "DRI",
+      "qty": 1,
+      "entryPrice": 213.72,
+      "entryDate": "2026-06-28",
+      "stopLoss": 201.44970719209206,
+      "takeProfit": 232.12543921186187,
+      "sector": "Consumer Cyclical",
+      "entryScore": 100,
+      "entryReasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "source": "top_picks",
+      "atr": 6.135146403953963,
+      "originalQty": 1,
+      "scaleLevel": 0,
+      "highWaterMark": 213.72
+    }
+  ],
+  "trades": [],
+  "signals": [
+    {
+      "date": "2026-06-28",
+      "symbol": "APH",
+      "score": 88,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "entered",
+      "price": 164,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "C",
+      "score": 88,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "entered",
+      "price": 141.7626,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "KO",
+      "score": 87,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "entered",
+      "price": 82.4317,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GLW",
+      "score": 86,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 220.79,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DRI",
+      "score": 83,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "entered",
+      "price": 213.72,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "LIN",
+      "score": 81,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 519.19,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ETR",
+      "score": 81,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 115.91,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ABNB",
+      "score": 80,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 145.78,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GWW",
+      "score": 80,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 1353.6099853515625,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "JPM",
+      "score": 79,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 329.0559,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "M",
+      "score": 77,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 25.96,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "URI",
+      "score": 77,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 1121.6600341796875,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AFRM",
+      "score": 76,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 79.33,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AXP",
+      "score": 75,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 340.3661,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "USB",
+      "score": 75,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 60.4159,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MRNA",
+      "score": 75,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 67.3,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "LYV",
+      "score": 75,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 179.4600067138672,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DOV",
+      "score": 75,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 225.9600067138672,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "D",
+      "score": 74,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 69.1,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "VLO",
+      "score": 69,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 259.3699951171875,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "JWN",
+      "score": 63,
+      "techScore": 100,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 24.66,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PNC",
+      "score": 85,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 244.9824,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AME",
+      "score": 84,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 237.52000427246094,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MNST",
+      "score": 81,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 96.37999725341797,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "UNH",
+      "score": 80,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 427.5,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MRK",
+      "score": 80,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 128.51,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "KMI",
+      "score": 80,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 33.189998626708984,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GE",
+      "score": 79,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 367.5,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CB",
+      "score": 79,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 341.4461,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BIIB",
+      "score": 79,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 215.5,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CVS",
+      "score": 78,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 104.3,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "EW",
+      "score": 78,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 89.6418,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "EA",
+      "score": 78,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 205.25,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XEL",
+      "score": 78,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 82.23,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ROK",
+      "score": 75,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 476.82000732421875,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ETSY",
+      "score": 73,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 78.04,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TGT",
+      "score": 71,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 140.39,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ILMN",
+      "score": 69,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 176.55,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SO",
+      "score": 69,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 97,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WEC",
+      "score": 69,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 118.8521,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ES",
+      "score": 69,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 73.48,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SWK",
+      "score": 67,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 91.9800033569336,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ED",
+      "score": 64,
+      "techScore": 98,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 112.0524,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MU",
+      "score": 89,
+      "techScore": 96,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 1134.9,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HWM",
+      "score": 82,
+      "techScore": 96,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 268.8699951171875,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "LRCX",
+      "score": 80,
+      "techScore": 96,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 379.27,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ALGN",
+      "score": 80,
+      "techScore": 96,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 178.43,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CAT",
+      "score": 78,
+      "techScore": 96,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 1000.99,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CMI",
+      "score": 77,
+      "techScore": 96,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 685.8699951171875,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PCAR",
+      "score": 71,
+      "techScore": 96,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 120.68000030517578,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "VRTX",
+      "score": 85,
+      "techScore": 94,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 490.99,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "JNJ",
+      "score": 81,
+      "techScore": 94,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 254.5,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ABBV",
+      "score": 81,
+      "techScore": 94,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 253.3454,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WMB",
+      "score": 80,
+      "techScore": 94,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 77.91999816894531,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ALL",
+      "score": 79,
+      "techScore": 94,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 239.61,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AEP",
+      "score": 78,
+      "techScore": 94,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 138.33,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TRV",
+      "score": 75,
+      "techScore": 94,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 326.5,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HON",
+      "score": 72,
+      "techScore": 94,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 231.86,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WSM",
+      "score": 70,
+      "techScore": 94,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 239.19,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TDG",
+      "score": 85,
+      "techScore": 92,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 1324.56005859375,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PH",
+      "score": 80,
+      "techScore": 92,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 968.9199829101562,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "V",
+      "score": 79,
+      "techScore": 92,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 335.42,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TTWO",
+      "score": 77,
+      "techScore": 92,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 238.52999877929688,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ANF",
+      "score": 75,
+      "techScore": 92,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 91.51,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NVS",
+      "score": 72,
+      "techScore": 92,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 155.41,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DE",
+      "score": 71,
+      "techScore": 92,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 613.239990234375,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MMM",
+      "score": 67,
+      "techScore": 92,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 164.00999450683594,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ITW",
+      "score": 60,
+      "techScore": 92,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 267.7099914550781,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MET",
+      "score": 81,
+      "techScore": 90,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 85.95,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BAC",
+      "score": 80,
+      "techScore": 90,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 57.92,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CTVA",
+      "score": 78,
+      "techScore": 90,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 82.62000274658203,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "STT",
+      "score": 73,
+      "techScore": 90,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 169.5,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DUK",
+      "score": 73,
+      "techScore": 90,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 127.463,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WFC",
+      "score": 82,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 83.8615,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "RTX",
+      "score": 80,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "MACD Bullish Cross",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 187.99000549316406,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ECL",
+      "score": 77,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 283.6499938964844,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PEG",
+      "score": 76,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 83.58,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TFC",
+      "score": 75,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 50.49,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FAST",
+      "score": 74,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 47.1,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SOFI",
+      "score": 73,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "MACD Bullish Cross",
+        "Bollinger Uptrend",
+        "Pattern: Bullish Engulfing (Bullish)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 17.82,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "UPST",
+      "score": 71,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross",
+        "Pattern: Bullish Engulfing (Bullish)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 33.54,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "W",
+      "score": 71,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 94.47000122070312,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SHW",
+      "score": 71,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 344.07000732421875,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PG",
+      "score": 70,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 149.628,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "KMB",
+      "score": 68,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 109.37000274658203,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BAX",
+      "score": 66,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 22.1717,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DLTR",
+      "score": 63,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 123.87,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "KSS",
+      "score": 59,
+      "techScore": 88,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 19.26,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FTNT",
+      "score": 77,
+      "techScore": 86,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 152,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CROX",
+      "score": 71,
+      "techScore": 86,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 127.76,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SKX",
+      "score": 61,
+      "techScore": 86,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 63.13,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DDOG",
+      "score": 80,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 239.23,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SNOW",
+      "score": 78,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 247.06,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PPL",
+      "score": 78,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 37.02000045776367,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "OKTA",
+      "score": 76,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 123.55,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SRE",
+      "score": 75,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 94.27,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BBY",
+      "score": 74,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 77.71,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CRWD",
+      "score": 73,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 701.0774,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "COF",
+      "score": 72,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 203,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DG",
+      "score": 69,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 119.51,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PGR",
+      "score": 67,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 224.25,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PRU",
+      "score": 66,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 108.25,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SYY",
+      "score": 62,
+      "techScore": 84,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 82.81999969482422,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AMAT",
+      "score": 84,
+      "techScore": 82,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum"
+      ],
+      "action": "skipped_no_cash",
+      "price": 630.51,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PANW",
+      "score": 77,
+      "techScore": 82,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 303.08,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HUM",
+      "score": 68,
+      "techScore": 82,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 383.84,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ASML",
+      "score": 83,
+      "techScore": 80,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 1788.06,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HPE",
+      "score": 80,
+      "techScore": 80,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Price at Lower BB (Support)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 43.6298,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "YUM",
+      "score": 77,
+      "techScore": 80,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 156.41,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HOOD",
+      "score": 74,
+      "techScore": 80,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 98.69,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TMO",
+      "score": 72,
+      "techScore": 80,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 513.7642,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NTAP",
+      "score": 72,
+      "techScore": 80,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Price at Lower BB (Support)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 152.45,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HD",
+      "score": 70,
+      "techScore": 80,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 349.414,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FE",
+      "score": 70,
+      "techScore": 80,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 48.470001220703125,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "EXC",
+      "score": 62,
+      "techScore": 80,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 47.3924,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "RH",
+      "score": 60,
+      "techScore": 80,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 159.04,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "LLY",
+      "score": 83,
+      "techScore": 78,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 1216.875,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ETN",
+      "score": 83,
+      "techScore": 78,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 402.67999267578125,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AEO",
+      "score": 69,
+      "techScore": 78,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "MACD Bullish Cross",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 17.88,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CL",
+      "score": 66,
+      "techScore": 78,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 92.06999969482422,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HIG",
+      "score": 70,
+      "techScore": 76,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 131.17,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CSCO",
+      "score": 79,
+      "techScore": 74,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Bollinger Breakout (Overextended Down)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 114.15,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "UNP",
+      "score": 80,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 268.8972,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DELL",
+      "score": 80,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 399.4972,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WDC",
+      "score": 76,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 585,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AZN",
+      "score": 76,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 188.41,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DHR",
+      "score": 74,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 197,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MRVL",
+      "score": 74,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 265.97,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "STM",
+      "score": 74,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 71.3,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MS",
+      "score": 73,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 212.5,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SYK",
+      "score": 73,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 332.71,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "COR",
+      "score": 73,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 286.13,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "STX",
+      "score": 72,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 900.8,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ABT",
+      "score": 71,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 94.12,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "STZ",
+      "score": 70,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 146.3000030517578,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BDX",
+      "score": 69,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 155.92,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XYL",
+      "score": 63,
+      "techScore": 72,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Strong Bullish Momentum",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 116.44999694824219,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MA",
+      "score": 82,
+      "techScore": 70,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "MACD Bullish Cross",
+        "Pattern: Bullish Engulfing (Bullish)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 499,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CDNS",
+      "score": 77,
+      "techScore": 70,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Pattern: Piercing Line (Bullish)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 377.2097,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PM",
+      "score": 76,
+      "techScore": 70,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 180.7733,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HLT",
+      "score": 74,
+      "techScore": 70,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Price at Lower BB (Support)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 332.866,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AMD",
+      "score": 73,
+      "techScore": 70,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 518.7665,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GS",
+      "score": 72,
+      "techScore": 70,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Price at Lower BB (Support)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 1019.6284,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SHOP",
+      "score": 70,
+      "techScore": 70,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "MACD Bullish Cross",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 116.68,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SIRI",
+      "score": 67,
+      "techScore": 70,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 28.350000381469727,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "UBER",
+      "score": 67,
+      "techScore": 68,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 75.45,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TWLO",
+      "score": 76,
+      "techScore": 64,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200"
+      ],
+      "action": "skipped_no_cash",
+      "price": 191.57,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AON",
+      "score": 74,
+      "techScore": 64,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_no_cash",
+      "price": 328.6841,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "IBM",
+      "score": 68,
+      "techScore": 64,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200"
+      ],
+      "action": "skipped_no_cash",
+      "price": 271.2536,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NET",
+      "score": 62,
+      "techScore": 64,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200"
+      ],
+      "action": "skipped_no_cash",
+      "price": 237.2357,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "STLD",
+      "score": 78,
+      "techScore": 62,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Price at Lower BB (Support)",
+        "Pattern: Doji (Indecision)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 245.49000549316406,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ANET",
+      "score": 77,
+      "techScore": 62,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 158.25,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DXCM",
+      "score": 77,
+      "techScore": 62,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Pattern: Bullish Engulfing (Bullish)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 70.14,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NUE",
+      "score": 74,
+      "techScore": 62,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Price at Lower BB (Support)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 239.77999877929688,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "EMR",
+      "score": 72,
+      "techScore": 62,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Pattern: Doji (Indecision)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 143.49000549316406,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GD",
+      "score": 70,
+      "techScore": 62,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)",
+        "Pattern: Doji (Indecision)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 346.7099914550781,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MAR",
+      "score": 69,
+      "techScore": 62,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "EMA Stack Bullish (Short > Mid > Long)"
+      ],
+      "action": "skipped_no_cash",
+      "price": 377.31,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BMY",
+      "score": 62,
+      "techScore": 62,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_no_cash",
+      "price": 57.4,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SCHW",
+      "score": 78,
+      "techScore": 56,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200"
+      ],
+      "action": "skipped_bearish",
+      "price": 90.6716,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "STE",
+      "score": 69,
+      "techScore": 54,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "MACD Bullish Cross"
+      ],
+      "action": "skipped_threshold",
+      "price": 215.6776,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MDLZ",
+      "score": 67,
+      "techScore": 54,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200"
+      ],
+      "action": "skipped_threshold",
+      "price": 60.790000915527344,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TXT",
+      "score": 67,
+      "techScore": 54,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200",
+        "Bollinger Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 91.22000122070312,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ELV",
+      "score": 66,
+      "techScore": 54,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200"
+      ],
+      "action": "skipped_threshold",
+      "price": 391.767,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "EBAY",
+      "score": 64,
+      "techScore": 54,
+      "trend": "BULLISH",
+      "reasons": [
+        "Price > EMA50",
+        "Price > EMA200"
+      ],
+      "action": "skipped_threshold",
+      "price": 107.87,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ZS",
+      "score": 67,
+      "techScore": 48,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)"
+      ],
+      "action": "skipped_bearish",
+      "price": 131.9728,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AZO",
+      "score": 63,
+      "techScore": 48,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)"
+      ],
+      "action": "skipped_bearish",
+      "price": 3128,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GILD",
+      "score": 71,
+      "techScore": 46,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "EMA Stack Bearish (Short < Mid < Long)"
+      ],
+      "action": "skipped_bearish",
+      "price": 127.8777,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "RBLX",
+      "score": 64,
+      "techScore": 46,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200"
+      ],
+      "action": "skipped_bearish",
+      "price": 47.5,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BNTX",
+      "score": 63,
+      "techScore": 46,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)"
+      ],
+      "action": "skipped_bearish",
+      "price": 91.22,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AIG",
+      "score": 62,
+      "techScore": 46,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200"
+      ],
+      "action": "skipped_bearish",
+      "price": 75.57,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TJX",
+      "score": 69,
+      "techScore": 42,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Developing Bearish Momentum",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 155.43,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TXN",
+      "score": 67,
+      "techScore": 41,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 282.3,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "REGN",
+      "score": 70,
+      "techScore": 40,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Price at Upper BB (Resistance)"
+      ],
+      "action": "skipped_bearish",
+      "price": 632.9,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HCA",
+      "score": 61,
+      "techScore": 40,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Price at Upper BB (Resistance)"
+      ],
+      "action": "skipped_bearish",
+      "price": 391.6871,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ROST",
+      "score": 76,
+      "techScore": 38,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Developing Bearish Momentum",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 213.2638,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ADI",
+      "score": 73,
+      "techScore": 38,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 385,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ISRG",
+      "score": 71,
+      "techScore": 38,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 404.67,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ORLY",
+      "score": 68,
+      "techScore": 38,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)"
+      ],
+      "action": "skipped_bearish",
+      "price": 89.5484,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ULTA",
+      "score": 66,
+      "techScore": 38,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)"
+      ],
+      "action": "skipped_bearish",
+      "price": 488.45,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FCX",
+      "score": 64,
+      "techScore": 38,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 62.45000076293945,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TSCO",
+      "score": 61,
+      "techScore": 38,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)"
+      ],
+      "action": "skipped_bearish",
+      "price": 31.21,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "APD",
+      "score": 61,
+      "techScore": 38,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)"
+      ],
+      "action": "skipped_bearish",
+      "price": 277.7900085449219,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MOS",
+      "score": 60,
+      "techScore": 38,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)"
+      ],
+      "action": "skipped_bearish",
+      "price": 22.3799991607666,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NXPI",
+      "score": 69,
+      "techScore": 37,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 274.35,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WMT",
+      "score": 70,
+      "techScore": 34,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 115.65,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NEE",
+      "score": 69,
+      "techScore": 34,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Bollinger Breakout (Overextended Up)"
+      ],
+      "action": "skipped_bearish",
+      "price": 88.5616,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GOOGL",
+      "score": 72,
+      "techScore": 33,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Developing Bearish Momentum",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 338,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MPWR",
+      "score": 72,
+      "techScore": 33,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Developing Bearish Momentum",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 1313.3436,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MCHP",
+      "score": 70,
+      "techScore": 33,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 87.75,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BSX",
+      "score": 70,
+      "techScore": 33,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)"
+      ],
+      "action": "skipped_bearish",
+      "price": 44.2308,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CF",
+      "score": 65,
+      "techScore": 33,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 105.69999694824219,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AAPL",
+      "score": 63,
+      "techScore": 33,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 282.42,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "QCOM",
+      "score": 60,
+      "techScore": 33,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 189.2467,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BKNG",
+      "score": 85,
+      "techScore": 32,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 181.46,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MCK",
+      "score": 64,
+      "techScore": 30,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 767.7,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "RMD",
+      "score": 64,
+      "techScore": 30,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Price at Upper BB (Resistance)"
+      ],
+      "action": "skipped_bearish",
+      "price": 204.91,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MDB",
+      "score": 63,
+      "techScore": 30,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "MACD Bearish Cross",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 314.0043,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PSX",
+      "score": 63,
+      "techScore": 30,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "MACD Bearish Cross",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 171.64999389648438,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TMUS",
+      "score": 62,
+      "techScore": 30,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 182.67999267578125,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "APO",
+      "score": 60,
+      "techScore": 30,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "Developing Bearish Momentum",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 118.2879,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NVDA",
+      "score": 72,
+      "techScore": 29,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Developing Bearish Momentum",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 192.4,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FANG",
+      "score": 61,
+      "techScore": 26,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 179.91000366210938,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CHWY",
+      "score": 64,
+      "techScore": 25,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 18.549999237060547,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SPGI",
+      "score": 71,
+      "techScore": 22,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 408.1673,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TEL",
+      "score": 63,
+      "techScore": 22,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 197.74,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BX",
+      "score": 61,
+      "techScore": 22,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 114.9414,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MCO",
+      "score": 60,
+      "techScore": 22,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 450.0181,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "EOG",
+      "score": 60,
+      "techScore": 22,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 132.60000610351562,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "LHX",
+      "score": 60,
+      "techScore": 22,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 291.25,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CI",
+      "score": 59,
+      "techScore": 22,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "MACD Bearish Cross",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 282.7976,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "INTU",
+      "score": 70,
+      "techScore": 21,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 268.04,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ICE",
+      "score": 70,
+      "techScore": 21,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 124.93,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NFLX",
+      "score": 68,
+      "techScore": 21,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 73.7,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ALB",
+      "score": 66,
+      "techScore": 21,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 133.6999969482422,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CME",
+      "score": 61,
+      "techScore": 21,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 222,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "COIN",
+      "score": 60,
+      "techScore": 21,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 148.4,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AA",
+      "score": 60,
+      "techScore": 21,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 54.3234,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BLK",
+      "score": 63,
+      "techScore": 18,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 970,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "KKR",
+      "score": 59,
+      "techScore": 18,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 90.13,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TEAM",
+      "score": 65,
+      "techScore": 17,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 78.74,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ORCL",
+      "score": 64,
+      "techScore": 17,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 148.66,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SMCI",
+      "score": 63,
+      "techScore": 17,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "MACD Bearish Cross",
+        "Bollinger Downtrend"
+      ],
+      "action": "skipped_bearish",
+      "price": 30.64,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WDAY",
+      "score": 69,
+      "techScore": 14,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 124.2122,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HUBS",
+      "score": 64,
+      "techScore": 14,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 184.4,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ONON",
+      "score": 64,
+      "techScore": 14,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 37.07,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "COST",
+      "score": 60,
+      "techScore": 14,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 951.01,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SNPS",
+      "score": 60,
+      "techScore": 14,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 452.62,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SNY",
+      "score": 59,
+      "techScore": 14,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 42.95,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PLTR",
+      "score": 66,
+      "techScore": 13,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 112.77,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AVGO",
+      "score": 65,
+      "techScore": 13,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 366.23,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "META",
+      "score": 64,
+      "techScore": 13,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 550.0013,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "KLAC",
+      "score": 84,
+      "techScore": 9,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 248.5,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NEM",
+      "score": 66,
+      "techScore": 9,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 96.12999725341797,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CRM",
+      "score": 65,
+      "techScore": 9,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "MACD Bearish Cross"
+      ],
+      "action": "skipped_bearish",
+      "price": 157.99,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ADBE",
+      "score": 63,
+      "techScore": 5,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 202.8829,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ADSK",
+      "score": 62,
+      "techScore": 5,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 197.01,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ZM",
+      "score": 59,
+      "techScore": 5,
+      "trend": "BEARISH",
+      "reasons": [
+        "Price < EMA50",
+        "Price < EMA200",
+        "EMA Stack Bearish (Short < Mid < Long)",
+        "Developing Bearish Momentum"
+      ],
+      "action": "skipped_bearish",
+      "price": 86.08,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BF-B",
+      "score": 70,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)"
+      ],
+      "action": "skipped_threshold",
+      "price": 27.959999084472656,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "VZ",
+      "score": 59,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 46.540000915527344,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SLB",
+      "score": 59,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Analyst Consensus: Strong Buy",
+        "🎯 Option Setup: PUT @ $51"
+      ],
+      "action": "skipped_bearish",
+      "price": 47,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MPC",
+      "score": 59,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 254.05999755859375,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BK",
+      "score": 58,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_bearish",
+      "price": 143.5626,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ZTS",
+      "score": 58,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🎯 Option Setup: PUT @ $75"
+      ],
+      "action": "skipped_bearish",
+      "price": 76.65,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "LOW",
+      "score": 58,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_bearish",
+      "price": 222.484,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CMG",
+      "score": 58,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 33.3394,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DVN",
+      "score": 58,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_bearish",
+      "price": 42.209999084472656,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MSFT",
+      "score": 63,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔍 4.1x avg volume",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+536%)",
+        "🎯 Option Setup: PUT @ $370"
+      ],
+      "action": "skipped_bearish",
+      "price": 372.47,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AMZN",
+      "score": 64,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔍 4.3x avg volume",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+425%)",
+        "🎯 Option Setup: PUT @ $225"
+      ],
+      "action": "skipped_bearish",
+      "price": 232.5,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CVX",
+      "score": 57,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_bearish",
+      "price": 171.05,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MCD",
+      "score": 57,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_bearish",
+      "price": 269.6,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PFE",
+      "score": 57,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 24.255,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "T",
+      "score": 57,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Analyst Consensus: Strong Buy",
+        "🎯 Option Setup: PUT @ $24"
+      ],
+      "action": "skipped_bearish",
+      "price": 22.65,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "LULU",
+      "score": 57,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Social Interest",
+        "🎯 Option Setup: PUT @ $115"
+      ],
+      "action": "skipped_bearish",
+      "price": 117.48,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DECK",
+      "score": 57,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Volume (+97%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 104.56,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TSLA",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 377.8987,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NKE",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Volume (+84%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 40.85,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DOCU",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals",
+        "High Volume (+87%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 45.21,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PYPL",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Volume (+60%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 44.2219,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HSY",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_bearish",
+      "price": 179.11000061035156,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CMCSA",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 23.170000076293945,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "OXY",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals",
+        "🎯 Option Setup: PUT @ $50"
+      ],
+      "action": "skipped_bearish",
+      "price": 49.9900016784668,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BKR",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Analyst Consensus: Strong Buy",
+        "🎯 Option Setup: PUT @ $55"
+      ],
+      "action": "skipped_bearish",
+      "price": 56.560001373291016,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XOM",
+      "score": 55,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 136.75,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "COP",
+      "score": 55,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_bearish",
+      "price": 105.95999908447266,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BA",
+      "score": 55,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+51%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 217.25,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SCCO",
+      "score": 55,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_bearish",
+      "price": 171.25999450683594,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DIS",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_bearish",
+      "price": 98.8734,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ACN",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Volume (+90%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 128.98,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GIS",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 36.0099983215332,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BJ",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 88.87000274658203,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HAL",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Analyst Consensus: Strong Buy",
+        "🎯 Option Setup: PUT @ $33"
+      ],
+      "action": "skipped_bearish",
+      "price": 34.209999084472656,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CLF",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 9.949999809265137,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ON",
+      "score": 53,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Volume (+354%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 90.85,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TTD",
+      "score": 53,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals",
+        "High Volume (+58%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 18.2931,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DPZ",
+      "score": 53,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Volume (+72%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 298.18,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GPS",
+      "score": 53,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 24.55,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FOXA",
+      "score": 53,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Volume (+136%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 50.099998474121094,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "OMC",
+      "score": 53,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_bearish",
+      "price": 73.08999633789062,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PEP",
+      "score": 52,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 141.21,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FMC",
+      "score": 52,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Volume (+51%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 11.75,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ADM",
+      "score": 51,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🎯 Option Setup: PUT @ $75"
+      ],
+      "action": "skipped_bearish",
+      "price": 76.79000091552734,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CHTR",
+      "score": 51,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 133.63999938964844,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "EL",
+      "score": 50,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 80.54000091552734,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "KR",
+      "score": 50,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 57.72999954223633,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "LMT",
+      "score": 49,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 507.3999938964844,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NOC",
+      "score": 48,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 500.0299987792969,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HPQ",
+      "score": 47,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🎯 Option Setup: PUT @ $22"
+      ],
+      "action": "skipped_bearish",
+      "price": 22.91,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ACI",
+      "score": 45,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 13.59000015258789,
+      "source": "top_picks"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WBD",
+      "score": 44,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 26.739999771118164,
+      "source": "both"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NWL",
+      "score": 77,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 4.9x avg volume",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "High Volume (+940%)",
+        "🎯 Option Setup: CALL @ $6"
+      ],
+      "action": "skipped_threshold",
+      "price": 5.82,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FROG",
+      "score": 76,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +11.1% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Social Interest",
+        "High Volume (+1101%)",
+        "🎯 Option Setup: CALL @ $80"
+      ],
+      "action": "skipped_threshold",
+      "price": 87.58,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ABCL",
+      "score": 74,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +10.8% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+188%)",
+        "🎯 Option Setup: CALL @ $7"
+      ],
+      "action": "skipped_threshold",
+      "price": 7.38,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BFLY",
+      "score": 73,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +10.8% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+185%)",
+        "🎯 Option Setup: CALL @ $10"
+      ],
+      "action": "skipped_threshold",
+      "price": 8.89,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CHYM",
+      "score": 72,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +11.2% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+476%)",
+        "🎯 Option Setup: CALL @ $22.5"
+      ],
+      "action": "skipped_threshold",
+      "price": 20.32,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BB",
+      "score": 71,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 1.6x avg volume + +10.3% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals",
+        "High Volume (+275%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 11.399999618530273,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DKNG",
+      "score": 69,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔍 +11.3% pre-mkt/today",
+        "📈 Outperforming SPY",
+        "Analyst Consensus: Strong Buy",
+        "High Social Interest"
+      ],
+      "action": "skipped_bearish",
+      "price": 25.6305,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SLS",
+      "score": 68,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +17.7% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "High Volume (+243%)",
+        "🎯 Option Setup: CALL @ $13"
+      ],
+      "action": "skipped_threshold",
+      "price": 12.39,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BWIN",
+      "score": 68,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +9.2% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+220%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 26.219999313354492,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CCC",
+      "score": 65,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +11.6% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals",
+        "High Volume (+51%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 5.01,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "IBRX",
+      "score": 64,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +11.8% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "High Volume (+128%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 8.71,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "LCID",
+      "score": 63,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔍 +15.6% pre-mkt/today",
+        "🔥 Volume Surge"
+      ],
+      "action": "skipped_bearish",
+      "price": 5.83,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WULF",
+      "score": 63,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 2.5x avg volume",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🔥 Volume Surge",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+72%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 25.83,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HL",
+      "score": 62,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔍 3.6x avg volume",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "High Volume (+411%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 15.54,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CGNX",
+      "score": 61,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+111%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 66.56,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TENB",
+      "score": 61,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +10.1% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "High Volume (+122%)",
+        "🎯 Option Setup: CALL @ $35"
+      ],
+      "action": "skipped_threshold",
+      "price": 30.22,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PAY",
+      "score": 61,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +10.2% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "High Volume (+1438%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 23.43,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NP",
+      "score": 61,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "🔍 +9.2% pre-mkt/today",
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals",
+        "High Volume (+75%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 29.969999313354492,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "TSM",
+      "score": 60,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_threshold",
+      "price": 432.3291,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "EQIX",
+      "score": 60,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_threshold",
+      "price": 1072.96,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MO",
+      "score": 59,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_threshold",
+      "price": 73.6,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DLR",
+      "score": 59,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+63%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 193,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SPHR",
+      "score": 58,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+84%)",
+        "🎯 Option Setup: CALL @ $180"
+      ],
+      "action": "skipped_threshold",
+      "price": 169.85,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SPG",
+      "score": 58,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "High Volume (+435%)",
+        "🎯 Option Setup: CALL @ $230"
+      ],
+      "action": "skipped_threshold",
+      "price": 226.8941,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WELL",
+      "score": 58,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+55%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 227.33,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PSA",
+      "score": 57,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_threshold",
+      "price": 324.39,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CSX",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_threshold",
+      "price": 47.0902,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FDS",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔍 +11.0% pre-mkt/today",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "High Volume (+88%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 231.74,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NOW",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔍 +9.9% pre-mkt/today",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_bearish",
+      "price": 98.33999633789062,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PCOR",
+      "score": 56,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔍 +9.4% pre-mkt/today",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+70%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 41.90999984741211,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MLM",
+      "score": 55,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_threshold",
+      "price": 616.0676,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MDT",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_threshold",
+      "price": 80.98,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "VMC",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_threshold",
+      "price": 311.35,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "O",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_threshold",
+      "price": 62.9795,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AVB",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_threshold",
+      "price": 190.12,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GWRE",
+      "score": 54,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔍 +10.3% pre-mkt/today",
+        "Solid Fundamentals",
+        "High Social Interest",
+        "High Volume (+165%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 121.48,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "EQR",
+      "score": 53,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 70,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "INVH",
+      "score": 53,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "High Volume (+78%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 30.46,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "KEYS",
+      "score": 52,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+332%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 328.66,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "WM",
+      "score": 52,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_threshold",
+      "price": 225.5341,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "BRK-B",
+      "score": 51,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_threshold",
+      "price": 498.6600036621094,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DD",
+      "score": 51,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Analyst Consensus: Strong Buy",
+        "🎯 Option Setup: CALL @ $135"
+      ],
+      "action": "skipped_threshold",
+      "price": 136.28,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PPG",
+      "score": 51,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 123.24,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FIG",
+      "score": 51,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔍 +10.6% pre-mkt/today",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "High Volume (+131%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 18.62,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "INTC",
+      "score": 50,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "🎯 Option Setup: CALL @ $140"
+      ],
+      "action": "skipped_threshold",
+      "price": 128.09,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SBUX",
+      "score": 50,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "High Volume (+87%)"
+      ],
+      "action": "skipped_threshold",
+      "price": 104.5981,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MARA",
+      "score": 50,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "🎯 Option Setup: CALL @ $15"
+      ],
+      "action": "skipped_threshold",
+      "price": 14.46,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AMGN",
+      "score": 49,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 358.02,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MAA",
+      "score": 49,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 140.7276,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PCG",
+      "score": 49,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_threshold",
+      "price": 17.38,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "LUV",
+      "score": 49,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_threshold",
+      "price": 51.04,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "RIVN",
+      "score": 47,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 15.71,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ADP",
+      "score": 47,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "📈 Outperforming SPY",
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "High Volume (+120%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 223.55,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GME",
+      "score": 46,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals"
+      ],
+      "action": "skipped_bearish",
+      "price": 21.78,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "PLD",
+      "score": 46,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+72%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 139.97,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AMT",
+      "score": 46,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+139%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 175.5932,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLV",
+      "score": 46,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 160.48,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLRE",
+      "score": 45,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 45.2282,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AWK",
+      "score": 45,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 130.15,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLU",
+      "score": 44,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "High Social Interest"
+      ],
+      "action": "skipped_threshold",
+      "price": 44.05,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "IWM",
+      "score": 44,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 298.97,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLI",
+      "score": 44,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 181.2905,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DX-Y.NYB",
+      "score": 44,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 101.322998046875,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "JPY=X",
+      "score": 44,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High"
+      ],
+      "action": "skipped_threshold",
+      "price": 161.72000122070312,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CDE",
+      "score": 44,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+81%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 16.04,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLF",
+      "score": 43,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY",
+        "🎯 Option Setup: CALL @ $54"
+      ],
+      "action": "skipped_threshold",
+      "price": 53.65,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "^VIX",
+      "score": 43,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 18.40999984741211,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CAD=X",
+      "score": 43,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 1.4181599617004395,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CIEN",
+      "score": 43,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_bearish",
+      "price": 483,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CCI",
+      "score": 42,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals",
+        "High Social Interest",
+        "High Volume (+79%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 82.62,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "VICI",
+      "score": 42,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_bearish",
+      "price": 27.19,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DIA",
+      "score": 42,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)",
+        "🏔️ Near 52W High",
+        "📈 Outperforming SPY"
+      ],
+      "action": "skipped_threshold",
+      "price": 518.63,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "AU",
+      "score": 42,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_bearish",
+      "price": 81.6185,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLB",
+      "score": 41,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)"
+      ],
+      "action": "skipped_threshold",
+      "price": 51.6,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CSGP",
+      "score": 41,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "Solid Fundamentals",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+65%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 30.83,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLP",
+      "score": 41,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 84.79,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "MSTR",
+      "score": 40,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge",
+        "Analyst Consensus: Strong Buy",
+        "High Volume (+155%)",
+        "🎯 Option Setup: PUT @ $80"
+      ],
+      "action": "skipped_bearish",
+      "price": 81.8,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "FSLY",
+      "score": 37,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge",
+        "Solid Fundamentals",
+        "High Volume (+84%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 17.11,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NG=F",
+      "score": 37,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "Bullish Momentum (RSI)"
+      ],
+      "action": "skipped_threshold",
+      "price": 3.2850000858306885,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SPY",
+      "score": 37,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🏔️ Near 52W High",
+        "🎯 Option Setup: PUT @ $726"
+      ],
+      "action": "skipped_bearish",
+      "price": 732.1399,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "^GSPC",
+      "score": 37,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend",
+        "🏔️ Near 52W High"
+      ],
+      "action": "skipped_threshold",
+      "price": 7354.02001953125,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "DOW",
+      "score": 36,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🎯 Option Setup: PUT @ $27.5"
+      ],
+      "action": "skipped_bearish",
+      "price": 28.95,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "^TNX",
+      "score": 36,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 4.372000217437744,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "^TYX",
+      "score": 36,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 4.863999843597412,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "^FVX",
+      "score": 36,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 4.130000114440918,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CE",
+      "score": 35,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge",
+        "Analyst Consensus: Strong Buy"
+      ],
+      "action": "skipped_bearish",
+      "price": 49.42,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "IPGP",
+      "score": 33,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Volume (+88%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 107.1824,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLK",
+      "score": 33,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 181.04,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "IPG",
+      "score": 32,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge",
+        "High Volume (+1104%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 24.57,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SI=F",
+      "score": 32,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge",
+        "High Volume (+4572%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 59.040000915527344,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "QQQ",
+      "score": 32,
+      "techScore": 0,
+      "trend": "BULLISH",
+      "reasons": [
+        "Strong Technical Uptrend"
+      ],
+      "action": "skipped_threshold",
+      "price": 706.27,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GBPUSD=X",
+      "score": 32,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🏔️ Near 52W High"
+      ],
+      "action": "skipped_bearish",
+      "price": 1.3203586339950562,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "HG=F",
+      "score": 31,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge",
+        "High Volume (+2685%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 6.185999870300293,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "^IXIC",
+      "score": 31,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "High Volume (+74%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 25297.6171875,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLC",
+      "score": 31,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 106.24,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "EURUSD=X",
+      "score": 31,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 1.1393414735794067,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "NGD",
+      "score": 31,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge"
+      ],
+      "action": "skipped_bearish",
+      "price": 9.08,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "ALI=F",
+      "score": 30,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge",
+        "High Volume (+9835%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 3324.5,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLY",
+      "score": 29,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 122.06,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GC=F",
+      "score": 27,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🔥 Volume Surge",
+        "High Volume (+3140%)"
+      ],
+      "action": "skipped_bearish",
+      "price": 4082.39990234375,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GDX",
+      "score": 26,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 76.97,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GDXJ",
+      "score": 25,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 100.05,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "CL=F",
+      "score": 24,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 69.43000030517578,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "XLE",
+      "score": 24,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [],
+      "action": "skipped_bearish",
+      "price": 53.8404,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "SLV",
+      "score": 23,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🎯 Option Setup: PUT @ $53"
+      ],
+      "action": "skipped_bearish",
+      "price": 53.0896,
+      "source": "alpha_hunter"
+    },
+    {
+      "date": "2026-06-28",
+      "symbol": "GLD",
+      "score": 22,
+      "techScore": 0,
+      "trend": "BEARISH",
+      "reasons": [
+        "🎯 Option Setup: PUT @ $368"
+      ],
+      "action": "skipped_bearish",
+      "price": 373.76,
+      "source": "alpha_hunter"
+    }
+  ],
+  "dailyLog": [
+    {
+      "date": "2026-06-28",
+      "equity": 991.6411999999999,
+      "cash": 9.027999999999935,
+      "positionsValue": 982.6132,
+      "positionCount": 4,
+      "cashMode": false,
+      "signalsGenerated": 395,
+      "entriesExecuted": 4,
+      "exitsExecuted": 0,
+      "symbolsScanned": 395,
+      "topPicksCount": 289,
+      "alphaHunterCount": 244
+    }
+  ],
+  "blacklist": {},
+  "lastRunDate": "2026-06-28",
+  "totalRuns": 1
+}

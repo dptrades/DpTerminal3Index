@@ -57,6 +57,4 @@ scripts/test-*
 data/codes.json
 data/users.csv
 user/users.csv
-data/forward_test.json
-data/alpaca_paper_test.json
 data/paper_trading.json
