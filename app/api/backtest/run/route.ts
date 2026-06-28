@@ -27,6 +27,10 @@ export async function POST(req: NextRequest) {
             enableCashMode: body.enableCashMode ?? DEFAULT_CONFIG.enableCashMode,
             enableSymbolBlacklist: body.enableSymbolBlacklist ?? DEFAULT_CONFIG.enableSymbolBlacklist,
             scanDaily: body.scanDaily ?? DEFAULT_CONFIG.scanDaily,
+            enableScaleOut: body.enableScaleOut ?? DEFAULT_CONFIG.enableScaleOut,
+            scaleOut1Pct: body.scaleOut1Pct ?? DEFAULT_CONFIG.scaleOut1Pct,
+            scaleOut2Pct: body.scaleOut2Pct ?? DEFAULT_CONFIG.scaleOut2Pct,
+            trailingStopAtr: body.trailingStopAtr ?? DEFAULT_CONFIG.trailingStopAtr,
         };
 
         const result = await runBacktest(config);

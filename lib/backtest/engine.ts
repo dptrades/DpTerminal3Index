@@ -41,6 +41,10 @@ export const DEFAULT_CONFIG: BacktestConfig = {
     enableCashMode: true,        // Fix 1: go flat in bear + high vol
     enableSymbolBlacklist: true,  // Fix 2: suspend repeat losers
     scanDaily: true,              // Fix 4: scan every trading day
+    enableScaleOut: false,        // Scale-out trailing stop (off by default)
+    scaleOut1Pct: 0.30,           // Sell 30% at 1x ATR profit
+    scaleOut2Pct: 0.30,           // Sell 30% at 2x ATR profit
+    trailingStopAtr: 1.5,        // Trail remaining 40% at 1.5x ATR
 };
 
 const TOP_BACKTEST_SYMBOLS = [

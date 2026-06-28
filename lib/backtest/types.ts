@@ -18,6 +18,10 @@ export interface BacktestConfig {
     enableCashMode: boolean;     // Fix 1: go flat when VIX>30 AND benchmark < 200 EMA
     enableSymbolBlacklist: boolean; // Fix 2: suspend symbols with <25% WR over last 20 trades
     scanDaily: boolean;          // Fix 4: scan every day instead of Mondays only
+    enableScaleOut: boolean;     // Scale-out trailing stop strategy
+    scaleOut1Pct: number;        // % of position to sell at 1x ATR profit (e.g. 0.30)
+    scaleOut2Pct: number;        // % of position to sell at 2x ATR profit (e.g. 0.30)
+    trailingStopAtr: number;     // trailing stop distance in ATR multiples for remaining shares
 }
 
 export interface BacktestBar {
@@ -42,6 +46,11 @@ export interface BacktestPosition {
     entryReason: string;
     earningsZone?: EarningsZone;
     positionSizeMultiplier?: number;
+    // Scale-out tracking
+    atr?: number;
+    originalQty?: number;
+    scaleLevel?: number;       // 0 = full, 1 = after first scale, 2 = after second scale
+    highWaterMark?: number;    // highest price since entry (for trailing stop)
 }
 
 export type VixRegime = 'Low Vol' | 'Normal' | 'High Vol' | 'Crisis';
@@ -72,7 +81,7 @@ export interface BacktestTrade {
     entryDate: string;
     exitPrice: number;
     exitDate: string;
-    exitReason: 'stop' | 'target' | 'time_exit' | 'end_of_test';
+    exitReason: 'stop' | 'target' | 'time_exit' | 'end_of_test' | 'scale_1' | 'scale_2' | 'trail_stop';
     pnl: number;
     pnlPercent: number;
     holdingDays: number;
