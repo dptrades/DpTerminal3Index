@@ -49,3 +49,14 @@ test-*.ts
 test-*.js
 scripts/test-*
 *.log
+
+# paper trading portfolio (local url only)
+/app/portfolio/
+
+# sensitive data files
+data/codes.json
+data/users.csv
+user/users.csv
+data/forward_test.json
+data/alpaca_paper_test.json
+data/paper_trading.json
