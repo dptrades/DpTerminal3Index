@@ -7,6 +7,14 @@
     {
       "path": "/api/cron/morning-brief",
       "schedule": "0 14 * * 1-5"
+    },
+    {
+      "path": "/api/cron/forward-test",
+      "schedule": "0 14 * * 1-5"
+    },
+    {
+      "path": "/api/paper-trade",
+      "schedule": "5 14 * * 1-5"
     }
   ],
   "functions": {
@@ -32,6 +40,12 @@
       "maxDuration": 300
     },
     "app/api/forward-test/route.ts": {
+      "maxDuration": 300
+    },
+    "app/api/paper-trade/route.ts": {
+      "maxDuration": 300
+    },
+    "app/api/backtest/run/route.ts": {
       "maxDuration": 300
     }
   }
