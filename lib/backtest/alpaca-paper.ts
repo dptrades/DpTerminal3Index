@@ -25,6 +25,7 @@ const CONFIG = {
     blacklistLookback: 20,
     blacklistMinWinRate: 0.25,
     blacklistSuspendDays: 30,
+    maxCapital: 1000,
 };
 
 // ── Types ───────────────────────────────────────────────────────────────────
@@ -192,15 +193,20 @@ export async function runAlpacaPaper(): Promise<{ state: AlpacaPaperState; summa
     const acct = await getAccount();
     if (!acct) return { state, summary: 'ERROR: Could not connect to Alpaca. Check API keys.' };
 
-    const alpacaEquity = parseFloat(acct.equity);
-    const alpacaCash = parseFloat(acct.cash);
+    const rawEquity = parseFloat(acct.equity);
+    const rawCash = parseFloat(acct.cash);
+
+    // Cap usable capital to maxCapital + any unrealized gains from our positions
+    const positionsValue = state.positions.reduce((sum, p) => sum + p.qty * p.entryPrice, 0);
+    const alpacaEquity = Math.min(rawEquity, CONFIG.maxCapital + positionsValue);
+    const alpacaCash = Math.min(rawCash, CONFIG.maxCapital - positionsValue);
 
     if (state.totalRuns === 0) {
-        state.account.initialBalance = alpacaEquity;
+        state.account.initialBalance = CONFIG.maxCapital;
         state.startDate = today;
     }
-    state.account.equity = alpacaEquity;
-    state.account.cash = alpacaCash;
+    state.account.equity = Math.min(alpacaEquity, CONFIG.maxCapital + positionsValue);
+    state.account.cash = Math.max(0, alpacaCash);
 
     const logs: string[] = [];
     let entries = 0, exits = 0;
@@ -341,9 +347,11 @@ export async function runAlpacaPaper(): Promise<{ state: AlpacaPaperState; summa
             const riskPerShare = c.price - stopLoss;
             if (riskPerShare <= 0) continue;
 
-            const riskBudget = alpacaEquity * (CONFIG.riskPercent / 100);
+            const cappedEquity = Math.min(alpacaEquity, CONFIG.maxCapital);
+            const riskBudget = cappedEquity * (CONFIG.riskPercent / 100);
             let qty = Math.floor(riskBudget / riskPerShare);
-            if (qty * c.price > alpacaCash) qty = Math.floor(alpacaCash / c.price);
+            const availableCash = Math.max(0, Math.min(alpacaCash, CONFIG.maxCapital - positionsValue));
+            if (qty * c.price > availableCash) qty = Math.floor(availableCash / c.price);
             if (qty <= 0) continue;
 
             // Execute buy on Alpaca
@@ -366,12 +374,22 @@ export async function runAlpacaPaper(): Promise<{ state: AlpacaPaperState; summa
         logs.push('CASH MODE — no entries');
     }
 
-    // ── Sync equity from Alpaca ──
+    // ── Sync equity — track only our capped slice ──
     const acctAfter = await getAccount();
-    if (acctAfter) {
-        state.account.equity = parseFloat(acctAfter.equity);
-        state.account.cash = parseFloat(acctAfter.cash);
+    const alpacaPositionsAfter = await getPositions();
+    let ourPositionsValue = 0;
+    for (const pos of state.positions) {
+        const ap = alpacaPositionsAfter.find(p => p.symbol === pos.symbol);
+        if (ap) {
+            ourPositionsValue += pos.qty * parseFloat(ap.current_price);
+        } else {
+            ourPositionsValue += pos.qty * pos.entryPrice;
+        }
     }
+    const cappedCash = CONFIG.maxCapital - state.positions.reduce((sum, p) => sum + p.qty * p.entryPrice, 0);
+    const trades_pnl = state.trades.reduce((sum, t) => sum + t.pnl, 0);
+    state.account.equity = CONFIG.maxCapital + trades_pnl + (ourPositionsValue - state.positions.reduce((sum, p) => sum + p.qty * p.entryPrice, 0));
+    state.account.cash = Math.max(0, state.account.equity - ourPositionsValue);
 
     const returnPct = state.account.initialBalance > 0 ? ((state.account.equity - state.account.initialBalance) / state.account.initialBalance) * 100 : 0;
 
