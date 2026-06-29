@@ -45,207 +45,101 @@ export default function AIAnalysisWidget({ symbol, analysis, optionsFlow, fundam
     const bgGlow = isBullish ? "shadow-[0_0_40px_-15px_rgba(0,255,148,0.15)]" : isBearish ? "shadow-[0_0_40px_-15px_rgba(255,46,46,0.15)]" : "";
 
     return (
-        <div className={`relative bg-[#0B0F17]/90 backdrop-blur-3xl rounded-3xl border ${borderColor} p-6 lg:p-8 ${bgGlow} transition-all duration-1000 overflow-hidden`}>
-            {/* Carbon Fiber Background Texture */}
+        <div className={`relative bg-[#0B0F17]/90 backdrop-blur-3xl rounded-2xl sm:rounded-3xl border ${borderColor} p-4 sm:p-6 lg:p-8 ${bgGlow} transition-all duration-1000 overflow-hidden`}>
             <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
-            
-            <div className="relative z-10 flex flex-col lg:grid lg:grid-cols-12 gap-8">
-                
-                {/* LEFT COLUMN: PRIMARY SIGNAL & EXECUTION (4/12) */}
-                <div className="lg:col-span-4 flex flex-col gap-6">
-                    {/* Header Row */}
-                    <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
-                                <Sparkles className="w-4 h-4 text-indigo-400 animate-pulse" />
-                            </div>
-                            <h3 className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Live AI Assessment</h3>
-                        </div>
-                        <span className="text-[9px] font-black px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 uppercase tracking-widest">
-                            {regime}
-                        </span>
-                    </div>
 
-                    {/* AI SIGNAL CARD */}
-                    <div className="bg-white/5 rounded-2xl p-6 border border-white/5 flex flex-col items-center text-center shadow-2xl relative group overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
-                        <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.25em] mb-4 relative z-10">AI Terminal Signal</div>
-                        {/* SMALLER SIGNAL TEXT AS REQUESTED */}
-                        <div className={`text-xl font-black ${scoreColor} tracking-widest mb-1 relative z-10 uppercase`}>
-                            {signal}
-                        </div>
-                        <div className="text-6xl font-black text-white tracking-tighter relative z-10">
-                            {score}<span className="text-xl text-white/20 font-bold ml-1">/10</span>
-                        </div>
-                    </div>
+            <div className="relative z-10 flex flex-col gap-5 sm:gap-6">
 
-                    {/* EXECUTION STRATEGY */}
-                    <div className={`p-6 rounded-2xl border flex flex-col gap-4 shadow-2xl ${
-                        executionAction === 'BUY' ? 'bg-[#00FF94]/5 border-[#00FF94]/20' : 
-                        executionAction === 'SELL' ? 'bg-[#FF2E2E]/5 border-[#FF2E2E]/20' : 
-                        'bg-[#FFB800]/5 border-[#FFB800]/20'
+                {/* HEADER — Regime Label */}
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                        <div className="p-1.5 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
+                            <Sparkles className="w-4 h-4 text-indigo-400" />
+                        </div>
+                        <h3 className="text-xs sm:text-sm font-black text-white/80 uppercase tracking-wider">Technical Analysis</h3>
+                    </div>
+                    <span className={`text-[10px] sm:text-xs font-black px-2.5 py-1 rounded-lg border uppercase tracking-wider ${
+                        isBullish ? 'bg-[#00FF94]/10 border-[#00FF94]/20 text-[#00FF94]' :
+                        isBearish ? 'bg-[#FF2E2E]/10 border-[#FF2E2E]/20 text-[#FF2E2E]' :
+                        'bg-indigo-500/10 border-indigo-500/20 text-indigo-400'
                     }`}>
-                        <div className="flex items-center gap-2">
-                            <Clock className={`w-4 h-4 ${
-                                executionAction === 'BUY' ? 'text-[#00FF94]' : 
-                                executionAction === 'SELL' ? 'text-[#FF2E2E]' : 
-                                'text-[#FFB800]'
-                            }`} />
-                            <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">Execution Strategy</span>
-                        </div>
-                        <div className={`text-xl font-black ${
-                            executionAction === 'BUY' ? 'text-[#00FF94]' : 
-                            executionAction === 'SELL' ? 'text-[#FF2E2E]' : 
-                            'text-[#FFB800]'
-                        }`}>
-                            {executionAction === 'BUY' ? 'BUY / ENTER NOW' : 
-                             executionAction === 'SELL' ? 'SELL / SHORT NOW' : 
-                             'WAIT FOR SETUP'}
-                        </div>
-                        
-                        {/* R:R Details & Options Strategy */}
-                        <div className="text-[11px] font-bold text-white/80 leading-relaxed bg-black/40 p-3.5 rounded-xl border border-white/5 backdrop-blur-sm space-y-2">
-                            {executionAction !== 'WAIT' ? (
-                                <div className="grid grid-cols-2 gap-y-1.5 gap-x-2 text-[10px]">
-                                    <div>Entry Zone: <span className="text-white font-black">${entryPrice.toFixed(2)}</span></div>
-                                    <div>R:R Ratio: <span className={`${executionAction === 'BUY' ? 'text-[#00FF94]' : 'text-[#FF2E2E]'} font-black`}>{rrRatio.toFixed(1)}:1</span></div>
-                                    <div>Target Price: <span className="text-white font-black">${targetPrice.toFixed(2)}</span></div>
-                                    <div>Stop Loss: <span className="text-white/60 font-black">${stopLoss.toFixed(2)}</span></div>
-                                </div>
-                            ) : (
-                                <div className="text-[10px] text-white/60">
-                                    No optimal risk-to-reward ratio entry zone identified. Await reversal signals.
-                                </div>
-                            )}
-                            <div className="pt-2 border-t border-white/5 mt-2">
-                                <div className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-0.5">Optimal Options Play</div>
-                                <span className={`text-[10.5px] font-black uppercase ${
-                                    executionAction === 'BUY' ? 'text-[#00FF94]' : 
-                                    executionAction === 'SELL' ? 'text-[#FF2E2E]' : 
-                                    'text-indigo-400'
-                                }`}>
-                                    {optionStrategy}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* TARGET PRICE */}
-                    {fundamentals.targetMeanPrice && (
-                        <div className="bg-[#161B22]/50 rounded-2xl p-5 border border-white/5 flex flex-col gap-2 shadow-2xl backdrop-blur-md">
-                            <div className="flex items-center gap-2 text-[9px] font-black text-white/30 uppercase tracking-widest">
-                                <Target className="w-4 h-4 text-blue-400" /> Analyst Target (Mean)
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-3xl font-black text-white">${fundamentals.targetMeanPrice.toFixed(0)}</span>
-                                <div className={`flex flex-col items-end`}>
-                                    <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${analysis.currentPrice < fundamentals.targetMeanPrice ? "bg-[#00FF94]/10 text-[#00FF94]" : "bg-[#FF2E2E]/10 text-[#FF2E2E]"}`}>
-                                        {analysis.currentPrice < fundamentals.targetMeanPrice ? "+" : ""}{((fundamentals.targetMeanPrice - analysis.currentPrice) / analysis.currentPrice * 100).toFixed(1)}% Implied
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                        {regime}
+                    </span>
                 </div>
 
-                {/* RIGHT COLUMN: TECHNICAL CONFLUENCE & ENTRY LOGIC (8/12) */}
-                <div className="lg:col-span-8 flex flex-col gap-6">
-                    {/* TECHNICAL DETAIL BREAKDOWN */}
-                    <div className="bg-white/5 rounded-3xl p-6 lg:p-8 border border-white/5 flex-grow shadow-2xl relative overflow-hidden">
-                        <div className="flex items-center gap-3 mb-8">
-                            <Activity className="w-5 h-5 text-indigo-400" />
-                            <h4 className="text-sm font-black text-white uppercase tracking-widest italic">Technical Confluence Analysis</h4>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-                            {/* Left Column: Trend, Gaps, Bias */}
-                            <div className="space-y-6">
-                                {/* Trend & Moving Averages */}
-                                <div className="space-y-4">
-                                    <div className="text-[10px] font-black text-white/60 uppercase tracking-[0.25em] flex items-center gap-2">
-                                        <div className="w-1 h-1 bg-indigo-500 rounded-full"></div>
-                                        Trend & Moving Averages
-                                    </div>
-                                    <div className="space-y-3.5">
-                                        {techDetails.emas.map((point, i) => (
-                                            <div key={i} className="flex items-start gap-3 group/item">
-                                                <div className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 shadow-[0_0_8px_rgba(0,0,0,0.5)] ${point.sentiment === 'positive' ? 'bg-[#00FF94]' : point.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-white/20'}`}></div>
-                                                <span className="text-xs text-white/70 font-bold leading-relaxed group-hover/item:text-white transition-colors">{point.text}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+                {/* CONFLUENCE ANALYSIS — 2 columns on desktop, stacked on mobile */}
+                <div className="bg-white/5 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-white/5 shadow-xl">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-x-10">
 
-                                {/* Market Gaps (FVG) */}
-                                <div className="space-y-4 pt-4 border-t border-white/5">
-                                    <div className="text-[10px] font-black text-white/60 uppercase tracking-[0.25em] flex items-center gap-2">
-                                        <div className="w-1 h-1 bg-indigo-500 rounded-full"></div>
-                                        Market Gaps (FVG)
-                                    </div>
-                                    <div className="flex items-start gap-3">
-                                        <div className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${techDetails.fvg.sentiment === 'positive' ? 'bg-[#00FF94]' : techDetails.fvg.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-white/20'}`}></div>
-                                        <span className="text-xs text-white/70 font-bold leading-relaxed">{techDetails.fvg.text}</span>
-                                    </div>
+                        {/* Column 1: Trend + FVG */}
+                        <div className="space-y-5">
+                            <div className="space-y-3">
+                                <div className="text-[11px] sm:text-xs font-black text-white/50 uppercase tracking-widest flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
+                                    Trend & Moving Averages
                                 </div>
-                                
-                                {/* Institutional Bias */}
-                                <div className="space-y-4 pt-4 border-t border-white/5">
-                                    <div className="text-[10px] font-black text-white/60 uppercase tracking-[0.25em] flex items-center gap-2">
-                                        <div className="w-1 h-1 bg-indigo-500 rounded-full"></div>
-                                        Institutional Bias
-                                    </div>
-                                    <div className="flex items-start gap-3">
-                                        <div className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${techDetails.options.sentiment === 'positive' ? 'bg-[#00FF94]' : techDetails.options.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-white/20'}`}></div>
-                                        <span className="text-xs text-white/70 font-bold leading-relaxed">{techDetails.options.text}</span>
-                                    </div>
+                                <div className="space-y-2.5">
+                                    {techDetails.emas.map((point, i) => (
+                                        <div key={i} className="flex items-start gap-2.5">
+                                            <div className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${point.sentiment === 'positive' ? 'bg-[#00FF94]' : point.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-white/20'}`}></div>
+                                            <span className="text-xs sm:text-sm text-white/70 font-medium leading-relaxed">{point.text}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
-                            {/* Right Column: Momentum, Volatility */}
-                            <div className="space-y-6">
-                                {/* Momentum (RSI) */}
-                                <div className="space-y-4">
-                                    <div className="text-[10px] font-black text-white/60 uppercase tracking-[0.25em] flex items-center gap-2">
-                                        <div className="w-1 h-1 bg-indigo-500 rounded-full"></div>
-                                        Momentum (RSI Matrix)
-                                    </div>
-                                    <div className="space-y-3.5">
-                                        {techDetails.rsi.map((point, i) => (
-                                            <div key={i} className="flex items-start gap-3 group/item">
-                                                <div className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 shadow-[0_0_8px_rgba(0,0,0,0.5)] ${point.sentiment === 'positive' ? 'bg-[#00FF94]' : point.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-[#FFB800]'}`}></div>
-                                                <span className="text-xs text-white/70 font-bold leading-relaxed group-hover/item:text-white transition-colors">{point.text}</span>
-                                            </div>
-                                        ))}
-                                    </div>
+                            <div className="space-y-3 pt-4 border-t border-white/5">
+                                <div className="text-[11px] sm:text-xs font-black text-white/50 uppercase tracking-widest flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
+                                    Market Gaps (FVG)
                                 </div>
+                                <div className="flex items-start gap-2.5">
+                                    <div className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${techDetails.fvg.sentiment === 'positive' ? 'bg-[#00FF94]' : techDetails.fvg.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-white/20'}`}></div>
+                                    <span className="text-xs sm:text-sm text-white/70 font-medium leading-relaxed">{techDetails.fvg.text}</span>
+                                </div>
+                            </div>
+                        </div>
 
-                                {/* Volatility (Bollinger) */}
-                                <div className="space-y-4 pt-4 border-t border-white/5">
-                                    <div className="text-[10px] font-black text-white/60 uppercase tracking-[0.25em] flex items-center gap-2">
-                                        <div className="w-1 h-1 bg-indigo-500 rounded-full"></div>
-                                        Volatility (Bollinger)
-                                    </div>
-                                    <div className="flex items-start gap-3">
-                                        <div className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${techDetails.bb.sentiment === 'positive' ? 'bg-[#00FF94]' : techDetails.bb.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-white/20'}`}></div>
-                                        <span className="text-xs text-white/70 font-bold leading-relaxed">{techDetails.bb.text}</span>
-                                    </div>
+                        {/* Column 2: Momentum + Volatility */}
+                        <div className="space-y-5">
+                            <div className="space-y-3">
+                                <div className="text-[11px] sm:text-xs font-black text-white/50 uppercase tracking-widest flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
+                                    Momentum (RSI Matrix)
+                                </div>
+                                <div className="space-y-2.5">
+                                    {techDetails.rsi.map((point, i) => (
+                                        <div key={i} className="flex items-start gap-2.5">
+                                            <div className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${point.sentiment === 'positive' ? 'bg-[#00FF94]' : point.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-[#FFB800]'}`}></div>
+                                            <span className="text-xs sm:text-sm text-white/70 font-medium leading-relaxed">{point.text}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="space-y-3 pt-4 border-t border-white/5">
+                                <div className="text-[11px] sm:text-xs font-black text-white/50 uppercase tracking-widest flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
+                                    Volatility (Bollinger)
+                                </div>
+                                <div className="flex items-start gap-2.5">
+                                    <div className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${techDetails.bb.sentiment === 'positive' ? 'bg-[#00FF94]' : techDetails.bb.sentiment === 'negative' ? 'bg-[#FF2E2E]' : 'bg-white/20'}`}></div>
+                                    <span className="text-xs sm:text-sm text-white/70 font-medium leading-relaxed">{techDetails.bb.text}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    {/* ENTRY PRICE LOGIC EXPLANATION */}
-                    <div className={`rounded-3xl p-6 border-l-4 shadow-2xl flex flex-col gap-3 relative overflow-hidden backdrop-blur-md ${isBullish ? 'bg-[#00FF94]/5 border-[#00FF94]/30' : isBearish ? 'bg-[#FF2E2E]/5 border-[#FF2E2E]/30' : 'bg-[#FFB800]/5 border-[#FFB800]/30'}`}>
-                        <div className="flex items-center gap-3">
-                            <div className={`p-1.5 rounded-lg ${isBullish ? 'bg-[#00FF94]/10' : isBearish ? 'bg-[#FF2E2E]/10' : 'bg-[#FFB800]/10'}`}>
-                                <Zap className={`w-4 h-4 ${isBullish ? 'text-[#00FF94]' : isBearish ? 'text-[#FF2E2E]' : 'text-[#FFB800]'}`} />
-                            </div>
-                            <h4 className="text-[11px] font-black text-white uppercase tracking-[0.2em]">Entry Condition & Tactical Strategy</h4>
-                        </div>
-                        <p className={`text-xs font-bold leading-relaxed italic ${isBullish ? 'text-[#00FF94]/80' : isBearish ? 'text-[#FF2E2E]/80' : 'text-[#FFB800]/80'}`}>
-                            "{entryReason}"
-                        </p>
+                {/* ENTRY CONDITION */}
+                <div className={`rounded-2xl sm:rounded-3xl p-4 sm:p-5 border-l-4 shadow-lg flex flex-col gap-2 backdrop-blur-md ${isBullish ? 'bg-[#00FF94]/5 border-[#00FF94]/30' : isBearish ? 'bg-[#FF2E2E]/5 border-[#FF2E2E]/30' : 'bg-[#FFB800]/5 border-[#FFB800]/30'}`}>
+                    <div className="flex items-center gap-2.5">
+                        <Zap className={`w-4 h-4 shrink-0 ${isBullish ? 'text-[#00FF94]' : isBearish ? 'text-[#FF2E2E]' : 'text-[#FFB800]'}`} />
+                        <h4 className="text-[11px] sm:text-xs font-black text-white uppercase tracking-wider">Entry Condition</h4>
                     </div>
+                    <p className={`text-xs sm:text-sm font-medium leading-relaxed ${isBullish ? 'text-[#00FF94]/80' : isBearish ? 'text-[#FF2E2E]/80' : 'text-[#FFB800]/80'}`}>
+                        {entryReason}
+                    </p>
                 </div>
             </div>
         </div>

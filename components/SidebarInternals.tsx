@@ -201,7 +201,7 @@ export default function SidebarInternals({ onSectorClick, isOpen, refreshTrigger
                     className="bg-gray-800 p-2 rounded border border-gray-700 hover:border-blue-500/50 hover:bg-gray-700/50 transition-all text-left group"
                 >
                     <div className="flex justify-between items-center mb-0.5">
-                        <span className="text-[10px] text-gray-100 block font-black uppercase tracking-wider">Bullish %</span>
+                        <span className="text-[10px] text-gray-100 block font-black uppercase tracking-wider">Above 50 EMA</span>
                         <Info className="w-2.5 h-2.5 text-gray-300 group-hover:text-blue-400 transition-colors" />
                     </div>
                     <span className={`text-sm font-bold ${stats.bullishPercent > 50 ? 'text-green-400' : 'text-red-400'}`}>
@@ -215,7 +215,6 @@ export default function SidebarInternals({ onSectorClick, isOpen, refreshTrigger
                 {[
                     { label: 'S&P 500', data: sp500 },
                     { label: 'Nasdaq 100', data: ndx },
-                    { label: 'Nasdaq Comp', data: nasdaq },
                     { label: 'Dow Jones', data: dow },
                     { label: 'Russell 2000', data: russell },
                 ].map((item) => item.data && (
@@ -242,7 +241,14 @@ export default function SidebarInternals({ onSectorClick, isOpen, refreshTrigger
                     </span>
                     <span className="text-gray-200 font-medium flex items-center gap-1 truncate">
                         Breadth
-                        <Info className="w-2.5 h-2.5 text-gray-300 group-hover:text-blue-400 transition-colors flex-shrink-0" />
+                        <span className={`text-[9px] font-black px-1.5 py-0.5 rounded ${
+                            stats.advancers > 0 && stats.decliners > 0 && (stats.advancers / stats.decliners) > 1.2 ? 'bg-green-500/20 text-green-400' :
+                            stats.advancers > 0 && stats.decliners > 0 && (stats.advancers / stats.decliners) < 0.8 ? 'bg-red-500/20 text-red-400' :
+                            'bg-gray-700 text-gray-300'
+                        }`}>
+                            {stats.advancers > 0 && stats.decliners > 0 && (stats.advancers / stats.decliners) > 1.2 ? 'STRONG' :
+                             stats.advancers > 0 && stats.decliners > 0 && (stats.advancers / stats.decliners) < 0.8 ? 'WEAK' : 'MIXED'}
+                        </span>
                     </span>
                     <span className="text-red-400 font-bold flex items-center gap-1">
                         ▼ {stats.decliners}
@@ -264,7 +270,7 @@ export default function SidebarInternals({ onSectorClick, isOpen, refreshTrigger
             <div className="pt-2 border-t border-gray-800 space-y-1">
                 <h4 className="text-[10px] font-bold text-gray-200 uppercase tracking-widest mb-2 truncate">Sector Performance</h4>
                 {sectors.length > 0 ? (
-                    sectors.map((sector) => (
+                    [...sectors].sort((a, b) => b.avgChange - a.avgChange).map((sector) => (
                         <button
                             key={sector.name}
                             onClick={() => onSectorClick(sector)}

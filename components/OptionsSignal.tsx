@@ -210,8 +210,14 @@ export default function OptionsSignal({ data, loading, onRefresh, companyName, u
                     <span className="text-xs font-bold uppercase tracking-wider text-gray-100">Options AI</span>
                     {/* Manual refresh button removed to enforce 15-minute sync rule */}
                 </div>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full bg-gray-700 ${color} font-bold`}>
-                    {data.confidence}% Confidence
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                    data.confidence >= 80 ? 'bg-emerald-500/20 text-emerald-400' :
+                    data.confidence >= 65 ? 'bg-blue-500/20 text-blue-400' :
+                    data.confidence >= 50 ? 'bg-amber-500/20 text-amber-400' :
+                    'bg-gray-700 text-gray-400'}`}>
+                    {data.confidence >= 80 ? 'STRONG SETUP' :
+                     data.confidence >= 65 ? 'MODERATE SETUP' :
+                     data.confidence >= 50 ? 'WEAK SETUP' : 'NO EDGE'}
                 </span>
                 <button
                     onClick={(e) => { e.stopPropagation(); handleTrack(); }}
@@ -307,8 +313,13 @@ export default function OptionsSignal({ data, loading, onRefresh, companyName, u
             {/* Segmented Confidence Bar */}
             <div className="mb-5">
                 <div className="flex justify-between items-end mb-1.5 px-0.5">
-                    <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">AI Signal Confidence</span>
-                    <span className="text-xs font-bold text-white">{data.confidence}%</span>
+                    <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Signal Strength</span>
+                    <span className={`text-xs font-bold ${
+                        data.confidence >= 80 ? 'text-emerald-400' :
+                        data.confidence >= 65 ? 'text-blue-400' :
+                        data.confidence >= 50 ? 'text-amber-400' : 'text-gray-400'}`}>
+                        {data.confidence >= 80 ? 'STRONG' : data.confidence >= 65 ? 'MODERATE' : data.confidence >= 50 ? 'WEAK' : 'NONE'}
+                    </span>
                 </div>
                 <div className="w-full bg-gray-800 h-2 rounded-full flex overflow-hidden border border-gray-700/50 shadow-inner">
                     {/* Base Score (50) */}
@@ -404,118 +415,7 @@ export default function OptionsSignal({ data, loading, onRefresh, companyName, u
                 </div>
             </div>
 
-            {/* === SMART EXECUTION SIGNAL === */}
-            {data.multiTimeframeConfluence && (
-                <div className={`mt-4 p-4 rounded-xl border transition-all duration-500 ${data.multiTimeframeConfluence.executionAction === 'BUY' 
-                    ? 'bg-emerald-500/10 border-emerald-500/40 shadow-[0_0_15px_-3px_rgba(16,185,129,0.2)]' 
-                    : 'bg-amber-500/10 border-amber-500/40 shadow-[0_0_15px_-3px_rgba(245,158,11,0.2)]'}`}>
-                    <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2">
-                            <Zap className={`w-4 h-4 ${data.multiTimeframeConfluence.executionAction === 'BUY' ? 'text-emerald-400' : 'text-amber-400'}`} />
-                            <h4 className="text-xs font-black text-white uppercase tracking-widest">Smart Execution Signal</h4>
-                        </div>
-                        <div className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${data.multiTimeframeConfluence.executionAction === 'BUY' 
-                            ? 'bg-emerald-500 text-white animate-pulse' 
-                            : 'bg-amber-500 text-white'}`}>
-                            {data.multiTimeframeConfluence.executionAction === 'BUY' ? 'BUY / ENTER' : 'WAIT FOR SETUP'}
-                        </div>
-                    </div>
 
-                    <div className="space-y-2">
-                        {data.multiTimeframeConfluence.executionReasons.map((reason, i) => (
-                            <div key={i} className="flex items-start gap-2.5 group/item">
-                                <div className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 transition-transform group-hover/item:scale-125 ${data.multiTimeframeConfluence?.executionAction === 'BUY' ? 'bg-emerald-400' : 'bg-amber-400'}`}></div>
-                                <span className="text-[11px] font-bold text-gray-100 leading-tight tracking-tight opacity-90">
-                                    {reason}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between">
-                        <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Multi-Timeframe Alpha</span>
-                        <div className="flex gap-1">
-                            {['1W', '1D', '1H'].map(tf => {
-                                const details = data.multiTimeframeConfluence?.timeframeDetails[tf.toLowerCase()];
-                                const trendColor = details?.trend === 'BULLISH' ? 'text-emerald-400' : details?.trend === 'BEARISH' ? 'text-rose-400' : 'text-gray-400';
-                                return (
-                                    <span key={tf} className={`text-[8px] font-black px-1.5 py-0.5 rounded bg-black/40 border border-white/5 ${trendColor}`}>
-                                        {tf}
-                                    </span>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* === TRADE EXECUTION PLAN === */}
-            {data.entryPrice && (
-                <div className="space-y-3 pt-4 border-t border-gray-700/50">
-                    <div className="flex items-center gap-2 mb-1">
-                        <Target className="w-4 h-4 text-amber-400" />
-                        <h4 className="text-xs font-extrabold text-white uppercase tracking-wider">Execution Plan</h4>
-                    </div>
-
-                    {/* Trade Plan Grid (Entry, Stop, Target) */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        {/* Entry */}
-                        <div className="flex flex-col bg-gray-800/80 rounded-xl p-3 border border-gray-600/50 shadow-md relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-8 h-8 bg-blue-500/10 rounded-bl-full"></div>
-                            <div className="flex items-center gap-1.5 mb-1.5">
-                                <Crosshair className="w-3.5 h-3.5 text-blue-400" />
-                                <span className="text-[10px] text-gray-300 uppercase font-bold tracking-wider">Underlying</span>
-                            </div>
-                            <div className="text-sm font-mono text-white font-bold tracking-tight">${data.entryPrice.toFixed(2)}</div>
-                        </div>
-
-                        {/* Stop Loss */}
-                        <div className="flex flex-col bg-gray-800/80 rounded-xl p-3 border border-rose-900/50 shadow-md relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-8 h-8 bg-rose-500/10 rounded-bl-full"></div>
-                            <div className="flex items-center gap-1.5 mb-1.5">
-                                <Shield className="w-3.5 h-3.5 text-rose-400" />
-                                <span className="text-[10px] text-rose-300 uppercase font-bold tracking-wider">Hard Stop</span>
-                            </div>
-                            <div className="text-sm font-mono text-rose-400 font-bold tracking-tight">{data.stopLoss ? `$${data.stopLoss.toFixed(2)}` : '---'}</div>
-                        </div>
-
-                        {/* Target */}
-                        <div className="flex flex-col bg-gray-800/80 rounded-xl p-3 border border-emerald-900/50 shadow-md relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-8 h-8 bg-emerald-500/10 rounded-bl-full"></div>
-                            <div className="flex items-center gap-1.5 mb-1.5">
-                                <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-                                <span className="text-[10px] text-emerald-300 uppercase font-bold tracking-wider">Target</span>
-                            </div>
-                            <div className="text-sm font-mono text-emerald-400 font-bold tracking-tight">{data.takeProfit1 ? `$${data.takeProfit1.toFixed(2)}` : '---'}</div>
-                        </div>
-                    </div>
-
-                    {/* Secondary Trade Info (Entry Condition & R:R) */}
-                    <div className="flex items-center justify-between px-1 text-[10px]">
-                        {data.entryCondition && (
-                            <div className="flex items-center gap-1 text-gray-200">
-                                <Zap className="w-3 h-3 text-yellow-400" />
-                                <span>{data.entryCondition}</span>
-                            </div>
-                        )}
-                        {data.riskReward && (
-                            <div className="text-gray-200 border border-gray-700/50 px-1.5 rounded bg-gray-900/50">
-                                R:R Target: <span className="text-yellow-400 font-bold">{data.riskReward}</span>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Max Loss Note */}
-                    {data.maxLoss && (
-                        <div className="flex items-start gap-1.5 pt-1">
-                            <AlertCircle className="w-3.5 h-3.5 text-gray-100 mt-0.5 flex-shrink-0" />
-                            <p className="text-[11px] text-gray-100 leading-tight">
-                                Max loss: {data.maxLoss}. {data.reason}.
-                            </p>
-                        </div>
-                    )}
-                </div>
-            )}
             <div className="mt-4 pt-2 border-t border-gray-700/30 flex justify-end">
                 <DataSourceIndicator source="Schwab / AI" />
             </div>

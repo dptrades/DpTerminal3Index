@@ -133,7 +133,6 @@ export default function Sidebar({
                     </h1>
                 </div>
                 <div className="flex items-center gap-2">
-                    <NotificationBell />
                     <button
                         onClick={() => setIsOpen(false)}
                         className="p-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-blue-400 border border-gray-700 transition-all active:scale-95 shadow-lg flex items-center gap-1 group"

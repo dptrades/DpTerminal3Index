@@ -133,18 +133,6 @@ export default function HeaderSignals({ latestData, showRSI = true }: HeaderSign
                         <span className="text-[8px] text-gray-200 font-bold uppercase tracking-widest leading-none">LT Trend</span>
                         <span className={`text-[10px] font-bold ${ltColor} leading-none`}>{ltTrend}</span>
                     </div>
-                    {isNearingDeathCross && (
-                        <div className="flex flex-col gap-1 items-center bg-yellow-500/10 border border-yellow-500/30 px-2 py-0.5 rounded animate-pulse">
-                            <span className="text-[7px] text-yellow-400 font-black uppercase tracking-tighter leading-none">Nearing</span>
-                            <span className="text-[9px] text-yellow-400 font-black tracking-tighter leading-none">Death Cross</span>
-                        </div>
-                    )}
-                    {isDeathCross && (
-                        <div className="flex flex-col gap-1 items-center bg-red-500/10 border border-red-500/30 px-2 py-0.5 rounded animate-pulse">
-                            <span className="text-[7px] text-red-400 font-black uppercase tracking-tighter leading-none">Active</span>
-                            <span className="text-[9px] text-red-400 font-black tracking-tighter leading-none">Death Cross</span>
-                        </div>
-                    )}
                 </div>
             </div>
 
@@ -158,10 +146,12 @@ export default function HeaderSignals({ latestData, showRSI = true }: HeaderSign
                     <span className="text-[8px] text-gray-200 tracking-widest leading-none">MACD</span>
                     <span className={`${macdColor} leading-none`}>{macdStatus}</span>
                 </div>
-                <div className="flex flex-col gap-1">
-                    <span className="text-[8px] text-gray-200 tracking-widest leading-none">BB</span>
-                    <span className={`${bbColor} leading-none`}>{bbStatus}</span>
-                </div>
+                {bbStatus !== 'MID' && (
+                    <div className="flex flex-col gap-1">
+                        <span className="text-[8px] text-gray-200 tracking-widest leading-none">BB</span>
+                        <span className={`${bbColor} leading-none`}>{bbStatus}</span>
+                    </div>
+                )}
                 <div className="flex flex-col gap-1">
                     <span className="text-[8px] text-gray-200 tracking-widest leading-none">VWAP</span>
                     <span className={`${vwapColor} leading-none`}>{vwapStatus}</span>

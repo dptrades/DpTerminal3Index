@@ -545,7 +545,6 @@ export default function Dashboard() {
                 <div className="flex flex-row items-center gap-2 flex-wrap sm:flex-nowrap">
                   <HeaderFundamentals symbol={symbol} />
                   {data.length > 0 && <HeaderSignals latestData={data[data.length - 1]} showRSI={true} />}
-                  <HeaderAnalyst symbol={symbol} analystNews={analystData} />
                 </div>
               </div>
             </div>

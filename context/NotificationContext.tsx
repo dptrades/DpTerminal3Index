@@ -416,30 +416,8 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
             return timeVal >= 4.0 && timeVal < 20.0;
         };
 
-        // Run initial checks on load
-        pollIntradayPulse();
-        pollTerminalState();
-        pollPositionsState();
-
-        // 60-second Intraday and Terminal poller
-        const checkInterval60s = setInterval(() => {
-            if (isMarketHours() && active && !document.hidden) {
-                pollIntradayPulse();
-                pollTerminalState();
-            }
-        }, 60000);
-
-        // 30-second Auto-trade position poller
-        const checkInterval30s = setInterval(() => {
-            if (isMarketHours() && active && !document.hidden) {
-                pollPositionsState();
-            }
-        }, 30000);
-
         return () => {
             active = false;
-            clearInterval(checkInterval60s);
-            clearInterval(checkInterval30s);
         };
     }, []);
 

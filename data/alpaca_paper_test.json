@@ -1,0 +1,43 @@
+{
+  "config": {
+    "convictionThreshold": 60,
+    "stopAtrMultiple": 2,
+    "targetAtrMultiple": 3,
+    "maxHoldingDays": 30,
+    "riskPercent": 1.5,
+    "maxPositions": 6,
+    "maxPerSector": 2,
+    "cashModeVixThreshold": 30,
+    "scaleOut1Pct": 0.3,
+    "scaleOut2Pct": 0.3,
+    "trailingStopAtr": 1.5,
+    "blacklistLookback": 20,
+    "blacklistMinWinRate": 0.25,
+    "blacklistSuspendDays": 30,
+    "maxCapital": 1000
+  },
+  "startDate": "2026-06-29",
+  "account": {
+    "equity": 1000,
+    "cash": 1000,
+    "initialBalance": 1000
+  },
+  "positions": [],
+  "trades": [],
+  "signals": [],
+  "dailyLog": [
+    {
+      "date": "2026-06-29",
+      "equity": 1000,
+      "alpacaEquity": 99693.21,
+      "cash": 1000,
+      "positionCount": 0,
+      "symbolsScanned": 0,
+      "entries": 0,
+      "exits": 0
+    }
+  ],
+  "blacklist": {},
+  "lastRunDate": "2026-06-29",
+  "totalRuns": 1
+}

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DP Trade Desk — Automated Trading System Architecture</title>
+<style>
+:root{--bg:#0d0d1a;--bg2:#111128;--bg3:#1a1a2e;--border:#2a2a4a;--t1:#f1f5f9;--t2:#cbd5e1;--t3:#94a3b8;--grn:#22c55e;--red:#ef4444;--cyn:#22d3ee;--ylw:#eab308;--pur:#a78bfa;--blu:#3b82f6;--org:#f97316}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t1);line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 24px 60px}
+h1{font-size:28px;font-weight:700;text-align:center;padding:20px 0 8px}
+.subtitle{text-align:center;color:var(--t3);font-size:14px;margin-bottom:24px}
+h2{font-size:20px;font-weight:700;color:var(--cyn);margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:16px;font-weight:700;color:var(--t1);margin:20px 0 8px}
+p{font-size:14px;color:var(--t2);margin:6px 0 12px}
+.tabs{display:flex;gap:4px;justify-content:center;margin:20px 0;flex-wrap:wrap}
+.tab{padding:10px 24px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;background:var(--bg3);color:var(--t2);border:1px solid var(--border);transition:all .15s}
+.tab.act{background:var(--cyn);color:#000;border-color:var(--cyn)}
+.tab:hover:not(.act){background:#222244}
+.pnl{display:none}.pnl.act{display:block}
+
+/* Architecture Diagram */
+.arch{padding:20px 0}
+.layer{margin:16px 0;padding:16px;border-radius:12px;border:1px solid var(--border)}
+.layer-title{font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.layer-title .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.boxes{display:flex;gap:10px;flex-wrap:wrap}
+.box{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px 16px;flex:1;min-width:140px}
+.box .name{font-size:14px;font-weight:700;color:var(--t1);margin-bottom:4px}
+.box .desc{font-size:11px;color:var(--t3);line-height:1.5}
+.box .cost{font-size:12px;font-weight:700;margin-top:6px;display:inline-block;padding:2px 8px;border-radius:4px}
+.box.free .cost{background:rgba(34,197,94,.15);color:var(--grn)}
+.box.paid .cost{background:rgba(234,179,8,.15);color:var(--ylw)}
+
+.arrow-down{text-align:center;font-size:24px;color:var(--t3);padding:4px 0}
+.arrow-right{color:var(--t3);font-size:20px;display:flex;align-items:center}
+
+/* Flow Diagram */
+.flow-section{margin:20px 0}
+.flow-row{display:flex;align-items:center;gap:8px;margin:8px 0;flex-wrap:wrap}
+.flow-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:12px;font-weight:600;text-align:center;min-width:120px}
+.flow-box.highlight{border-color:var(--cyn);color:var(--cyn)}
+.flow-box.action{border-color:var(--grn);color:var(--grn)}
+.flow-box.data{border-color:var(--pur);color:var(--pur)}
+.flow-box.decision{border-color:var(--ylw);color:var(--ylw);border-radius:20px}
+.flow-box.danger{border-color:var(--red);color:var(--red)}
+.flow-arrow{color:var(--t3);font-size:18px;min-width:20px;text-align:center}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:12px 0}
+th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);color:var(--t2);font-weight:600;font-size:12px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid var(--border)}
+tr:hover td{background:rgba(255,255,255,.02)}
+.r{text-align:right}
+.mono{font-family:'SF Mono',Monaco,monospace}
+.badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600}
+.bg-grn{background:rgba(34,197,94,.15);color:var(--grn)}
+.bg-red{background:rgba(239,68,68,.15);color:var(--red)}
+.bg-ylw{background:rgba(234,179,8,.15);color:var(--ylw)}
+.bg-cyn{background:rgba(34,211,238,.15);color:var(--cyn)}
+.bg-pur{background:rgba(167,139,250,.15);color:var(--pur)}
+.bg-org{background:rgba(249,115,22,.15);color:var(--org)}
+.bg-blu{background:rgba(59,130,246,.15);color:var(--blu)}
+
+/* Timeline */
+.timeline{position:relative;padding:16px 0 16px 24px;border-left:2px solid var(--border);margin:16px 0 16px 12px}
+.timeline-item{position:relative;margin:16px 0;padding-left:20px}
+.timeline-item::before{content:'';position:absolute;left:-29px;top:6px;width:12px;height:12px;border-radius:50%;border:2px solid var(--cyn);background:var(--bg)}
+.timeline-item .time{font-size:13px;font-weight:700;color:var(--cyn)}
+.timeline-item .event{font-size:13px;color:var(--t2);margin-top:2px}
+.timeline-item .detail{font-size:12px;color:var(--t3);margin-top:4px;padding:8px 12px;background:var(--bg3);border-radius:6px;border:1px solid var(--border)}
+
+/* Cards */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin:10px 0}
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:768px){.card-grid{grid-template-columns:1fr}}
+.total-card{background:linear-gradient(135deg,#111128,#1a1a3e);border:2px solid var(--cyn);border-radius:12px;padding:20px;text-align:center;margin:20px 0}
+.total-card .amount{font-size:36px;font-weight:700;color:var(--cyn)}
+.total-card .label{font-size:14px;color:var(--t3);margin-top:4px}
+
+.footer{text-align:center;padding:24px 0;font-size:12px;color:var(--t3);border-top:1px solid var(--border);margin-top:32px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>DP Trade Desk — Automated Trading System</h1>
+<div class="subtitle">End-to-End Architecture | Component Workflow | Cost Analysis</div>
+
+<div class="tabs" id="tabs">
+<div class="tab act" data-t="arch">System Architecture</div>
+<div class="tab" data-t="flow">Daily Workflow</div>
+<div class="tab" data-t="components">Components</div>
+<div class="tab" data-t="cost">Cost Analysis</div>
+<div class="tab" data-t="execution">Execution Flow</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- ARCHITECTURE TAB -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="pnl act" id="p-arch">
+
+<h2>System Architecture Overview</h2>
+<p>Five layers work together: data providers feed the intelligence engine, which generates signals, executes trades through Robinhood, and runs automatically on Vercel.</p>
+
+<div class="arch">
+
+<!-- Layer 1: Data -->
+<div class="layer" style="border-color:var(--pur)">
+<div class="layer-title"><span class="dot" style="background:var(--pur)"></span> <span style="color:var(--pur)">LAYER 1 — DATA PROVIDERS</span></div>
+<div class="boxes">
+<div class="box paid"><div class="name">Polygon.io</div><div class="desc">Real-time stock quotes, OHLCV bars, options chains, Greeks, fundamentals. Primary data source.</div><div class="cost">$79/mo</div></div>
+<div class="box paid"><div class="name">Unusual Whales</div><div class="desc">Options flow, dark pool activity, congressional trades, institutional holdings. Smart money signals.</div><div class="cost">$50/mo</div></div>
+<div class="box free"><div class="name">Alpaca</div><div class="desc">Historical daily bars (5+ years) for backtesting. Free IEX feed. Paper trading API.</div><div class="cost">FREE</div></div>
+</div>
+</div>
+
+<div class="arrow-down">&#9660;</div>
+
+<!-- Layer 2: Intelligence -->
+<div class="layer" style="border-color:var(--cyn)">
+<div class="layer-title"><span class="dot" style="background:var(--cyn)"></span> <span style="color:var(--cyn)">LAYER 2 — INTELLIGENCE ENGINE (Your Dashboard)</span></div>
+<div class="boxes">
+<div class="box"><div class="name">Conviction Scanner</div><div class="desc">Top Picks (200+ mega-caps) + Alpha Hunter (300+ growth stocks). 4-factor scoring: Technical + Fundamental + Analyst + Sentiment.</div></div>
+<div class="box"><div class="name">Technical Scorer</div><div class="desc">EMA stack, RSI, MACD, Bollinger, ADX, candlestick patterns, divergence, 52-week high, relative strength vs SPY.</div></div>
+<div class="box"><div class="name">Smart Money Layer</div><div class="desc">UW unusual flow + dark pool as conviction booster. Institutional confirmation of technical signals.</div></div>
+<div class="box"><div class="name">Risk Engine</div><div class="desc">Cash mode (VIX>30), symbol blacklist, earnings zones, sector caps, equity-scaled sizing, 30-day time exit.</div></div>
+</div>
+</div>
+
+<div class="arrow-down">&#9660;</div>
+
+<!-- Layer 3: Strategy -->
+<div class="layer" style="border-color:var(--grn)">
+<div class="layer-title"><span class="dot" style="background:var(--grn)"></span> <span style="color:var(--grn)">LAYER 3 — STRATEGY & EXECUTION</span></div>
+<div class="boxes">
+<div class="box"><div class="name">Scale-Out + Trail</div><div class="desc">Sell 30% at +1 ATR, sell 30% at +2 ATR, trail remaining 40% at 1.5x ATR. No fixed target — rides momentum.</div></div>
+<div class="box"><div class="name">Forward Test</div><div class="desc">Simulated fills using same logic. Validates strategy against live market without real money. $1,000 virtual.</div></div>
+<div class="box"><div class="name">Robinhood Agentic</div><div class="desc">Real order execution via MCP protocol. Dedicated agentic account with isolated funds. Commission-free.</div></div>
+</div>
+</div>
+
+<div class="arrow-down">&#9660;</div>
+
+<!-- Layer 4: Infrastructure -->
+<div class="layer" style="border-color:var(--ylw)">
+<div class="layer-title"><span class="dot" style="background:var(--ylw)"></span> <span style="color:var(--ylw)">LAYER 4 — INFRASTRUCTURE</span></div>
+<div class="boxes">
+<div class="box paid"><div class="name">Vercel Pro</div><div class="desc">Hosts dashboard, runs daily cron jobs at 10:00 AM ET. 300s function timeout. Blob storage for state.</div><div class="cost">$20/mo</div></div>
+<div class="box free"><div class="name">GitHub</div><div class="desc">Code repository, version control, deployment triggers. All trading data synced.</div><div class="cost">FREE</div></div>
+<div class="box free"><div class="name">Robinhood MCP</div><div class="desc">Model Context Protocol server for agentic trading. Real equity orders through dedicated account.</div><div class="cost">FREE</div></div>
+</div>
+</div>
+
+<div class="arrow-down">&#9660;</div>
+
+<!-- Layer 5: Monitoring -->
+<div class="layer" style="border-color:var(--org)">
+<div class="layer-title"><span class="dot" style="background:var(--org)"></span> <span style="color:var(--org)">LAYER 5 — MONITORING & DASHBOARDS</span></div>
+<div class="boxes">
+<div class="box"><div class="name">/forward-test</div><div class="desc">Simulated trading dashboard. Equity curve, positions, signals, trades, blacklist tracking.</div></div>
+<div class="box"><div class="name">/paper-trade</div><div class="desc">Alpaca paper trading with real orders. Slippage measurement. Compare vs forward test.</div></div>
+<div class="box"><div class="name">/backtest</div><div class="desc">Historical strategy replay. 4.5 years, 1,282 trades. All strategy variations comparable.</div></div>
+<div class="box"><div class="name">Robinhood App</div><div class="desc">Real-time notifications of agent trades. Manual override available. Separate agentic account view.</div></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- DAILY WORKFLOW TAB -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="pnl" id="p-flow">
+
+<h2>Daily Automated Workflow</h2>
+<p>Every weekday at 10:00 AM ET, the system executes this sequence automatically via Vercel cron. Zero human intervention required.</p>
+
+<div class="timeline">
+
+<div class="timeline-item">
+<div class="time">10:00:00 AM — Market Check</div>
+<div class="event">System wakes up, checks if market is open</div>
+<div class="detail">
+Fetch VIX level from Polygon.io<br>
+Fetch SPY price and compute 200-day EMA<br>
+<strong>Decision:</strong> If VIX > 30 AND SPY < 200 EMA → CASH MODE (skip all entries, only process exits)
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="time">10:00:05 AM — Exit Processing</div>
+<div class="event">Check all open positions for exits</div>
+<div class="detail">
+For each position, fetch current price from Polygon.io:<br>
+• Price ≤ stop-loss → <span style="color:var(--red)">SELL (stop hit)</span><br>
+• Price ≥ entry + 1x ATR (scale level 0) → <span style="color:var(--cyn)">SELL 30% (scale 1)</span>, move stop to breakeven<br>
+• Price ≥ entry + 2x ATR (scale level 1) → <span style="color:var(--cyn)">SELL 30% (scale 2)</span>, move stop up<br>
+• Scale level 2+ → Update trailing stop (1.5x ATR below high water mark)<br>
+• Days held ≥ 30 → <span style="color:var(--ylw)">SELL ALL (time exit)</span><br><br>
+Each sell → Robinhood MCP places market sell order on agentic account
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="time">10:00:30 AM — Discovery Scan</div>
+<div class="event">Scan 300+ stocks from Top Picks + Alpha Hunter</div>
+<div class="detail">
+Run scanConviction() → 200+ mega-cap stocks scored on 4 factors<br>
+Run scanAlphaHunter() → 300+ growth/momentum stocks scored<br>
+Merge and deduplicate → ~400 unique candidates<br>
+Data sources: Polygon.io (prices, fundamentals), Yahoo Finance (analyst ratings)
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="time">10:01:00 AM — Technical Scoring</div>
+<div class="event">Score each candidate using confluence scorer</div>
+<div class="detail">
+For each of ~400 stocks, compute:<br>
+• EMA stack (9/21/50/200) alignment<br>
+• RSI momentum + divergence<br>
+• MACD crossover<br>
+• Bollinger Band position<br>
+• Candlestick patterns<br>
+• 52-week high proximity<br>
+• Relative strength vs SPY<br>
+Result: Technical score 0-100 for each stock
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="time">10:02:00 AM — Smart Money Check (NEW)</div>
+<div class="event">Query Unusual Whales for institutional confirmation</div>
+<div class="detail">
+For top-scored candidates (score ≥ 60, BULLISH trend):<br>
+• <span style="color:var(--pur)">UW MCP:</span> Check unusual options flow → large call buying = conviction boost<br>
+• <span style="color:var(--pur)">UW MCP:</span> Check dark pool activity → block accumulation = conviction boost<br>
+• <span style="color:var(--pur)">UW MCP:</span> Check congressional trades → political insider buying = flag<br>
+Adjust conviction score: +5 to +15 for strong smart money confirmation
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="time">10:02:30 AM — Risk Filtering</div>
+<div class="event">Apply all risk gates before entry</div>
+<div class="detail">
+Filter candidates through:<br>
+• Score ≥ 60 (conviction threshold)<br>
+• Trend = BULLISH only<br>
+• Not in symbol blacklist (<25% WR over 20 trades → 30-day suspension)<br>
+• Positions < 6 max<br>
+• Sector count < 2 per sector<br>
+• Not in earnings red zone (0-7 days before earnings)<br>
+• Sufficient cash available<br>
+<strong>Result:</strong> Top 1-6 qualifying candidates ranked by score
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="time">10:03:00 AM — Order Execution</div>
+<div class="event">Place buy orders on Robinhood via MCP</div>
+<div class="detail">
+For each qualifying candidate:<br>
+1. Calculate position size: 1.5% of equity ÷ (entry - stop) = shares<br>
+2. Cap at available cash<br>
+3. <span style="color:var(--grn)">Robinhood MCP → place market buy order</span><br>
+4. Record entry price, stop-loss, scale levels, ATR<br>
+5. Log signal with full audit trail<br><br>
+<strong>Simultaneously:</strong> Forward test records same decisions with simulated fills (for comparison)
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="time">10:03:30 AM — Save & Sync</div>
+<div class="event">Persist state, push to GitHub</div>
+<div class="detail">
+Save state to Vercel Blob (positions, trades, signals, equity curve)<br>
+Commit data files to GitHub for version tracking<br>
+Send notification summary (optional email via Resend)
+</div>
+</div>
+
+<div class="timeline-item">
+<div class="time">10:04:00 AM — Done</div>
+<div class="event">System goes idle until next trading day</div>
+<div class="detail">
+Total execution time: ~3-4 minutes<br>
+Next run: Tomorrow 10:00 AM ET (weekdays only)<br>
+All dashboards updated and viewable at any time
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- COMPONENTS TAB -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="pnl" id="p-components">
+
+<h2>Component Details</h2>
+
+<h3>Polygon.io — Developer Plan ($79/mo)</h3>
+<div class="card">
+<p><strong>Role:</strong> Primary market data provider. Replaces the fragile Yahoo Finance + Public.com + Finnhub patchwork with one reliable API.</p>
+<table>
+<tr><td>Real-time stock quotes</td><td>All US exchanges (SIP feed)</td></tr>
+<tr><td>OHLCV bars</td><td>1min to monthly, 5+ years history</td></tr>
+<tr><td>Options chains</td><td>Full chain with Greeks (delta, gamma, theta, vega, IV)</td></tr>
+<tr><td>Fundamentals</td><td>Financials, dividends, splits</td></tr>
+<tr><td>WebSocket streaming</td><td>Real-time price updates (for future intraday use)</td></tr>
+<tr><td>API limits</td><td>Unlimited calls</td></tr>
+<tr><td>Reliability</td><td>99.9% uptime SLA, dedicated infrastructure</td></tr>
+</table>
+</div>
+
+<h3>Unusual Whales — Basic Plan ($50/mo)</h3>
+<div class="card">
+<p><strong>Role:</strong> Smart money intelligence layer. Provides data that no amount of technical analysis can replicate — what institutions are actually doing.</p>
+<table>
+<tr><td>Unusual options flow</td><td>Large trades, sweeps, block orders in real-time</td></tr>
+<tr><td>Dark pool data</td><td>Hidden institutional block trades off-exchange</td></tr>
+<tr><td>Congressional trades</td><td>What politicians are buying/selling (disclosed filings)</td></tr>
+<tr><td>Institutional holdings</td><td>13F filings, hedge fund positions</td></tr>
+<tr><td>IV/Volatility data</td><td>IV rank, percentile, skew for options analysis</td></tr>
+<tr><td>MCP Server</td><td>Direct integration with Claude Code and AI agents</td></tr>
+<tr><td>REST API</td><td>100+ endpoints for automated integration</td></tr>
+</table>
+</div>
+
+<h3>Robinhood Agentic Trading (FREE)</h3>
+<div class="card">
+<p><strong>Role:</strong> Order execution. AI agent places real trades through a dedicated Robinhood account via MCP protocol.</p>
+<table>
+<tr><td>MCP endpoint</td><td><code>https://agent.robinhood.com/mcp/trading</code></td></tr>
+<tr><td>Account type</td><td>Dedicated agentic account (isolated from main portfolio)</td></tr>
+<tr><td>Supported orders</td><td>Equities (stocks) — options coming soon</td></tr>
+<tr><td>Commissions</td><td>$0 (commission-free)</td></tr>
+<tr><td>Safety</td><td>Trade notifications, preview approvals, fraud detection</td></tr>
+<tr><td>Monitoring</td><td>Full visibility in Robinhood app</td></tr>
+<tr><td>Fund isolation</td><td>Agent can only access funds deposited in agentic account</td></tr>
+</table>
+</div>
+
+<h3>Vercel Pro ($20/mo)</h3>
+<div class="card">
+<p><strong>Role:</strong> Cloud infrastructure. Hosts the dashboard, runs daily cron jobs, stores trading state.</p>
+<table>
+<tr><td>Function timeout</td><td>300 seconds (5 minutes) — sufficient for 400-stock scan</td></tr>
+<tr><td>Cron jobs</td><td>Unlimited — daily 10:00 AM ET trigger</td></tr>
+<tr><td>Blob storage</td><td>Persistent state for positions, trades, equity curves</td></tr>
+<tr><td>Bandwidth</td><td>1 TB/mo — more than enough for dashboards</td></tr>
+<tr><td>Custom domain</td><td>Your own URL for the trading dashboard</td></tr>
+<tr><td>Analytics</td><td>Function execution logs, error tracking</td></tr>
+</table>
+</div>
+
+<h3>Alpaca (FREE)</h3>
+<div class="card">
+<p><strong>Role:</strong> Historical data for backtesting + paper trading for strategy validation before going live on Robinhood.</p>
+<table>
+<tr><td>Historical bars</td><td>5-6 years of daily OHLCV (IEX feed)</td></tr>
+<tr><td>Paper trading</td><td>$100K simulated account for testing</td></tr>
+<tr><td>API limits</td><td>200 requests/minute</td></tr>
+<tr><td>Data feed</td><td>IEX (15-min delay) — sufficient for daily scanning</td></tr>
+</table>
+</div>
+
+<h3>Your Trading Dashboard (DP Trade Desk)</h3>
+<div class="card">
+<p><strong>Role:</strong> The brain. Built on Next.js, this is the intelligence engine that ties everything together.</p>
+<table>
+<tr><td>Main dashboard</td><td>Real-time stock analysis with multi-timeframe indicators</td></tr>
+<tr><td>Top Picks</td><td>200+ mega-cap conviction scanner (4-factor model)</td></tr>
+<tr><td>Alpha Hunter</td><td>300+ broader market discovery (unusual volume + momentum)</td></tr>
+<tr><td>Terminal</td><td>Market regime assessment (risk-on/risk-off)</td></tr>
+<tr><td>Backtest</td><td>Historical strategy replay with all 5 fixes</td></tr>
+<tr><td>Forward Test</td><td>Live paper trading with simulated fills</td></tr>
+<tr><td>Paper Trade</td><td>Alpaca real paper orders with slippage tracking</td></tr>
+<tr><td>Sector Heatmap</td><td>11-sector performance overview</td></tr>
+</table>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- COST ANALYSIS TAB -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="pnl" id="p-cost">
+
+<h2>Monthly Cost Analysis</h2>
+
+<div class="total-card">
+<div class="amount">$149/mo</div>
+<div class="label">Total Monthly Cost for Full Automated Trading System</div>
+</div>
+
+<table>
+<thead><tr><th>Component</th><th>Purpose</th><th class="r">Monthly</th><th class="r">Annual</th><th>Required?</th></tr></thead>
+<tbody>
+<tr><td><strong>Polygon.io Developer</strong></td><td>Real-time stocks + options + fundamentals</td><td class="r mono" style="color:var(--ylw)">$79.00</td><td class="r mono">$948</td><td><span class="badge bg-grn">Essential</span></td></tr>
+<tr><td><strong>Unusual Whales Basic</strong></td><td>Options flow + dark pool + smart money</td><td class="r mono" style="color:var(--ylw)">$50.00</td><td class="r mono">$600</td><td><span class="badge bg-cyn">High Value</span></td></tr>
+<tr><td><strong>Vercel Pro</strong></td><td>Cloud hosting + cron jobs + storage</td><td class="r mono" style="color:var(--ylw)">$20.00</td><td class="r mono">$240</td><td><span class="badge bg-grn">Essential</span></td></tr>
+<tr><td><strong>Robinhood Agentic</strong></td><td>Live order execution via MCP</td><td class="r mono" style="color:var(--grn)">$0.00</td><td class="r mono">$0</td><td><span class="badge bg-grn">Essential</span></td></tr>
+<tr><td><strong>Alpaca Free</strong></td><td>Historical data + paper trading</td><td class="r mono" style="color:var(--grn)">$0.00</td><td class="r mono">$0</td><td><span class="badge bg-ylw">Validation</span></td></tr>
+<tr><td><strong>GitHub</strong></td><td>Code hosting + version control</td><td class="r mono" style="color:var(--grn)">$0.00</td><td class="r mono">$0</td><td><span class="badge bg-grn">Essential</span></td></tr>
+<tr style="border-top:2px solid var(--border)"><td><strong>TOTAL</strong></td><td></td><td class="r mono" style="color:var(--cyn);font-weight:700;font-size:16px">$149.00</td><td class="r mono" style="color:var(--cyn);font-weight:700">$1,788</td><td></td></tr>
+</tbody>
+</table>
+
+<h3>Break-Even Analysis</h3>
+<div class="card">
+<p>At $149/mo fixed cost, how much capital do you need to break even?</p>
+<table>
+<thead><tr><th>Account Size</th><th>Cost as % of Capital</th><th>Monthly Return Needed to Cover Cost</th><th>Backtest Avg Monthly Return</th><th>Verdict</th></tr></thead>
+<tbody>
+<tr><td>$1,000</td><td class="r">14.9%</td><td class="r">14.9%/mo</td><td class="r">~2.5%/mo</td><td><span class="badge bg-red">Too Small</span></td></tr>
+<tr><td>$5,000</td><td class="r">2.98%</td><td class="r">2.98%/mo</td><td class="r">~2.5%/mo</td><td><span class="badge bg-ylw">Tight</span></td></tr>
+<tr><td>$10,000</td><td class="r">1.49%</td><td class="r">1.49%/mo</td><td class="r">~2.5%/mo</td><td><span class="badge bg-grn">Viable</span></td></tr>
+<tr><td>$25,000</td><td class="r">0.60%</td><td class="r">0.60%/mo</td><td class="r">~2.5%/mo</td><td><span class="badge bg-grn">Comfortable</span></td></tr>
+<tr><td>$50,000</td><td class="r">0.30%</td><td class="r">0.30%/mo</td><td class="r">~2.5%/mo</td><td><span class="badge bg-grn">Optimal</span></td></tr>
+</tbody>
+</table>
+<p style="color:var(--t3);font-size:12px;margin-top:8px">* Based on backtest scale-out strategy: +142% over 4.5 years ≈ ~2.5% average monthly return</p>
+</div>
+
+<h3>Cost Comparison: Your System vs Alternatives</h3>
+<table>
+<thead><tr><th>Platform</th><th class="r">Monthly</th><th>What You Get</th><th>Limitation</th></tr></thead>
+<tbody>
+<tr><td><strong>Your System (DP Trade Desk)</strong></td><td class="r mono" style="color:var(--cyn)">$149</td><td>Custom strategy, full control, backtested edge</td><td>Requires maintenance</td></tr>
+<tr><td>Trade Ideas (Standard)</td><td class="r mono">$228</td><td>Pre-built scanners, alerts</td><td>No custom strategy, no automation</td></tr>
+<tr><td>QuantConnect</td><td class="r mono">$120</td><td>Cloud backtesting + live trading</td><td>Python only, learning curve</td></tr>
+<tr><td>TrendSpider (Elite)</td><td class="r mono">$97</td><td>Auto-charting, scanning</td><td>No order execution</td></tr>
+<tr><td>Unusual Whales Pro + manual trading</td><td class="r mono">$75</td><td>Flow data, alerts</td><td>No automation, manual execution</td></tr>
+</tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!-- EXECUTION FLOW TAB -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<div class="pnl" id="p-execution">
+
+<h2>Order Execution Flow</h2>
+<p>How a trade goes from signal to real money on Robinhood.</p>
+
+<h3>Entry Flow</h3>
+<div class="flow-section">
+<div class="flow-row">
+<div class="flow-box data">Polygon.io<br><span style="font-size:10px">OHLCV bars</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box highlight">Technical Scorer<br><span style="font-size:10px">Score: 92</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box data">Unusual Whales<br><span style="font-size:10px">Call flow detected</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box highlight">Score Boosted<br><span style="font-size:10px">92 → 97</span></div>
+</div>
+<div class="flow-row">
+<div class="flow-arrow" style="margin-left:auto">↓</div>
+</div>
+<div class="flow-row">
+<div class="flow-box decision">Score ≥ 60?<br>BULLISH?</div>
+<div class="flow-arrow">YES →</div>
+<div class="flow-box decision">Cash Mode?<br>Blacklisted?</div>
+<div class="flow-arrow">NO →</div>
+<div class="flow-box decision">Positions < 6?<br>Sector < 2?</div>
+<div class="flow-arrow">YES →</div>
+<div class="flow-box action">CALCULATE<br><span style="font-size:10px">1.5% equity ÷ risk = qty</span></div>
+</div>
+<div class="flow-row">
+<div class="flow-arrow" style="margin-left:auto">↓</div>
+</div>
+<div class="flow-row">
+<div class="flow-box action" style="border-color:var(--org);color:var(--org)">Robinhood MCP<br><span style="font-size:10px">Market Buy Order</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box" style="border-color:var(--grn);color:var(--grn)">ORDER FILLED<br><span style="font-size:10px">e.g. PLTR 15 @ $96.28</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box">Save State<br><span style="font-size:10px">Vercel Blob + GitHub</span></div>
+</div>
+</div>
+
+<h3>Scale-Out Exit Flow</h3>
+<div class="flow-section">
+<div class="flow-row">
+<div class="flow-box">Position Open<br><span style="font-size:10px">PLTR 15 @ $96.28</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box data">Polygon.io<br><span style="font-size:10px">Current: $104.50</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box decision">Price ≥ Entry + 1 ATR?<br><span style="font-size:10px">$96.28 + $8.22 = $104.50 ✓</span></div>
+</div>
+<div class="flow-row">
+<div class="flow-arrow" style="margin-left:auto">↓ YES</div>
+</div>
+<div class="flow-row">
+<div class="flow-box action" style="border-color:var(--cyn);color:var(--cyn)">SCALE 1<br><span style="font-size:10px">Sell 30% = 5 shares</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box action" style="border-color:var(--org);color:var(--org)">Robinhood MCP<br><span style="font-size:10px">Market Sell 5 shares</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box">Update Position<br><span style="font-size:10px">10 shares remain<br>Stop → $96.28 (breakeven)</span></div>
+</div>
+<div class="flow-row" style="margin-top:12px">
+<div class="flow-box" style="opacity:.7">Later: Price hits $112.50<br><span style="font-size:10px">Entry + 2 ATR</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box action" style="border-color:var(--cyn);color:var(--cyn)">SCALE 2<br><span style="font-size:10px">Sell 30% = 5 shares</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box">5 shares remain<br><span style="font-size:10px">Stop → $104.50<br>Trail at 1.5x ATR</span></div>
+</div>
+<div class="flow-row" style="margin-top:12px">
+<div class="flow-box" style="opacity:.7">Later: Price peaks $125<br>then drops to $112.67</div>
+<div class="flow-arrow">→</div>
+<div class="flow-box danger">TRAIL STOP HIT<br><span style="font-size:10px">$125 - (1.5 × $8.22) = $112.67</span></div>
+<div class="flow-arrow">→</div>
+<div class="flow-box action" style="border-color:var(--org);color:var(--org)">Robinhood MCP<br><span style="font-size:10px">Sell remaining 5</span></div>
+</div>
+</div>
+
+<h3>Trade Result Summary</h3>
+<div class="card">
+<table>
+<tr><td>Scale 1</td><td>5 shares sold @ $104.50</td><td class="r" style="color:var(--grn)">+$41.10</td><td>(+8.5%)</td></tr>
+<tr><td>Scale 2</td><td>5 shares sold @ $112.50</td><td class="r" style="color:var(--grn)">+$81.10</td><td>(+16.8%)</td></tr>
+<tr><td>Trail Stop</td><td>5 shares sold @ $112.67</td><td class="r" style="color:var(--grn)">+$81.95</td><td>(+17.0%)</td></tr>
+<tr style="border-top:2px solid var(--border)"><td><strong>Total PnL</strong></td><td>15 shares, $96.28 → avg $109.89</td><td class="r" style="color:var(--grn);font-weight:700"><strong>+$204.15</strong></td><td><strong>(+14.1%)</strong></td></tr>
+</table>
+<p style="color:var(--t3);font-size:12px">Without scale-out (old system): would have either hit stop at -$90 or waited for full target. Scale-out locked in profit at three levels.</p>
+</div>
+
+<h3>Parallel Tracking</h3>
+<div class="card">
+<p>Three systems run simultaneously for validation:</p>
+<table>
+<thead><tr><th>System</th><th>Fills</th><th>Real Money</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><span class="badge bg-cyn">Forward Test</span></td><td>Simulated (instant)</td><td>No</td><td>Baseline — what the algorithm decides</td></tr>
+<tr><td><span class="badge bg-ylw">Alpaca Paper</span></td><td>Real market orders (paper $)</td><td>No</td><td>Measures slippage vs forward test</td></tr>
+<tr><td><span class="badge bg-grn">Robinhood Agentic</span></td><td>Real market orders (real $)</td><td>Yes</td><td>Actual trading — real P&L</td></tr>
+</tbody>
+</table>
+<p>Compare all three after 4-6 weeks. If they diverge by more than 15%, investigate execution issues before scaling capital.</p>
+</div>
+
+</div>
+
+<div class="footer">
+DP Trade Desk — Automated Trading System Architecture<br>
+Polygon.io ($79) + Unusual Whales ($50) + Vercel Pro ($20) + Robinhood (Free) = $149/mo
+</div>
+
+</div>
+
+<script>
+document.getElementById('tabs').addEventListener('click', function(e) {
+    var t = e.target.closest('.tab');
+    if (!t) return;
+    document.querySelectorAll('.tab').forEach(function(x) { x.classList.remove('act'); });
+    document.querySelectorAll('.pnl').forEach(function(x) { x.classList.remove('act'); });
+    t.classList.add('act');
+    document.getElementById('p-' + t.dataset.t).classList.add('act');
+});
+</script>
+</body>
+</html>
